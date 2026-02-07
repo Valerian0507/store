@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Produits{% endblock %}
+
+{% block body %}
+  <section class="container">
+    <h1>Produits</h1>
+
+    <div>
+      <ul class="products">
+      {% for product in products %}
+        <li>
+          Title : {{ product.title }}
+        </li>
+      {% endfor %}
+      </ul>
+    </div>
+  </section>
+
+{% endblock %}

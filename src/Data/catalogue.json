@@ -1,0 +1,960 @@
+{
+  "piscines": [
+    {
+      "id": "piscines-1",
+      "reference": "P10-1236",
+      "category": "piscines",
+      "title": "Piscine gonflable 366x91 cm",
+      "volume_m3": 0.047,
+      "weight_kg": 12.27,
+      "price_eur": 130.07,
+      "image": "P10-1236.jpg"
+    },
+    {
+      "id": "piscines-2",
+      "reference": "P20-0830",
+      "category": "piscines",
+      "title": "Piscine tubulaire 244x76 cm",
+      "volume_m3": 0.07,
+      "weight_kg": 15.81,
+      "price_eur": 170.7,
+      "image": "P20-0830.jpg"
+    },
+    {
+      "id": "piscines-3",
+      "reference": "P20-1252-B",
+      "category": "piscines",
+      "title": "Kit Piscine tubulaire 366x132 cm (pompe 3m³/h, échelle, bâche, tapis de sol)",
+      "volume_m3": 0.3464,
+      "weight_kg": 66.84,
+      "price_eur": 772.11,
+      "image": "P20-1252-B.jpg"
+    },
+    {
+      "id": "piscines-4",
+      "reference": "P20-1252-S",
+      "category": "piscines",
+      "title": "Kit Piscine tubulaire 366x132 cm (pompe à sable 4,1m³/h, échelle, bâche, tapis de sol)",
+      "volume_m3": 0.4283,
+      "weight_kg": 75.59,
+      "price_eur": 1033.7,
+      "image": "P20-1252-S.jpg"
+    },
+    {
+      "id": "piscines-5",
+      "reference": "P20-1552-Z",
+      "category": "piscines",
+      "title": "Kit Piscine tubulaire 457x132 cm (échelle, bâche, tapis de sol)",
+      "volume_m3": 0.33,
+      "weight_kg": 74.6,
+      "price_eur": 811.71,
+      "image": "P20-1552-Z.jpg"
+    },
+    {
+      "id": "piscines-6",
+      "reference": "P20-2052-B",
+      "category": "piscines",
+      "title": "Kit Piscine tubulaire 549x274x132 cm (pompe, échelle, bâche, tapis de sol, kit nettoyage, skimmer)",
+      "volume_m3": 0.592,
+      "weight_kg": 116.92,
+      "price_eur": 1517.91,
+      "image": "P20-2052-B.jpg"
+    },
+    {
+      "id": "piscines-7",
+      "reference": "P20-1852-B",
+      "category": "piscines",
+      "title": "Kit Piscine tubulaire 549x132 cm (pompe 5,7m³/h, échelle, bâche, tapis de sol)",
+      "volume_m3": 0.4157,
+      "weight_kg": 113.3,
+      "price_eur": 1266.39,
+      "image": "P20-1852-B.jpg"
+    },
+    {
+      "id": "piscines-8",
+      "reference": "57173",
+      "category": "piscines",
+      "title": "Piscine tubulaire 122x122x30 cm, bleue, à partir de 2 ans",
+      "volume_m3": 0.0172,
+      "weight_kg": 4.317,
+      "price_eur": 56.19,
+      "image": "57173.jpg"
+    },
+    {
+      "id": "piscines-9",
+      "reference": "56452",
+      "category": "piscines",
+      "title": "Piscine gonflable 457x84 cm",
+      "volume_m3": 0.038,
+      "weight_kg": 10.96,
+      "price_eur": 208.9,
+      "image": "56452.jpg"
+    },
+    {
+      "id": "piscines-10",
+      "reference": "58472",
+      "category": "piscines",
+      "title": "Piscine gonflable 549x107 cm",
+      "volume_m3": 0.071,
+      "weight_kg": 18.23,
+      "price_eur": 380.7,
+      "image": "58472.jpg"
+    },
+    {
+      "id": "piscines-11",
+      "reference": "57190",
+      "category": "piscines",
+      "title": "Piscine familiale 229x66 cm, à partir de 6 ans",
+      "volume_m3": 0.0195,
+      "weight_kg": 5.4,
+      "price_eur": 76.04,
+      "image": "57190.jpg"
+    },
+    {
+      "id": "piscines-12",
+      "reference": "56490",
+      "category": "piscines",
+      "title": "Kit Piscine gonflable 549x122 cm (avec pompe 3m³/h)",
+      "volume_m3": 0.256,
+      "weight_kg": 36.6,
+      "price_eur": 591.89,
+      "image": "56490.jpg"
+    },
+    {
+      "id": "piscines-13",
+      "reference": "58485",
+      "category": "piscines",
+      "title": "Piscine familiale 262x175x51 cm, à partir de 6 ans",
+      "volume_m3": 0.015,
+      "weight_kg": 4.95,
+      "price_eur": 62.65,
+      "image": "58485.jpg"
+    },
+    {
+      "id": "piscines-14",
+      "reference": "57183",
+      "category": "piscines",
+      "title": "Piscine familiale 305x183x56 cm, à partir de 6 ans",
+      "volume_m3": 0.024,
+      "weight_kg": 7.32,
+      "price_eur": 82.17,
+      "image": "57183.jpg"
+    },
+    {
+      "id": "piscines-15",
+      "reference": "28272",
+      "category": "piscines",
+      "title": "Piscine tubulaire 400x200x100 cm",
+      "volume_m3": 0.125,
+      "weight_kg": 41.5,
+      "price_eur": 349.18,
+      "image": "28272.jpg"
+    },
+    {
+      "id": "piscines-16",
+      "reference": "28273",
+      "category": "piscines",
+      "title": "Piscine tubulaire 450x220x84 cm, à partir de 6 ans",
+      "volume_m3": 0.121,
+      "weight_kg": 39.2,
+      "price_eur": 335.67,
+      "image": "28273.jpg"
+    },
+    {
+      "id": "piscines-17",
+      "reference": "28101",
+      "category": "piscines",
+      "title": "Piscine gonflable 183x51 cm, à partir de 3 ans",
+      "volume_m3": 0.0123,
+      "weight_kg": 3.35,
+      "price_eur": 42.16,
+      "image": "28101.jpg"
+    },
+    {
+      "id": "piscines-18",
+      "reference": "28106",
+      "category": "piscines",
+      "title": "Piscine gonflable 244x61 cm",
+      "volume_m3": 0.0177,
+      "weight_kg": 5.25,
+      "price_eur": 55.28,
+      "image": "28106.jpg"
+    },
+    {
+      "id": "piscines-19",
+      "reference": "28200",
+      "category": "piscines",
+      "title": "Piscine tubulaire 220x150x60 cm, à partir de 6 ans",
+      "volume_m3": 0.05,
+      "weight_kg": 15.6,
+      "price_eur": 186.76,
+      "image": "28200.jpg"
+    },
+    {
+      "id": "piscines-20",
+      "reference": "28242",
+      "category": "piscines",
+      "title": "Piscine tubulaire 549x274x122 cm",
+      "volume_m3": 0.316,
+      "weight_kg": 68.6,
+      "price_eur": 622.63,
+      "image": "28242.jpg"
+    },
+    {
+      "id": "piscines-21",
+      "reference": "26700",
+      "category": "piscines",
+      "title": "Piscine tubulaire 732x366x132 cm (Ultra Frame)",
+      "volume_m3": 0.584,
+      "weight_kg": 139.7,
+      "price_eur": 1216.87,
+      "image": "26700.jpg"
+    },
+    {
+      "id": "piscines-22",
+      "reference": "28208",
+      "category": "piscines",
+      "title": "Piscine tubulaire 300x200x75 cm",
+      "volume_m3": 0.073,
+      "weight_kg": 21.6,
+      "price_eur": 253.99,
+      "image": "28208.jpg"
+    },
+    {
+      "id": "piscines-23",
+      "reference": "26784",
+      "category": "piscines",
+      "title": "Piscine tubulaire 400x200x122 cm (Ultra Frame)",
+      "volume_m3": 0.179,
+      "weight_kg": 58.7,
+      "price_eur": 588.36,
+      "image": "26784.jpg"
+    },
+    {
+      "id": "piscines-24",
+      "reference": "26742",
+      "category": "piscines",
+      "title": "Piscine tubulaire 400x200x100 cm (Ultra Frame)",
+      "volume_m3": 0.13,
+      "weight_kg": 44.4,
+      "price_eur": 465.15,
+      "image": "26742.jpg"
+    },
+    {
+      "id": "piscines-25",
+      "reference": "26384",
+      "category": "piscines",
+      "title": "Piscine tubulaire 488x122 cm (Ultra Frame)",
+      "volume_m3": 0.231,
+      "weight_kg": 70.3,
+      "price_eur": 625.42,
+      "image": "26384.jpg"
+    },
+    {
+      "id": "piscines-26",
+      "reference": "26340",
+      "category": "piscines",
+      "title": "Piscine tubulaire 457x122 cm (Ultra Frame)",
+      "volume_m3": 0.186,
+      "weight_kg": 61.1,
+      "price_eur": 549.32,
+      "image": "26340.jpg"
+    },
+    {
+      "id": "piscines-27",
+      "reference": "26374",
+      "category": "piscines",
+      "title": "Piscine tubulaire 457x107 cm (Ultra Frame)",
+      "volume_m3": 0.154,
+      "weight_kg": 54.3,
+      "price_eur": 509.17,
+      "image": "26374.jpg"
+    },
+    {
+      "id": "piscines-28",
+      "reference": "56629",
+      "category": "piscines",
+      "title": "Piscine tubulaire 457x122 cm",
+      "volume_m3": 0.174,
+      "weight_kg": 50.8,
+      "price_eur": 419.28,
+      "image": "56629.jpg"
+    },
+    {
+      "id": "piscines-29",
+      "reference": "5614A",
+      "category": "piscines",
+      "title": "Kit Piscine tubulaire 488x244x107 cm (Ultra) (pompe 3,8 m³/h, échelle)",
+      "volume_m3": 0.264,
+      "weight_kg": 75.2,
+      "price_eur": 858.12,
+      "image": "5614A.jpg"
+    },
+    {
+      "id": "piscines-30",
+      "reference": "5614X",
+      "category": "piscines",
+      "title": "Kit Piscine tubulaire 549x274x122 cm (Ultra) (pompe 5,7 m³/h, échelle, bâche, tapis de sol)",
+      "volume_m3": 0.384,
+      "weight_kg": 105.1,
+      "price_eur": 1405.92,
+      "image": "5614X.jpg"
+    },
+    {
+      "id": "piscines-31",
+      "reference": "561CS",
+      "category": "piscines",
+      "title": "Kit Piscine tubulaire 732x366x132 cm (Ultra) (pompe 7,9 m³/h, échelle, bâche, tapis de sol)",
+      "volume_m3": 0.584,
+      "weight_kg": 161.4,
+      "price_eur": 2093.26,
+      "image": "561CS.jpg"
+    },
+    {
+      "id": "piscines-32",
+      "reference": "561CW",
+      "category": "piscines",
+      "title": "Kit Piscine tubulaire 975x488x132 cm (Ultra) (pompe 10 m³/h, échelle, bâche, tapis de sol)",
+      "volume_m3": 0.706,
+      "weight_kg": 204.4,
+      "price_eur": 2677.24,
+      "image": "561CW.jpg"
+    },
+    {
+      "id": "piscines-33",
+      "reference": "57100",
+      "category": "piscines",
+      "title": "Piscine fond gonflable 85x85x23 cm, 2 couleurs, 1-3 ans",
+      "volume_m3": 0.0036,
+      "weight_kg": 1.08,
+      "price_eur": 13.91,
+      "image": "57100.jpg"
+    },
+    {
+      "id": "piscines-34",
+      "reference": "58924",
+      "category": "piscines",
+      "title": "Piscine fond gonflable 86x25 cm, 1-3 ans",
+      "volume_m3": 0.0024,
+      "weight_kg": 0.682,
+      "price_eur": 9.54,
+      "image": "58924.jpg"
+    },
+    {
+      "id": "piscines-35",
+      "reference": "57403",
+      "category": "piscines",
+      "title": "Piscine fond gonflable 166x100x28 cm, à partir de 2 ans",
+      "volume_m3": 0.0058,
+      "weight_kg": 1.81,
+      "price_eur": 20.18,
+      "image": "57403.jpg"
+    },
+    {
+      "id": "piscines-36",
+      "reference": "58426",
+      "category": "piscines",
+      "title": "Piscine fond gonflable 147x33 cm, à partir de 2 ans",
+      "volume_m3": 0.0052,
+      "weight_kg": 1.444,
+      "price_eur": 16.34,
+      "image": "58426.jpg"
+    },
+    {
+      "id": "piscines-37",
+      "reference": "57180",
+      "category": "piscines",
+      "title": "Piscine familiale 203x152x48 cm, à partir de 3 ans",
+      "volume_m3": 0.014,
+      "weight_kg": 3.734,
+      "price_eur": 46.48,
+      "image": "57180.jpg"
+    },
+    {
+      "id": "piscines-38",
+      "reference": "58484",
+      "category": "piscines",
+      "title": "Piscine familiale 305x183x56 cm, bleue, à partir de 6 ans",
+      "volume_m3": 0.0227,
+      "weight_kg": 7.32,
+      "price_eur": 80.13,
+      "image": "58484.jpg"
+    },
+    {
+      "id": "piscines-39",
+      "reference": "58417",
+      "category": "piscines",
+      "title": "Piscine gonflable 305x76 cm, à partir de 3 ans",
+      "volume_m3": 0.0286,
+      "weight_kg": 7.8,
+      "price_eur": 72.5,
+      "image": "58417.jpg"
+    }
+  ],
+  "spa": [
+    {
+      "id": "spa-1",
+      "reference": "60001",
+      "category": "spa",
+      "title": "Jacuzzi gonflable Miami 180x66cm",
+      "volume_m3": 0.225,
+      "weight_kg": 33.93,
+      "price_eur": 918.19,
+      "image": "60001.jpg"
+    },
+    {
+      "id": "spa-2",
+      "reference": "60005",
+      "category": "spa",
+      "title": "Jacuzzi gonflable Lay-Z-Spa Vegas 196x61cm",
+      "volume_m3": 0.235,
+      "weight_kg": 34.33,
+      "price_eur": 973.24,
+      "image": "60005.jpg"
+    },
+    {
+      "id": "spa-3",
+      "reference": "60059",
+      "category": "spa",
+      "title": "Jacuzzi gonflable Lay-Z-Spa Helsinki 180x66cm",
+      "volume_m3": 0.21,
+      "weight_kg": 35.15,
+      "price_eur": 995.51,
+      "image": "60059.jpg"
+    },
+    {
+      "id": "spa-4",
+      "reference": "28442",
+      "category": "spa",
+      "title": "Jacuzzi gonflable Simple-Spa 280x180x71cm",
+      "volume_m3": 0.254,
+      "weight_kg": 35.84,
+      "price_eur": 1175.65,
+      "image": "28442.jpg"
+    },
+    {
+      "id": "spa-5",
+      "reference": "28458",
+      "category": "spa",
+      "title": "Jacuzzi gonflable Pure-Spa Jet Massage 201x71cm",
+      "volume_m3": 0.231,
+      "weight_kg": 35.34,
+      "price_eur": 1300.75,
+      "image": "28458.jpg"
+    },
+    {
+      "id": "spa-6",
+      "reference": "28428",
+      "category": "spa",
+      "title": "Jacuzzi gonflable Pure-Spa Bubble Massage 216x71cm",
+      "volume_m3": 0.253,
+      "weight_kg": 41.5,
+      "price_eur": 1127.64,
+      "image": "28428.jpg"
+    }
+  ],
+  "matelas": [
+    {
+      "id": "matelas-1",
+      "reference": "67998",
+      "category": "matelas",
+      "title": "Matelas gonflable 183x76x22 cm",
+      "volume_m3": 0.003,
+      "weight_kg": 1.7,
+      "price_eur": 16.27,
+      "image": "67998.jpg"
+    },
+    {
+      "id": "matelas-2",
+      "reference": "64448",
+      "category": "matelas",
+      "title": "Lit gonflable 191x99x46 cm avec pompe électrique",
+      "volume_m3": 0.026,
+      "weight_kg": 5.4,
+      "price_eur": 61.12,
+      "image": "64448.jpg"
+    },
+    {
+      "id": "matelas-3",
+      "reference": "64428",
+      "category": "matelas",
+      "title": "Lit gonflable 203x152x46 cm avec pompe électrique",
+      "volume_m3": 0.038,
+      "weight_kg": 7.4,
+      "price_eur": 86.84,
+      "image": "64428.jpg"
+    },
+    {
+      "id": "matelas-4",
+      "reference": "64488",
+      "category": "matelas",
+      "title": "Lit gonflable 203x152x51 cm avec pompe électrique et sac de rangement",
+      "volume_m3": 0.046,
+      "weight_kg": 8.7,
+      "price_eur": 118.04,
+      "image": "64488.jpg"
+    },
+    {
+      "id": "matelas-5",
+      "reference": "64412",
+      "category": "matelas",
+      "title": "Lit gonflable 191x99x25 cm avec pompe à pied",
+      "volume_m3": 0.013,
+      "weight_kg": 3.2,
+      "price_eur": 32.76,
+      "image": "64412.jpg"
+    },
+    {
+      "id": "matelas-6",
+      "reference": "64414",
+      "category": "matelas",
+      "title": "Lit gonflable 203x152x25 cm avec pompe à pied",
+      "volume_m3": 0.02,
+      "weight_kg": 4.8,
+      "price_eur": 49.38,
+      "image": "64414.jpg"
+    },
+    {
+      "id": "matelas-7",
+      "reference": "67768",
+      "category": "matelas",
+      "title": "Matelas gonflable (2 pièces) 191x99x22 cm",
+      "volume_m3": 0.004,
+      "weight_kg": 2.2,
+      "price_eur": 23.33,
+      "image": "67768.jpg"
+    },
+    {
+      "id": "matelas-8",
+      "reference": "64126",
+      "category": "matelas",
+      "title": "Matelas/Lit gonflable 191x99x25 cm",
+      "volume_m3": 0.005,
+      "weight_kg": 2.4,
+      "price_eur": 24.35,
+      "image": "64126.jpg"
+    },
+    {
+      "id": "matelas-9",
+      "reference": "64162",
+      "category": "matelas",
+      "title": "Matelas/Lit gonflable 203x183x25 cm",
+      "volume_m3": 0.009,
+      "weight_kg": 4.5,
+      "price_eur": 45.43,
+      "image": "64162.jpg"
+    },
+    {
+      "id": "matelas-10",
+      "reference": "64124",
+      "category": "matelas",
+      "title": "Matelas/Lit gonflable 183x76x25 cm",
+      "volume_m3": 0.004,
+      "weight_kg": 1.8,
+      "price_eur": 17.87,
+      "image": "64124.jpg"
+    },
+    {
+      "id": "matelas-11",
+      "reference": "64132",
+      "category": "matelas",
+      "title": "Matelas/Lit gonflable 191x137x25 cm",
+      "volume_m3": 0.006,
+      "weight_kg": 3.3,
+      "price_eur": 33.82,
+      "image": "64132.jpg"
+    },
+    {
+      "id": "matelas-12",
+      "reference": "64118",
+      "category": "matelas",
+      "title": "Matelas/Lit gonflable 203x183x22 cm",
+      "volume_m3": 0.007,
+      "weight_kg": 4.1,
+      "price_eur": 41.59,
+      "image": "64118.jpg"
+    },
+    {
+      "id": "matelas-13",
+      "reference": "64157",
+      "category": "matelas",
+      "title": "Matelas/Lit gonflable 191x99x22 cm",
+      "volume_m3": 0.004,
+      "weight_kg": 2.2,
+      "price_eur": 23.33,
+      "image": "64157.jpg"
+    },
+    {
+      "id": "matelas-14",
+      "reference": "64146",
+      "category": "matelas",
+      "title": "Matelas/Lit gonflable 203x152x22 cm",
+      "volume_m3": 0.006,
+      "weight_kg": 3.4,
+      "price_eur": 34.9,
+      "image": "64146.jpg"
+    },
+    {
+      "id": "matelas-15",
+      "reference": "64103",
+      "category": "matelas",
+      "title": "Matelas gonflable 185x76x22 cm (avec oreiller)",
+      "volume_m3": 0.003,
+      "weight_kg": 1.7,
+      "price_eur": 16.27,
+      "image": "64103.jpg"
+    },
+    {
+      "id": "matelas-16",
+      "reference": "64114",
+      "category": "matelas",
+      "title": "Matelas gonflable 191x99x22 cm (avec oreiller)",
+      "volume_m3": 0.004,
+      "weight_kg": 2.2,
+      "price_eur": 23.33,
+      "image": "64114.jpg"
+    },
+    {
+      "id": "matelas-17",
+      "reference": "64109",
+      "category": "matelas",
+      "title": "Matelas gonflable 203x152x22 cm (avec oreiller)",
+      "volume_m3": 0.006,
+      "weight_kg": 3.4,
+      "price_eur": 34.9,
+      "image": "64109.jpg"
+    },
+    {
+      "id": "matelas-18",
+      "reference": "64760",
+      "category": "matelas",
+      "title": "Matelas gonflable 203x152x22 cm",
+      "volume_m3": 0.007,
+      "weight_kg": 3.7,
+      "price_eur": 37.6,
+      "image": "64760.jpg"
+    },
+    {
+      "id": "matelas-19",
+      "reference": "64755",
+      "category": "matelas",
+      "title": "Matelas gonflable 191x99x22 cm",
+      "volume_m3": 0.004,
+      "weight_kg": 2.3,
+      "price_eur": 24.35,
+      "image": "64755.jpg"
+    },
+    {
+      "id": "matelas-20",
+      "reference": "64106",
+      "category": "matelas",
+      "title": "Matelas gonflable 191x137x22 cm (с oreiller)",
+      "volume_m3": 0.005,
+      "weight_kg": 3.0,
+      "price_eur": 30.78,
+      "image": "64106.jpg"
+    },
+    {
+      "id": "matelas-21",
+      "reference": "64759",
+      "category": "matelas",
+      "title": "Matelas gonflable 203x183x22 cm",
+      "volume_m3": 0.008,
+      "weight_kg": 4.6,
+      "price_eur": 46.52,
+      "image": "64759.jpg"
+    }
+  ],
+  "entretien": [
+    {
+      "id": "entretien-1",
+      "reference": "28005",
+      "category": "entretien",
+      "title": "Nettoyeur automatique de piscine ZX300",
+      "volume_m3": 0.077,
+      "weight_kg": 7.46,
+      "price_eur": 235.65,
+      "image": "28005.jpg"
+    },
+    {
+      "id": "entretien-2",
+      "reference": "28004",
+      "category": "entretien",
+      "title": "Nettoyeur automatique de piscine ZX25",
+      "volume_m3": 0.038,
+      "weight_kg": 3.73,
+      "price_eur": 135.29,
+      "image": "28004.jpg"
+    },
+    {
+      "id": "entretien-3",
+      "reference": "29000",
+      "category": "entretien",
+      "title": "Manche télescopique en aluminium",
+      "volume_m3": 0.0076,
+      "weight_kg": 0.817,
+      "price_eur": 12.37,
+      "image": "29000.jpg"
+    },
+    {
+      "id": "entretien-4",
+      "reference": "29044",
+      "category": "entretien",
+      "title": "Épuisette de surface (sac)",
+      "volume_m3": 0.0054,
+      "weight_kg": 0.596,
+      "price_eur": 6.7,
+      "image": "29044.jpg"
+    },
+    {
+      "id": "entretien-5",
+      "reference": "58237",
+      "category": "entretien",
+      "title": "Kit de nettoyage de piscine DELUXE",
+      "volume_m3": 0.078,
+      "weight_kg": 6.42,
+      "price_eur": 94.67,
+      "image": "58237.jpg"
+    },
+    {
+      "id": "entretien-6",
+      "reference": "58233",
+      "category": "entretien",
+      "title": "Kit de nettoyage de piscine",
+      "volume_m3": 0.0445,
+      "weight_kg": 3.764,
+      "price_eur": 62.46,
+      "image": "58233.jpg"
+    },
+    {
+      "id": "entretien-7",
+      "reference": "58665",
+      "category": "entretien",
+      "title": "Aspirateur de piscine AquaDrift",
+      "volume_m3": 0.066,
+      "weight_kg": 6.3,
+      "price_eur": 144.52,
+      "image": "58665.jpg"
+    },
+    {
+      "id": "entretien-8",
+      "reference": "58282",
+      "category": "entretien",
+      "title": "Tête de brosse d'aspirateur",
+      "volume_m3": 0.00458,
+      "weight_kg": 0.792,
+      "price_eur": 15.12,
+      "image": "58282.jpg"
+    },
+    {
+      "id": "entretien-9",
+      "reference": "26666",
+      "category": "entretien",
+      "title": "Générateur de chlore avec ozonateur",
+      "volume_m3": 0.0512,
+      "weight_kg": 11.215,
+      "price_eur": 420.62,
+      "image": "26666.jpg"
+    },
+    {
+      "id": "entretien-10",
+      "reference": "26652",
+      "category": "entretien",
+      "title": "Pompe de filtration 3,8 m³/h",
+      "volume_m3": 0.065,
+      "weight_kg": 8.08,
+      "price_eur": 185.74,
+      "image": "26652.jpg"
+    },
+    {
+      "id": "entretien-11",
+      "reference": "28523",
+      "category": "entretien",
+      "title": "Kit de nettoyage de jacuzzi",
+      "volume_m3": 0.0076,
+      "weight_kg": 0.499,
+      "price_eur": 14.88,
+      "image": "28523.jpg"
+    },
+    {
+      "id": "entretien-12",
+      "reference": "10",
+      "category": "entretien",
+      "title": "Chlore (comprimés), disponible en 0,5 kg, 1 kg, 2 kg, 3 kg, 5 kg, 25 kg.",
+      "volume_m3": 0.0017,
+      "weight_kg": 0.6,
+      "price_eur": 13.91,
+      "image": "10.jpg"
+    },
+    {
+      "id": "entretien-13",
+      "reference": "16",
+      "category": "entretien",
+      "title": "Chlore (granulés), disponible en 0,5 kg, 1 kg, 2 kg, 3 kg, 5 kg, 25 kg.",
+      "volume_m3": 0.0017,
+      "weight_kg": 0.6,
+      "price_eur": 13.91,
+      "image": "16.jpg"
+    },
+    {
+      "id": "entretien-14",
+      "reference": "22",
+      "category": "entretien",
+      "title": "Algicide (liquide), disponible en 1 L, 3 L, 20 L, 30 L, 200 L.",
+      "volume_m3": 0.0018,
+      "weight_kg": 1.1,
+      "price_eur": 6.76,
+      "image": "22.jpg"
+    },
+    {
+      "id": "entretien-15",
+      "reference": "28",
+      "category": "entretien",
+      "title": "Émovex (liquide), disponible en 1 L, 3 L, 20 L, 30 L, 200 L.",
+      "volume_m3": 0.0018,
+      "weight_kg": 1.1,
+      "price_eur": 6.76,
+      "image": "28.jpg"
+    },
+    {
+      "id": "entretien-16",
+      "reference": "34",
+      "category": "entretien",
+      "title": "Équitalle (comprimés), disponible en 0,5 kg, 1 kg, 2 kg, 25 kg.",
+      "volume_m3": 0.0017,
+      "weight_kg": 0.6,
+      "price_eur": 7.91,
+      "image": "34.jpg"
+    },
+    {
+      "id": "entretien-17",
+      "reference": "39",
+      "category": "entretien",
+      "title": "Équitalle (liquide), disponible en 1 L, 3 L, 20 L, 30 L.",
+      "volume_m3": 0.0018,
+      "weight_kg": 1.0,
+      "price_eur": 3.61,
+      "image": "39.jpg"
+    },
+    {
+      "id": "entretien-18",
+      "reference": "60310",
+      "category": "entretien",
+      "title": "Matelas gonflable double 191x137x22 cm",
+      "volume_m3": 0.0058,
+      "weight_kg": 2.66,
+      "price_eur": 19.33,
+      "image": "60310.jpg"
+    },
+    {
+      "id": "entretien-19",
+      "reference": "60311",
+      "category": "entretien",
+      "title": "Matelas gonflable double 203x152x22 cm",
+      "volume_m3": 0.0068,
+      "weight_kg": 3.06,
+      "price_eur": 21.09,
+      "image": "60311.jpg"
+    },
+    {
+      "id": "entretien-20",
+      "reference": "58142",
+      "category": "entretien",
+      "title": "Fauteuil-poire gonflable 104x104x69 cm",
+      "volume_m3": 0.0042,
+      "weight_kg": 1.2,
+      "price_eur": 13.56,
+      "image": "58142.jpg"
+    },
+    {
+      "id": "entretien-21",
+      "reference": "60327",
+      "category": "entretien",
+      "title": "Canapé-chaise longue gonflable 183x79x66 cm",
+      "volume_m3": 0.0075,
+      "weight_kg": 2.02,
+      "price_eur": 22.75,
+      "image": "60327.jpg"
+    },
+    {
+      "id": "entretien-22",
+      "reference": "58210",
+      "category": "entretien",
+      "title": "Bouée-radeau \"Tortue\" avec poignées 140x140 cm",
+      "volume_m3": 0.0083,
+      "weight_kg": 1.556,
+      "price_eur": 17.55,
+      "image": "58210.jpg"
+    },
+    {
+      "id": "entretien-23",
+      "reference": "58668",
+      "category": "entretien",
+      "title": "Gilet gonflable \"Vie marine\", 3-5 ans",
+      "volume_m3": 0.0007,
+      "weight_kg": 0.21,
+      "price_eur": 3.86,
+      "image": "58668.jpg"
+    },
+    {
+      "id": "entretien-24",
+      "reference": "58678",
+      "category": "entretien",
+      "title": "Bouée-radeau \"Dauphin\" 175x66 cm",
+      "volume_m3": 0.0046,
+      "weight_kg": 1.272,
+      "price_eur": 14.34,
+      "image": "58678.jpg"
+    },
+    {
+      "id": "entretien-25",
+      "reference": "58230",
+      "category": "entretien",
+      "title": "Bouée avec poignées \"Animaux\" 107x99 cm",
+      "volume_m3": 0.0028,
+      "weight_kg": 0.74,
+      "price_eur": 8.35,
+      "image": "58230.jpg"
+    },
+    {
+      "id": "entretien-26",
+      "reference": "58259",
+      "category": "entretien",
+      "title": "Bouée avec poignées \"Pilote\" 91x76 cm",
+      "volume_m3": 0.0034,
+      "weight_kg": 0.9,
+      "price_eur": 10.15,
+      "image": "58259.jpg"
+    },
+    {
+      "id": "entretien-27",
+      "reference": "58635",
+      "category": "entretien",
+      "title": "Bouée-radeau \"Baleine\" 193x119 cm",
+      "volume_m3": 0.0068,
+      "weight_kg": 1.93,
+      "price_eur": 13.91,
+      "image": "58635.jpg"
+    },
+    {
+      "id": "entretien-28",
+      "reference": "58702",
+      "category": "entretien",
+      "title": "Bouée-radeau \"Flamant\" 127x127 cm",
+      "volume_m3": 0.0042,
+      "weight_kg": 0.983,
+      "price_eur": 11.08,
+      "image": "58702.jpg"
+    },
+    {
+      "id": "entretien-29",
+      "reference": "29083",
+      "category": "entretien",
+      "title": "Échelle avec plateforme, 132 cm",
+      "volume_m3": 0.0768,
+      "weight_kg": 11.94,
+      "price_eur": 134.61,
+      "image": "29083.jpg"
+    }
+  ]
+}
