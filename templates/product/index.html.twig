@@ -2,19 +2,72 @@
 
 {% block title %}Produits{% endblock %}
 
-{% block body %}
-  <section class="container">
-    <h1>Produits</h1>
+{% block stylesheets %}
 
-    <div>
-      <ul class="products">
-      {% for product in products %}
-        <li>
-          Title : {{ product.title }}
-        </li>
-      {% endfor %}
-      </ul>
-    </div>
-  </section>
+    <style>
+        h1 {
+            font-size: 3em;
+        }
+
+        .catalogue{
+            display:grid;
+            grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+            gap:16px;
+            align-items:stretch;
+        }
+
+        .card{
+            border:1px solid #ddd;
+            padding:12px;
+        }
+
+        .imgWrap{
+            display:block;
+            aspect-ratio: 1 / 1;
+            border:1px solid #eee;
+            overflow:hidden;
+            margin-bottom:10px;
+        }
+
+        .imgWrap img{
+            width:100%;
+            height:100%;
+            object-fit:contain;
+            display:block;
+        }
+
+        .title{ margin-bottom:6px; }
+        .price{ font-weight:bold; margin-bottom:6px; }
+        .ref{ font-size:12px; color:#666; }
+    </style>
+
+{% endblock %}
+
+{% block body %}
+    <section class="container">
+        <h1>Catalogue des produits</h1>
+        {% if products is empty %}
+            <p>Aucun produit disponible.</p>
+        {% else %}
+        <div class="catalogue">
+            {% for product in products %}
+            <article class="card">
+                <a href="{{ path('app_product_show', {id: product.id}) }}" class="imgWrap">
+                    {% if product.image %}
+                        <img src="{{ asset('images/products/' ~ product.image) }}" alt="{{ product.title }}" loading="lazy">
+                    {% endif %}
+                </a>
+                <div class="meta">
+                    <div class="title">
+                        <a href="{{ path('app_product_show', {id: product.id}) }}">{{ product.title }}</a>
+                    </div>
+                    <div class="price">Prix: {{ product.getPriceEur() }}€</div>
+                    <div class="ref">ref: {{ product.reference }}</div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </section>
 
 {% endblock %}

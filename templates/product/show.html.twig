@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.title }}{% endblock %}
+
+{% block body %}
+    <a href="{{ path('app_product') }}">← Retourner au catalogue</a>
+
+    <section class="container">
+    {% if product.image %}
+         <img class="img-fluid" src="{{ asset('images/products/' ~ product.image) }}">
+    {% endif %}
+    <h2>{{ product.title }}</h2>
+
+    <p><b>Prix:</b> {{ product.getPriceEur() }}</p>
+    <p><b>Catégorie:</b> {{ product.category }}</p>
+    <p><b>Reference:</b> {{ product.reference }}</p>
+
+    {% if product.description %}
+        <h3>Description</h3>
+        <p>{{ product.description }}</p>
+    {% endif %}
+
+    <h3>Caractéristiques</h3>
+    <ul>
+        <li>Volume (м³): {{ product.volumeM3 }}</li>
+        <li>Poids (kg): {{ product.weightKg }}</li>
+    </ul>
+
+
+
+
+        </section>
+
+{% endblock %}
