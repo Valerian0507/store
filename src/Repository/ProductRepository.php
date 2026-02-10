@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
+
 
 /**
  * @extends ServiceEntityRepository<Product>
@@ -18,37 +20,67 @@ class ProductRepository extends ServiceEntityRepository
 
 //    /**
 //     * Для каталога: список товаров с предсказуемой сортировкой.
-//     * Позже сюда легко добавить пагинацию и фильтры.
 //     *
 //     * @return Product[] Returns an array of Product objects
 //     */
 
-    public function findForCatalog(int $page = 1, int $perPage= 20): array
+    private function createCatalogQueryBuilder(): QueryBuilder
     {
+        return $this->createQueryBuilder('product');
+    }
+
+    private function applyCategoryFilter(QueryBuilder $qb, ?string $category): void
+    {
+        if ($category !== null && $category !== '') {
+            $qb->andWhere('product.category = :category')
+                ->setParameter('category', $category);
+        }
+    }
+
+    private function applySearch(QueryBuilder $qb, ?string $q): void
+    {
+        if ($q !== null && $q !== '') {
+            $qb
+                ->andWhere('LOWER(product.title) LIKE LOWER(:q)')
+                ->setParameter('q', '%' . $q . '%');
+        }
+    }
+
+
+
+    private function applySort(QueryBuilder $qb, string $sort): void
+    {
+        match ($sort) {
+            'price_asc'  => $qb->orderBy('product.priceCents', 'ASC')->addOrderBy('product.id', 'DESC'),
+            'price_desc' => $qb->orderBy('product.priceCents', 'DESC')->addOrderBy('product.id', 'DESC'),
+            'title_asc'  => $qb->orderBy('product.title', 'ASC')->addOrderBy('product.id', 'DESC'),
+            'title_desc' => $qb->orderBy('product.title', 'DESC')->addOrderBy('product.id', 'DESC'),
+            default      => $qb->orderBy('product.id', 'DESC'),
+        };
+    }
+
+
+    public function findForCatalog(
+        int $page = 1,
+        int $perPage = 20,
+        ?string $category = null,
+        string $sort = 'newest',
+        ?string $q = null
+    ): array {
         $page = max(1, $page);
         $perPage = max(1, min(100, $perPage));
         $offset = ($page - 1) * $perPage;
 
-        return $this->createQueryBuilder('product')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-            ->orderBy('product.id', 'DESC')
+        $qb = $this->createCatalogQueryBuilder()
             ->setFirstResult($offset)
-            ->setMaxResults($perPage)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
+            ->setMaxResults($perPage);
 
-//    public function findOneBySomeField($value): ?Product
-//    {
-//        return $this->createQueryBuilder('p')
-//            ->andWhere('p.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $this->applyCategoryFilter($qb, $category);
+        $this->applySearch($qb, $q);
+        $this->applySort($qb, $sort);
+
+        return $qb->getQuery()->getResult();
+    }
 
 
     /**
@@ -62,4 +94,38 @@ class ProductRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * @return int
+     * Запрос, который возвращает общее количество товаров.
+     */
+    public function countForCatalog(?string $category = null, ?string $q = null): int
+    {
+        $qb = $this->createCatalogQueryBuilder()
+            ->select('COUNT(product.id)');
+
+        $this->applyCategoryFilter($qb, $category);
+        $this->applySearch($qb, $q);
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+
+//     1) Список категорий (для select)
+    public function findAllCategories(): array
+    {
+        $rows = $this->createQueryBuilder('product')
+            ->select('DISTINCT product.category AS category')
+            ->where('product.category IS NOT NULL')
+            ->andWhere('product.category <> :empty')
+            ->setParameter('empty', '')
+            ->orderBy('product.category', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+
+        return array_map(static fn(array $r) => $r['category'], $rows);
+    }
+
+    // 2) Список товаров для каталога с опциональным фильтром
+
 }

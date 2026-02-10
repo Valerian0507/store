@@ -9,6 +9,10 @@
             font-size: 3em;
         }
 
+        form{
+            margin: 12px 0 20px;
+        }
+
         .catalogue{
             display:grid;
             grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
@@ -17,8 +21,13 @@
         }
 
         .card{
-            border:1px solid #ddd;
-            padding:12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 12px;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .imgWrap{
@@ -39,6 +48,73 @@
         .title{ margin-bottom:6px; }
         .price{ font-weight:bold; margin-bottom:6px; }
         .ref{ font-size:12px; color:#666; }
+
+        /**Paginated*/
+
+        .paginated{
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:14px;
+
+            margin:28px auto;
+
+            /*background: radial-gradient(120% 120% at 50% 0%, #0b1030 0%, #050713 60%);*/
+            /*border-radius:14px;*/
+        }
+
+        .paginated a{
+            all: unset;
+            cursor: pointer;
+
+            width:42px;
+            height:42px;
+
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+
+            border-radius:50%;
+            border:1px solid #cfd3da;
+
+            color:#000000;
+            font-size:20px;
+            line-height:1;
+
+            background:#fff;
+
+            transition:
+                border-color .15s ease,
+                background-color .15s ease,
+                box-shadow .15s ease,
+                transform .1s ease;
+        }
+
+        .paginated a:hover{
+            background:#f4f6fb;
+            border-color:#d9d2d2;
+            box-shadow:0 4px 10px rgba(37,99,235,.15);
+            transform: translateY(-1px);
+        }
+
+        .paginated a:active{
+            transform: translateY(0);
+        }
+
+        .paginated .is-current{
+            background: #d9d2d2;
+            color:#fff;
+            border-color:#d9d2d2;
+            pointer-events:none;
+        }
+
+        .paginated .dots{
+            padding:0 6px;
+            color:#9ca3af;
+            user-select:none;
+        }
+
+
     </style>
 
 {% endblock %}
@@ -46,15 +122,72 @@
 {% block body %}
     <section class="container">
         <h1>Catalogue des produits</h1>
+
+        <form method="get" class="filters">
+            <label>
+                Catégorie:
+                <select name="category" class="category" onchange="this.form.submit()">
+                    <option value="">Toutes</option>
+
+                    {% for c in categories %}
+                        <option value="{{ c }}" {% if c == category %}selected{% endif %}>
+                            {{ c|capitalize }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>
+                Recherche:
+                <input type="search" name="q" value="{{ q ?? '' }}" placeholder="Nom du produit">
+            </label>
+            <button type="submit">Rechercher</button>
+
+            <label>
+                Trier:
+                <select name="sort" class="sort" onchange="this.form.submit()">
+                    <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Nouveautés</option>
+                    <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Prix ↑</option>
+                    <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Prix ↓</option>
+                    <option value="title_asc" {% if sort == 'title_asc' %}selected{% endif %}>Titre A→Z</option>
+                    <option value="title_desc" {% if sort == 'title_desc' %}selected{% endif %}>Titre Z→A</option>
+                </select>
+            </label>
+        </form>
+
+        {% set baseParams = {} %}
+        {% if category %}
+            {% set baseParams = baseParams|merge({category: category}) %}
+        {% endif %}
+        {% if sort %}
+            {% set baseParams = baseParams|merge({sort: sort}) %}
+        {% endif %}
+        {% if q %}
+            {% set baseParams = baseParams|merge({q: q}) %}
+        {% endif %}
+
         {% if products is empty %}
+        {% if q %}
+            <p>Aucun produit trouvé pour « <strong>{{ q }}</strong> ».</p>
+        {% else %}
             <p>Aucun produit disponible.</p>
+        {% endif %}
         {% else %}
         <div class="catalogue">
             {% for product in products %}
             <article class="card">
                 <a href="{{ path('app_product_show', {id: product.id}) }}" class="imgWrap">
                     {% if product.image %}
-                        <img src="{{ asset('images/products/' ~ product.image) }}" alt="{{ product.title }}" loading="lazy">
+                        <img src="{{ asset('images/products/' ~ product.image) }}"
+                             alt="{{ product.title }}"
+                             loading="lazy"
+                             onerror="this.onerror=null;this.src='{{ asset('images/products/no-image.jpg') }}';"
+                        >
+                    {% else %}
+                        <img
+                            src="{{ asset('images/products/no-image.jpg') }}"
+                            alt="No image"
+                            loading="lazy"
+                        >
                     {% endif %}
                 </a>
                 <div class="meta">
@@ -67,7 +200,50 @@
             </article>
             {% endfor %}
         </div>
+
+
+
+        {% if pages > 1 %}
+            <nav class="paginated">
+                {# ← #}
+                {% if page > 1 %}
+                    <a href="{{ path('app_product', baseParams|merge({page: page - 1})) }}" class="previous">‹</a>
+                {% endif %}
+
+                {# 1 #}
+                <a href="{{ path('app_product', baseParams|merge({page: 1})) }}"
+                   class="{{ page == 1 ? 'is-current' : '' }}">1</a>
+
+                {# … left #}
+                {% if pagination.start > 2 %}
+                    <span class="dots">…</span>
+                {% endif %}
+
+                {# center #}
+                {% for p in pagination.start..pagination.end %}
+                    {% if p > 1 and p < pages %}
+                        <a href="{{ path('app_product', baseParams|merge({page: p})) }}"
+                           class="{{ page == p ? 'is-current' : '' }}">{{ p }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {# … right #}
+                {% if pagination.end < pages - 1 %}
+                    <span class="dots">…</span>
+                {% endif %}
+
+                {# last #}
+                <a href="{{ path('app_product', baseParams|merge({page: pages})) }}"
+                   class="{{ page == pages ? 'is-current' : '' }}">{{ pages }}</a>
+
+                {# → #}
+                {% if page < pages %}
+                    <a href="{{ path('app_product', baseParams|merge({page: page + 1})) }}" class="next">›</a>
+                {% endif %}
+            </nav>
         {% endif %}
+        {% endif %}
+
     </section>
 
 {% endblock %}
