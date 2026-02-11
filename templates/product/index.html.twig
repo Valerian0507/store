@@ -120,11 +120,11 @@
 {% endblock %}
 
 {% block body %}
-    <section class="container">
+    <section  class="container">
         <h1>Catalogue des produits</h1>
 
         <form method="get" class="filters">
-            <label>
+            <label class="filter-categorie">
                 Catégorie:
                 <select name="category" class="category" onchange="this.form.submit()">
                     <option value="">Toutes</option>
@@ -136,13 +136,14 @@
                     {% endfor %}
                 </select>
             </label>
-            <label>
+
+            <label class="filter-recherche">
                 Recherche:
                 <input type="search" name="q" value="{{ q ?? '' }}" placeholder="Nom du produit">
             </label>
             <button type="submit">Rechercher</button>
 
-            <label>
+            <label class="filter-trier">
                 Trier:
                 <select name="sort" class="sort" onchange="this.form.submit()">
                     <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Nouveautés</option>
@@ -172,6 +173,8 @@
             <p>Aucun produit disponible.</p>
         {% endif %}
         {% else %}
+
+
         <div class="catalogue">
             {% for product in products %}
             <article class="card">
