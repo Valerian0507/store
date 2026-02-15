@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin · Produits{% endblock %}
+
+{% block body %}
+<div class="example-wrapper">
+    <h1>Products Controller</h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+
+    <div class="mb-3">
+        <a class="btn btn-primary" href="{{ path('admin_products_new') }}">Nouveau produit</a>
+        <a class="btn btn-link" href="{{ path('admin_dashboard') }}">Retour au tableau de bord</a>
+    </div>
+
+    <table class="table table-striped align-middle">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Reference</th>
+            <th>Category</th>
+            <th>Title</th>
+            <th class="text-end">Price</th>
+            <th class="text-end">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for p in products %}
+            <tr>
+                <td>{{ p.id }}</td>
+                <td>{{ p.reference }}</td>
+                <td>{{ p.category }}</td>
+                <td>{{ p.title }}</td>
+                <td class="text-end">{{ (p.priceCents / 100) | number_format(2, '.', ' ') }}</td>
+                <td class="text-end">
+                    <a class="btn btn-sm btn-outline-secondary"
+                       href="{{ path('admin_products_edit', {id: p.id}) }}">Edit</a>
+
+                    <form method="post"
+                          action="{{ path('admin_products_delete', {id: p.id}) }}"
+                          style="display:inline"
+                          onsubmit="return confirm('Delete this product?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_product_' ~ p.id) }}">
+                        <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="6">No products.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}

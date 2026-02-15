@@ -29,10 +29,10 @@ class Product
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?float $volumeM3 = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?float $weightKg = null;
 
     #[ORM\Column]
@@ -146,5 +146,5 @@ class Product
     {
         return number_format($this->priceCents / 100, 2, '.', '');
     }
-//    {{ product.priceEur }} € Для прописи в Twig отображения цены
+//    {{ products.priceEur }} € Для прописи в Twig отображения цены
 }

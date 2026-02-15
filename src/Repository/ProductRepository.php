@@ -26,13 +26,13 @@ class ProductRepository extends ServiceEntityRepository
 
     private function createCatalogQueryBuilder(): QueryBuilder
     {
-        return $this->createQueryBuilder('product');
+        return $this->createQueryBuilder('products');
     }
 
     private function applyCategoryFilter(QueryBuilder $qb, ?string $category): void
     {
         if ($category !== null && $category !== '') {
-            $qb->andWhere('product.category = :category')
+            $qb->andWhere('products.category = :category')
                 ->setParameter('category', $category);
         }
     }
@@ -41,7 +41,7 @@ class ProductRepository extends ServiceEntityRepository
     {
         if ($q !== null && $q !== '') {
             $qb
-                ->andWhere('LOWER(product.title) LIKE LOWER(:q)')
+                ->andWhere('LOWER(products.title) LIKE LOWER(:q)')
                 ->setParameter('q', '%' . $q . '%');
         }
     }
@@ -51,11 +51,11 @@ class ProductRepository extends ServiceEntityRepository
     private function applySort(QueryBuilder $qb, string $sort): void
     {
         match ($sort) {
-            'price_asc'  => $qb->orderBy('product.priceCents', 'ASC')->addOrderBy('product.id', 'DESC'),
-            'price_desc' => $qb->orderBy('product.priceCents', 'DESC')->addOrderBy('product.id', 'DESC'),
-            'title_asc'  => $qb->orderBy('product.title', 'ASC')->addOrderBy('product.id', 'DESC'),
-            'title_desc' => $qb->orderBy('product.title', 'DESC')->addOrderBy('product.id', 'DESC'),
-            default      => $qb->orderBy('product.id', 'DESC'),
+            'price_asc'  => $qb->orderBy('products.priceCents', 'ASC')->addOrderBy('products.id', 'DESC'),
+            'price_desc' => $qb->orderBy('products.priceCents', 'DESC')->addOrderBy('products.id', 'DESC'),
+            'title_asc'  => $qb->orderBy('products.title', 'ASC')->addOrderBy('products.id', 'DESC'),
+            'title_desc' => $qb->orderBy('products.title', 'DESC')->addOrderBy('products.id', 'DESC'),
+            default      => $qb->orderBy('products.id', 'DESC'),
         };
     }
 
@@ -88,8 +88,8 @@ class ProductRepository extends ServiceEntityRepository
      */
     public function findOneForCatalog(int $id): ?Product
     {
-        return $this->createQueryBuilder('product')
-            ->andWhere('product.id = :id')
+        return $this->createQueryBuilder('products')
+            ->andWhere('products.id = :id')
             ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult();
@@ -102,7 +102,7 @@ class ProductRepository extends ServiceEntityRepository
     public function countForCatalog(?string $category = null, ?string $q = null): int
     {
         $qb = $this->createCatalogQueryBuilder()
-            ->select('COUNT(product.id)');
+            ->select('COUNT(products.id)');
 
         $this->applyCategoryFilter($qb, $category);
         $this->applySearch($qb, $q);
@@ -114,12 +114,12 @@ class ProductRepository extends ServiceEntityRepository
 //     1) Список категорий (для select)
     public function findAllCategories(): array
     {
-        $rows = $this->createQueryBuilder('product')
-            ->select('DISTINCT product.category AS category')
-            ->where('product.category IS NOT NULL')
-            ->andWhere('product.category <> :empty')
+        $rows = $this->createQueryBuilder('products')
+            ->select('DISTINCT products.category AS category')
+            ->where('products.category IS NOT NULL')
+            ->andWhere('products.category <> :empty')
             ->setParameter('empty', '')
-            ->orderBy('product.category', 'ASC')
+            ->orderBy('products.category', 'ASC')
             ->getQuery()
             ->getArrayResult();
 

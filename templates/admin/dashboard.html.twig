@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin{% endblock %}
+
+{% block body %}
+    <section class="container">
+        <h1>Admin dashboard</h1>
+
+        <div class="list-group mt-3">
+            <a class="list-group-item list-group-item-action" href="{{ path('admin_products_index') }}">
+                Products
+            </a>
+        </div>
+    </section>
+{% endblock %}

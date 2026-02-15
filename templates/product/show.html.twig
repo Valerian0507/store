@@ -3,7 +3,7 @@
 {% block title %}{{ product.title }}{% endblock %}
 
 {% block body %}
-    <a href="{{ path('app_product') }}">← Retourner au catalogue</a>
+    <a href="{{ path('app_products_index') }}">← Retourner au catalogue</a>
 
     <section  class="container">
         {% if product.image %}

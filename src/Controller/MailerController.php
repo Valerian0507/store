@@ -2,15 +2,16 @@
 
 namespace App\Controller;
 
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 
-class MailController extends AbstractController
+class MailerController extends AbstractController
 {
-    #[Route('/send-email-html', name: 'app_send_mail_html')]
+    #[Route('/send-mail-html', name: 'app_send_mail_html')]
     public function sendMailHtml(MailerInterface $mailer): Response
     {
         $username = 'John Doe';

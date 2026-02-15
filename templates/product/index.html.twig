@@ -178,7 +178,7 @@
         <div class="catalogue">
             {% for product in products %}
             <article class="card">
-                <a href="{{ path('app_product_show', {id: product.id}) }}" class="imgWrap">
+                <a href="{{ path('app_products_show', {id: product.id}) }}" class="imgWrap">
                     {% if product.image %}
                         <img src="{{ asset('images/products/' ~ product.image) }}"
                              alt="{{ product.title }}"
@@ -195,7 +195,7 @@
                 </a>
                 <div class="meta">
                     <div class="title">
-                        <a href="{{ path('app_product_show', {id: product.id}) }}">{{ product.title }}</a>
+                        <a href="{{ path('app_products_show', {id: product.id}) }}">{{ product.title }}</a>
                     </div>
                     <div class="price">Prix: {{ product.getPriceEur() }}€</div>
                     <div class="ref">ref: {{ product.reference }}</div>
@@ -210,11 +210,11 @@
             <nav class="paginated">
                 {# ← #}
                 {% if page > 1 %}
-                    <a href="{{ path('app_product', baseParams|merge({page: page - 1})) }}" class="previous">‹</a>
+                    <a href="{{ path('app_products_index', baseParams|merge({page: page - 1})) }}" class="previous">‹</a>
                 {% endif %}
 
                 {# 1 #}
-                <a href="{{ path('app_product', baseParams|merge({page: 1})) }}"
+                <a href="{{ path('app_products_index', baseParams|merge({page: 1})) }}"
                    class="{{ page == 1 ? 'is-current' : '' }}">1</a>
 
                 {# … left #}
@@ -225,7 +225,7 @@
                 {# center #}
                 {% for p in pagination.start..pagination.end %}
                     {% if p > 1 and p < pages %}
-                        <a href="{{ path('app_product', baseParams|merge({page: p})) }}"
+                        <a href="{{ path('app_products_index', baseParams|merge({page: p})) }}"
                            class="{{ page == p ? 'is-current' : '' }}">{{ p }}</a>
                     {% endif %}
                 {% endfor %}
@@ -236,12 +236,12 @@
                 {% endif %}
 
                 {# last #}
-                <a href="{{ path('app_product', baseParams|merge({page: pages})) }}"
+                <a href="{{ path('app_products_index', baseParams|merge({page: pages})) }}"
                    class="{{ page == pages ? 'is-current' : '' }}">{{ pages }}</a>
 
                 {# → #}
                 {% if page < pages %}
-                    <a href="{{ path('app_product', baseParams|merge({page: page + 1})) }}" class="next">›</a>
+                    <a href="{{ path('app_products_index', baseParams|merge({page: page + 1})) }}" class="next">›</a>
                 {% endif %}
             </nav>
         {% endif %}

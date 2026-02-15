@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ProductController extends AbstractController
 {
-    #[Route('product', name: 'app_product', methods: ['GET'])]
+    #[Route('/products', name: 'app_products_index', methods: ['GET'])]
     public function index(Request $request, ProductRepository $products): Response
     {
         $page = max(1, (int) $request->query->get('page', 1));
@@ -34,8 +34,8 @@ class ProductController extends AbstractController
         $q = $q !== '' ? $q : null;
 
 
-        if($q != null && mb_strlen($q) > 80){
-            $q = mb_strlen($q, 0, 80);
+        if ($q !== null && mb_strlen($q) > 80) {
+            $q = mb_substr($q, 0, 80);
         }
 
         $total = $products->countForCatalog($category, $q);
@@ -76,7 +76,7 @@ class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('products/{id}', name: 'app_product_show', requirements: ['id' => '\d+'], methods: ['GET'])]
+    #[Route('/products/{id}', name: 'app_products_show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function show(int $id, ProductRepository $products): Response
     {
         $product = $products->findOneForCatalog($id);

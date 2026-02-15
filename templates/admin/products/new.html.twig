@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin · New product{% endblock %}
+
+{% block body %}
+    <h1>New product</h1>
+
+    {{ form_start(form) }}
+
+    {{ form_row(form.reference) }}
+    {{ form_row(form.category) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.volumeM3) }}
+    {{ form_row(form.weightKg) }}
+    {{ form_row(form.priceCents) }}
+    {{ form_row(form.image) }}
+
+    <button class="btn btn-primary">Create</button>
+    <a class="btn btn-link" href="{{ path('admin_products_index') }}">Cancel</a>
+
+    {{ form_end(form) }}
+{% endblock %}
