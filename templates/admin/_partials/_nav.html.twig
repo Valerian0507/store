@@ -1,0 +1,34 @@
+{% set route = app.request.attributes.get('_route') %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="{{ path('app_home') }}">
+            <img src="{{ asset('images/icons/logo4.png') }}" alt="Logo" class="logo">
+        </a>
+        <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link {{ route == 'app_home' ? 'active' : '' }}" href="{{ path('app_home') }}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ route starts with 'app_products' ? 'active' : '' }}" href="{{ path('app_products_index') }}">Produit</a>
+                </li>
+                {% if is_granted('ROLE_ADMIN') %}
+              <li class="nav-item">
+                <a class="nav-link {{ route starts with 'admin_' ? 'active' : '' }}" href="{{ path('admin_dashboard') }}">
+                  Admin
+                </a>
+              </li>
+            {% endif %}
+            </ul>
+
+
+        {% include '_partials/_account_nav.html.twig' %}
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,18 @@
+{
+  "files.exclude": {
+    "**/var/cache/**": true
+  },
+  "search.exclude": {
+    "**/var/cache/**": true
+  },
+  "files.watcherExclude": {
+    "**/var/cache/**": true
+  },
+
+  "intelephense.files.exclude": [
+    "**/var/cache/**"
+  ],
+  "intelephense.environment.phpVersion": "8.4.0",
+
+  "php.validate.enable": false
+}

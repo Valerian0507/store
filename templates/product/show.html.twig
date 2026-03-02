@@ -7,8 +7,18 @@
 
     <section  class="container">
         {% if product.image %}
-             <img class="img-fluid" src="{{ asset('images/products/' ~ product.image) }}">
+            <img class="img-fluid" src="{{ asset('uploads/products/' ~ product.image) }}"
+                 alt="{{ product.title }}"
+                 onerror="this.onerror=null;this.src='{{ asset('images/products/no-image.jpg') }}';"
+                 >
+        {% else %}
+            <img class="img-fluid" src="{{ asset('images/products/no-image.jpg') }}"
+                 alt="No image">
         {% endif %}
+
+        {#        {% if product.image %}#}
+{#             <img class="img-fluid" src="{{ asset('images/products/' ~ product.image) }}">#}
+{#        {% endif %}#}
         <h2>{{ product.title }}</h2>
 
         <p><b>Prix:</b> {{ product.getPriceEur() }}</p>

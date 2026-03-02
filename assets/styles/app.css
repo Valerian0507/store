@@ -1,5 +1,13 @@
 @import '../vendor/bootstrap/dist/css/bootstrap.min.css';
 
+/*  */
+.icon-primary { color: #304880; }
+.btn-icon { background: none; border: 0; padding: 0; }
+.navbar .logo {
+  max-width: 40px;
+}
+
+
 body {
     background-color: white;
 }

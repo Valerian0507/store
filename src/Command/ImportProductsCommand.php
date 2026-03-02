@@ -24,7 +24,7 @@ final class ImportProductsCommand extends Command
 
     protected function configure(): void
     {
-        $this->addArgument('file', InputArgument::REQUIRED, 'Path to JSON file');
+        $this->addArgument('file', InputArgument::OPTIONAL, 'Path to JSON file', 'var/data/catalogue.json');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -62,7 +62,7 @@ final class ImportProductsCommand extends Command
             $product->setTitle($row['title'] ?? '');
             $product->setDescription($row['description'] ?? null);
             $product->setVolumeM3((float) ($row['volume_m3'] ?? 0));
-            $product->setWeightKg((float) ($row['weight_kg'] ?? 0));
+            // $product->setWeightKg((float) ($row['weight_kg'] ?? 0));
             $product->setPriceCents((int) round(((float) ($row['price_eur'] ?? 0)) * 100));
             $product->setImage($row['image'] ?? '');
 

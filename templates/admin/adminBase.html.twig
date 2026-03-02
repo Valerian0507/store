@@ -1,38 +1,38 @@
-{# templates/admin/base.html.twig #}
-{% extends 'base.html.twig' %}
+{# templates/admin/adminBase.html.twig #}
 
-{% block body %}
-    <div class="admin-layout">
-        {% block admin_content %}{% endblock %}
-    </div>
-{% endblock %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Admin{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
 
+        {% block stylesheets %}{% endblock %}
 
-{#<!DOCTYPE html>#}
-{#<html>#}
-{#    <head>#}
-{#        <meta charset="UTF-8">#}
-{#        <title>{% block title %}Welcome!{% endblock %}</title>#}
-{#        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">#}
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+            <script src="https://kit.fontawesome.com/bc43524f66.js" crossorigin="anonymous"></script>
+        {% endblock %}
+    </head>
 
-{#        {% block stylesheets %}#}
-{#        {% endblock %}#}
+    <body class="admin">
+    <header class="admin-header">
+        {% include 'admin/_partials/_nav.html.twig' %}
+    </header>
 
-{#        {% block javascripts %}#}
-{#            {% block importmap %}{{ importmap('app') }}{% endblock %}#}
-{#            <script src="https://kit.fontawesome.com/bc43524f66.js" crossorigin="anonymous"></script>#}
-{#        {% endblock %}#}
-{#    </head>#}
-{#    <body>#}
-{#        {% include '_partials/_navbar.html.twig' %}#}
+    <main class="admin-main">
+        {# флешки подключим позже — но блок оставим уже сейчас #}
+        {% include '_partials/_flash.html.twig' %}
 
-{#        {% block body %}#}
-{#            <div class="admin-layout">#}
-{#                {% block admin_content %}{% endblock %}#}
-{#            </div>#}
-{#        {% endblock %}#}
+        {% block body %}
+            <div class="admin-layout">
+                {% block admin_content %}{% endblock %}
+            </div>
+        {% endblock %}
+    </main>
 
-
-{#        {% include '_partials/_footer.html.twig' %}#}
-{#    </body>#}
-{#</html>#}
+    <footer class="admin-footer">
+        {% include '_partials/_footer.html.twig' %}
+    </footer>
+    </body>
+</html>

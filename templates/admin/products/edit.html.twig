@@ -1,23 +1,41 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/adminBase.html.twig' %}
 
 {% block title %}Admin · Edit product{% endblock %}
 
 {% block body %}
-    <h1>Edit product #{{ product.id }}</h1>
+    <section class="container">
+        <h1>Edit product #{{ product.id }}</h1>
 
-    {{ form_start(form) }}
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
 
-    {{ form_row(form.reference) }}
-    {{ form_row(form.category) }}
-    {{ form_row(form.title) }}
-    {{ form_row(form.description) }}
-    {{ form_row(form.volumeM3) }}
-    {{ form_row(form.weightKg) }}
-    {{ form_row(form.priceCents) }}
-    {{ form_row(form.image) }}
+        {{ form_row(form.reference) }}
+        {{ form_row(form.category) }}
+        {{ form_row(form.title) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.volumeM3) }}
+        {{ form_row(form.weightKg) }}
+        {{ form_row(form.priceCents) }}
 
-    <button class="btn btn-primary">Create</button>
-    <a class="btn btn-link" href="{{ path('admin_products_index') }}">Cancel</a>
+        {% if product.image %}
+            <div class="mb-3">
+                <div class="mb-2">
+                    <strong>Current image:</strong> <code>{{ product.image }}</code>
+                </div>
+                <img
+                    src="{{ asset('uploads/products/' ~ product.image) }}"
+                    alt="Current image"
+                    style="max-width:240px; height:auto; border:1px solid #ddd; padding:6px; border-radius:8px;"
+                    onerror="this.onerror=null;this.src='{{ asset('images/products/no-image.jpg') }}';"
+                >
+            </div>
+        {% endif %}
+        {{ form_row(form.image, { help: 'Оставь пустым, чтобы сохранить текущую картинку.' }) }}
+{#        {{ form_row(form.image) }}#}
 
-    {{ form_end(form) }}
+        <button class="btn btn-primary">Modifier</button>
+        <a class="btn btn-link" href="{{ path('admin_products_index') }}">Cancel</a>
+
+        {{ form_end(form) }}
+    </section>
 {% endblock %}

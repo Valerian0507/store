@@ -29,6 +29,8 @@ security:
             # switch_user: true
             logout:
                 path: app_logout
+                csrf_parameter: _csrf_token
+                csrf_token_id: logout
                 # where to redirect after logout
                 # target: app_any_route
             form_login:
@@ -37,6 +39,7 @@ security:
                 enable_csrf: true
                 username_parameter: email
                 password_parameter: password
+                default_target_path: app_home
 
     # Note: Only the *first* matching rule is applied
     access_control:

@@ -1,0 +1,52 @@
+<ul class="navbar-nav ms-auto align-items-center">
+    {% if app.user %}
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_profile') }}">
+                <i class="fa-solid fa-user icon-primary"></i>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link" href="{{ path('app_cart') }}">
+                <i class="fa-solid fa-cart-shopping icon-primary"></i>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <form class="d-inline" method="POST" action="{{ path('app_logout') }}">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+                <button type="submit" class="btn nav-link btn-icon" title="Déconnexion">
+                    <i class="fa-solid fa-right-from-bracket icon-primary"></i>
+                </button>
+            </form>
+        </li>
+
+{#         
+        <li class="nav-item">
+            <form class="d-inline" method="POST" action="{{ path('app_logout') }}">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+                <button type="submit" class="btn nav-link btn-icon" title="Déconnexion">
+                <i class="fa-solid fa-right-from-bracket icon-primary"></i>
+                </button>
+            </form>
+        </li> #}
+
+
+
+    {% else %}
+        <li>
+            <a class="nav-link" href="{{ path('app_login') }}" title="Connexion">
+                <i class="fa-solid fa-arrow-right-to-bracket icon-primary"></i>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('app_register') }}" title="Inscription">
+                <i class="fa-solid fa-user-plus icon-primary" ></i>
+            </a>
+        </li>
+    {% endif %}
+</ul>
+
+
+
+

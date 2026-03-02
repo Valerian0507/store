@@ -1,60 +1,37 @@
 {# Navbar #}
+{% set route = app.request.attributes.get('_route') %}
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 	<div class="container">
-		<div class="collapse navbar-collapse justify-content" id="navbarNav">
-            <div class="navbar-nav">
-                <img src="{{ asset('images/icons/logo4.png') }}" alt="Logo" class="logo" style="max-width: 40px; ">
-            </div>
+        <a class="navbar-brand" href="{{ path('app_home') }}">
+            <img src="{{ asset('images/icons/logo4.png') }}" alt="Logo" class="logo">
+        </a>
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
 			<ul class="navbar-nav">
 				<li class="nav-item">
-					<a class="nav-link" href="{{ path('app_home') }}">Accueil</a>
+                    <a class="nav-link {{ route == 'app_home' ? 'active' : '' }}" href="{{ path('app_home') }}">
+                        Accueil
+                    </a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="{{ path('app_products_index') }}">Produit</a>
+					<a class="nav-link {{ route starts with 'app_products' ? 'active' : '' }}" href="{{ path('app_products_index') }}">
+                        Produit
+                    </a>
 				</li>
                 <li>
                 {% if is_granted('ROLE_ADMIN') %}
-                    <a class="nav-link" href="{{ path('admin_dashboard') }}">Admin</a>
+                    <a class="nav-link {{ route starts with 'admin_' ? 'active' : '' }}" href="{{ path('admin_dashboard') }}">
+                        Admin
+                    </a>
                 {% endif %}
                 </li>
             </ul>
-            <ul class="navbar-nav ms-auto align-items-center">
-                {% if app.user %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_profile') }}">
-                        <i class="fa-solid fa-user" style="color: #304880"></i>
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-link" href="{{ path('app_profile') }}">
-                        <i class="fa-solid fa-cart-shopping" style="color: #304880"></i>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <form class="d-inline" method="POST" action="{{ path('app_logout') }}">
-                        <input type="hidden" name="csrf-token" value="{{ csrf_token('logout') }}">
-                        <button type="submit" class="btn nav-link" title="Déconnexion" style="background: none; border: 0;">
-                            <i class="fa-solid fa-right-from-bracket" style="color: #304880"></i>
-                        </button>
-                    </form>
-                </li>
-
-
-                {% else %}
-                <li>
-                    <a class="nav-link" href="{{ path('app_login') }}" title="Connexion">
-                        <i class="fa-solid fa-arrow-right-to-bracket" style="color: #304880"></i>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_register') }}" title="Inscription">
-                        <i class="fa-solid fa-user-plus" style="color: #304880"></i>
-                    </a>
-                </li>
-                {% endif %}
-            </ul>
+            {% include '_partials/_account_nav.html.twig' %}
 		</div>
 	</div>
 </nav>
