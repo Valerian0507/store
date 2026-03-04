@@ -6,6 +6,7 @@ use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use App\Entity\Category;
 
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
@@ -20,8 +21,9 @@ class Product
     #[ORM\Column(length: 255, unique: true)]
     private ?string $reference = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $category = null;
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'RESTRICT')]
+    private ?Category $category = null;
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
@@ -58,15 +60,14 @@ class Product
         return $this;
     }
 
-    public function getCategory(): ?string
+    public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    public function setCategory(string $category): static
+    public function setCategory(?Category $category): static
     {
         $this->category = $category;
-
         return $this;
     }
 
@@ -135,7 +136,7 @@ class Product
         return $this->image;
     }
 
-    public function setImage(string $image): static
+    public function setImage(?string $image): static
     {
         $this->image = $image;
 

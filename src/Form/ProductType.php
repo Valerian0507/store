@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Entity\Product;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -15,8 +16,8 @@ use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\PositiveOrZero;
-use Symfony\Component\Validator\Constraints\Regex;
-use Symfony\Component\Validator\Constraints\Type;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class ProductType extends AbstractType
 {
@@ -29,10 +30,13 @@ class ProductType extends AbstractType
                     new Length(max: 64, maxMessage: 'Максимум {{ limit }} символов.'),
                 ],
             ])
-            ->add('category', TextType::class, [
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'label',
+                'placeholder' => 'Выберите категорию',
+                'required' => true,
                 'constraints' => [
                     new NotBlank(message: 'Обязательное поле.'),
-                    new Length(max: 128, maxMessage: 'Максимум {{ limit }} символов.'),
                 ],
             ])
             ->add('title', TextType::class, [
@@ -68,7 +72,7 @@ class ProductType extends AbstractType
                     new NotBlank(message: 'Введите цену.'),
                     new PositiveOrZero(message: 'Цена не может быть отрицательной.'),
                 ],
-                'help' => 'Price in cents (e.g. 1299 = 12.99',
+                'help' => 'Price in cents (e.g. 1299 = 12.99)',
             ])
             ->add('image', FileType::class, [
                 'label' => 'Image du produit',

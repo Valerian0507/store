@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\ProductRepository;
+use App\Repository\CategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,16 +12,18 @@ use Symfony\Component\Routing\Attribute\Route;
 class ProductController extends AbstractController
 {
     #[Route('/products', name: 'app_products_index', methods: ['GET'])]
-    public function index(Request $request, ProductRepository $products): Response
+    public function index(Request $request, ProductRepository $products, CategoryRepository $categoriesRepo): Response
     {
         $page = max(1, (int) $request->query->get('page', 1));
 
-        $category = $request->query->get('category');
-        $category = is_string($category) && $category !== '' ? $category : null;
+        $categoryId = $request->query->filter('category', null, FILTER_VALIDATE_INT, [
+            'flags' => FILTER_NULL_ON_FAILURE,
+            'options' => ['min_range' => 1],
+        ]);
 
         $perPage = (int) $this->getParameter('catalog.per_page');
 
-        $categories = $products->findAllCategories();
+        $categories = $categoriesRepo->findAllOrdered();
         $sort = (string) $request->query->get('sort', 'newest');
 
         $allowedSorts = ['newest', 'price_asc', 'price_desc', 'title_asc', 'title_desc'];
@@ -38,11 +41,11 @@ class ProductController extends AbstractController
             $q = mb_substr($q, 0, 80);
         }
 
-        $total = $products->countForCatalog($category, $q);
+        $total = $products->countForCatalog($categoryId, $q);
         $pages = max(1, (int) ceil($total / $perPage));
         $page = min ($page, $pages);
 
-        $items = $products->findForCatalog(page: $page, perPage: $perPage, category: $category, sort: $sort, q: $q);
+        $items = $products->findForCatalog(page: $page, perPage: $perPage, category: $categoryId, sort: $sort, q: $q);
 
         $window = 2;
 
@@ -67,7 +70,7 @@ class ProductController extends AbstractController
             'pages' => $pages,
             'total' => $total,
             'perPage' => $perPage,
-            'category' => $category,
+            'category' => $categoryId,
             'categories' => $categories,
             'sort' => $sort,
             'q' => $q,

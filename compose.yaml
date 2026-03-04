@@ -1,39 +1,41 @@
 
 services:
   database:
-    image: postgres:${POSTGRES_VERSION:-16}-alpine
+    image: mysql:8.0
     container_name: store-database
     environment:
-      POSTGRES_DB: store_db
-      POSTGRES_USER: store_user
-      POSTGRES_PASSWORD: REMOVED
-    volumes:
-      - database_data:/var/lib/postgresql/data:rw
+      MYSQL_DATABASE: store_db
+      MYSQL_USER: store_user
+      MYSQL_PASSWORD: REMOVED
+      MYSQL_ROOT_PASSWORD: REMOVED
     ports:
-      - "5432:5432"
+      - "3307:3306"
+    volumes:
+      - database_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "pg_isready", "-d", "store_db", "-U", "store_user"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "-pREMOVED"]
+      interval: 5s
       timeout: 5s
-      retries: 5
-      start_period: 60s
+      retries: 10
 
-  pgAdmin:
-      image: dpage/pgadmin4
-      container_name: store-pgadmin
-      environment:
-        PGADMIN_DEFAULT_EMAIL: admin@store.com
-        PGADMIN_DEFAULT_PASSWORD: REMOVED
-      ports:
-        - "8080:80"
-      depends_on:
-        - database
+  phpmyadmin:
+    image: phpmyadmin:5.2.3-apache
+    container_name: store-phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
+    depends_on:
+      - database
+
 
   mailer:
-      image: axllent/mailpit
-      container_name: store-mailer
-      ports:
-        - "1025:1025" # SMTP
-        - "8025:8025" # Web UI
+    image: axllent/mailpit
+    container_name: store-mailer
+    ports:
+      - "1025:1025" # SMTP
+      - "8025:8025" # Web UI
 
 #    volumes:
 #      - database_data:/var/lib/postgresql/data:rw
@@ -45,3 +47,52 @@ volumes:
 ###> doctrine/doctrine-bundle ###
   database_data:
 ###< doctrine/doctrine-bundle ###
+
+
+
+# services:
+#   database:
+#     image: postgres:${POSTGRES_VERSION:-16}-alpine
+#     container_name: store-database
+#     environment:
+#       POSTGRES_DB: store_db
+#       POSTGRES_USER: store_user
+#       POSTGRES_PASSWORD: REMOVED
+#     volumes:
+#       - database_data:/var/lib/postgresql/data:rw
+#     ports:
+#       - "5432:5432"
+#     healthcheck:
+#       test: ["CMD", "pg_isready", "-d", "store_db", "-U", "store_user"]
+#       timeout: 5s
+#       retries: 5
+#       start_period: 60s
+
+#   pgAdmin:
+#       image: dpage/pgadmin4
+#       container_name: store-pgadmin
+#       environment:
+#         PGADMIN_DEFAULT_EMAIL: admin@store.com
+#         PGADMIN_DEFAULT_PASSWORD: REMOVED
+#       ports:
+#         - "8080:80"
+#       depends_on:
+#         - database
+
+#   mailer:
+#       image: axllent/mailpit
+#       container_name: store-mailer
+#       ports:
+#         - "1025:1025" # SMTP
+#         - "8025:8025" # Web UI
+
+# #    volumes:
+# #      - database_data:/var/lib/postgresql/data:rw
+#       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
+#       # - ./docker/db/data:/var/lib/postgresql/data:rw
+# ###< doctrine/doctrine-bundle ###
+
+# volumes:
+# ###> doctrine/doctrine-bundle ###
+#   database_data:
+# ###< doctrine/doctrine-bundle ###

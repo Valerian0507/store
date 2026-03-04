@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
 
 
+
 /**
  * @extends ServiceEntityRepository<Product>
  */
@@ -29,11 +30,11 @@ class ProductRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('products');
     }
 
-    private function applyCategoryFilter(QueryBuilder $qb, ?string $category): void
+    private function applyCategoryFilter(QueryBuilder $qb, ?int $categoryId): void
     {
-        if ($category !== null && $category !== '') {
+         if ($categoryId !== null) {
             $qb->andWhere('products.category = :category')
-                ->setParameter('category', $category);
+                ->setParameter('category', $categoryId);
         }
     }
 
@@ -63,10 +64,10 @@ class ProductRepository extends ServiceEntityRepository
     public function findForCatalog(
         int $page = 1,
         int $perPage = 20,
-        ?string $category = null,
+        ?int $category = null,
         string $sort = 'newest',
         ?string $q = null
-    ): array {
+        ): array {
         $page = max(1, $page);
         $perPage = max(1, min(100, $perPage));
         $offset = ($page - 1) * $perPage;
@@ -99,12 +100,12 @@ class ProductRepository extends ServiceEntityRepository
      * @return int
      * Запрос, который возвращает общее количество товаров.
      */
-    public function countForCatalog(?string $category = null, ?string $q = null): int
+    public function countForCatalog(?int $categoryId = null, ?string $q = null): int
     {
         $qb = $this->createCatalogQueryBuilder()
             ->select('COUNT(products.id)');
 
-        $this->applyCategoryFilter($qb, $category);
+        $this->applyCategoryFilter($qb, $categoryId);
         $this->applySearch($qb, $q);
 
         return (int) $qb->getQuery()->getSingleScalarResult();
@@ -112,20 +113,19 @@ class ProductRepository extends ServiceEntityRepository
 
 
 //     1) Список категорий (для select)
-    public function findAllCategories(): array
-    {
-        $rows = $this->createQueryBuilder('products')
-            ->select('DISTINCT products.category AS category')
-            ->where('products.category IS NOT NULL')
-            ->andWhere('products.category <> :empty')
-            ->setParameter('empty', '')
-            ->orderBy('products.category', 'ASC')
-            ->getQuery()
-            ->getArrayResult();
-
-        return array_map(static fn(array $r) => $r['category'], $rows);
-    }
+    
 
     // 2) Список товаров для каталога с опциональным фильтром
+
+    // public function findByCategoryLabel(string $label): array
+    // {
+    //     return $this->createQueryBuilder('p')
+    //         ->innerJoin('p.category', 'c')
+    //         ->andWhere('c.label = :label')
+    //         ->setParameter('label', $label)
+    //         ->orderBy('p.id', 'DESC')
+    //         ->getQuery()
+    //         ->getResult();
+    // }
 
 }

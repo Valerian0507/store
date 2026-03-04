@@ -128,11 +128,10 @@
                 Catégorie:
                 <select name="category" class="category" onchange="this.form.submit()">
                     <option value="">Toutes</option>
-
                     {% for c in categories %}
-                        <option value="{{ c }}" {% if c == category %}selected{% endif %}>
-                            {{ c|capitalize }}
-                        </option>
+                      <option value="{{ c.id }}" {{ c.id == category ? 'selected' : '' }}>
+                        {{ c.label|capitalize }}
+                      </option>
                     {% endfor %}
                 </select>
             </label>

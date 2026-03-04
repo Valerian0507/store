@@ -73,11 +73,13 @@ class ProductController extends AbstractController
 
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
+        
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             /** @var UploadedFile|null $imageFile */
             $imageFile = $form->get('image')->getData();
+            // $removeImage = $form->has('removeImage') ? (bool) $form->get('removeImage')->getData() : false;
 
             if ($imageFile) {
                 $newFilename = $fileUploader->upload($imageFile, $product->getReference());
@@ -102,6 +104,40 @@ class ProductController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    
+    #[Route('/{id}/delete-image', name: 'delete_image', methods: ['POST'])]
+        public function deleteImage(
+            Product $product,
+            Request $request,
+            EntityManagerInterface $em,
+            FileUploader $fileUploader
+        ): Response {
+            $token = (string) $request->request->get('_token_delete_image');
+
+            if (!$this->isCsrfTokenValid('delete_product_image_'.$product->getId(), $token)) {
+                $this->addFlash('error', 'Invalid CSRF token.');
+                return $this->redirectToRoute('admin_products_edit', ['id' => $product->getId()]);
+            }
+
+            $image = $product->getImage();
+
+            if ($image) {
+                $path = $fileUploader->getTargetDirectory() . DIRECTORY_SEPARATOR . $image;
+
+                if (is_file($path)) {
+                    unlink($path);
+                }
+
+                $product->setImage(null);
+                $em->flush();
+
+                $this->addFlash('success', 'Image supprimée.');
+            }
+
+            return $this->redirectToRoute('admin_products_edit', ['id' => $product->getId()]);
+        }
+
 
     #[Route('/{id}', name: 'delete', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function delete(Product $product, Request $request, EntityManagerInterface $em, FileUploader $fileUploader): Response

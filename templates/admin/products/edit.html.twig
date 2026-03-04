@@ -28,14 +28,27 @@
                     style="max-width:240px; height:auto; border:1px solid #ddd; padding:6px; border-radius:8px;"
                     onerror="this.onerror=null;this.src='{{ asset('images/products/no-image.jpg') }}';"
                 >
+
+                <div class = "mt-2">
+                    <input type="hidden"
+                           name="_token_delete_image"
+                           value="{{ csrf_token('delete_product_image_' ~ product.id) }}">
+
+                    <button type="button"
+                            class="btn btn-danger btn-sm js-delete-image"
+                            data-action="{{ path('admin_products_delete_image', {id: product.id}) }}">
+                      Supprimer l'image
+                    </button>
+                </div>
             </div>
         {% endif %}
-        {{ form_row(form.image, { help: 'Оставь пустым, чтобы сохранить текущую картинку.' }) }}
-{#        {{ form_row(form.image) }}#}
 
+        {{ form_row(form.image, { help: 'Place pour le message' }) }}
+{#        {{ form_row(form.image) }}#}
         <button class="btn btn-primary">Modifier</button>
         <a class="btn btn-link" href="{{ path('admin_products_index') }}">Cancel</a>
 
         {{ form_end(form) }}
+    
     </section>
 {% endblock %}

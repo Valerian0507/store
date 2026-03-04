@@ -1,3 +1,4 @@
+-- Active: 1772634764290@@127.0.0.1@3307@store_db
 {# templates/admin/adminBase.html.twig #}
 
 <!DOCTYPE html>
@@ -24,6 +25,7 @@
         {# флешки подключим позже — но блок оставим уже сейчас #}
         {% include '_partials/_flash.html.twig' %}
 
+
         {% block body %}
             <div class="admin-layout">
                 {% block admin_content %}{% endblock %}
@@ -34,5 +36,34 @@
     <footer class="admin-footer">
         {% include '_partials/_footer.html.twig' %}
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">    </script>
+    <script>
+document.addEventListener('click', function (e) {
+    const btn = e.target.closest('.js-delete-image');
+    if (!btn) return;
+
+    e.preventDefault();
+
+    const form = btn.closest('form');
+    const action = btn.dataset.action;
+
+    Swal.fire({
+        title: 'Supprimer l’image ?',
+        text: "Cette action est irréversible.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Oui, supprimer',
+        cancelButtonText: 'Annuler'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.action = action;
+            form.method = 'post';
+            form.submit();
+        }
+    });
+});
+</script>
+
     </body>
 </html>
