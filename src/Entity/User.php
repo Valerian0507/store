@@ -3,10 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use App\Entity\Address;
+use App\Entity\Order;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -22,22 +26,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-    /**
-     * @var list<string> The user roles
-     */
+    #[ORM\Column(length: 120, nullable: true)]
+    private ?string $firstName = null;
+
+    #[ORM\Column(length: 120, nullable: true)]
+    private ?string $lastName = null;
+
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
     private ?string $password = null;
 
     #[ORM\Column]
     private bool $isVerified = false;
 
-    public function getId(): ?int
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Address::class, orphanRemoval: true)]
+    private Collection $addresses;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class, orphanRemoval: true)]
+    private Collection $orders;
+
+    public function __construct()
+    {
+        $this->addresses = new ArrayCollection();
+        $this->orders = new ArrayCollection();
+    }
+   
+        public function getId(): ?int
     {
         return $this->id;
     }
@@ -52,6 +68,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->email = $email;
 
         return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(?string $firstName): static
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(?string $lastName): static
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    /**
+     * Summary of getFullName
+     * @return string
+     */
+    public function getFullName(): string
+    {
+        return trim(($this->firstName ?? '').' '.($this->lastName ?? ''));
     }
 
     /**
@@ -129,4 +178,45 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function addAddress(Address $address): static
+    {
+        if(!$this->addresses->contains($address)) {
+            $this->addresses->add($address);
+            $address->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeAddress(Address $address): static
+    {
+        $this->addresses->removeElement($address);
+        return $this;
+    }
+    
+    public function getAddresses(): Collection
+    {
+        return $this->addresses;
+    }
+
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+    
+    public function addOrder(Order $order): static
+    {
+        if(!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setUser($this);
+        }
+        return $this;
+    }
+
+    public function removeOrder(Order $order): static
+    {
+        $this->orders->removeElement($order);
+        return $this;
+    }
+
 }

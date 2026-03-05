@@ -1,8 +1,6 @@
--- Active: 1772634764290@@127.0.0.1@3307@store_db
 {# templates/admin/adminBase.html.twig #}
 
 <!DOCTYPE html>
-<html>
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Admin{% endblock %}</title>
@@ -37,14 +35,14 @@
         {% include '_partials/_footer.html.twig' %}
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11">    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-document.addEventListener('click', function (e) {
+    document.addEventListener('click', function (e) {
     const btn = e.target.closest('.js-delete-image');
     if (!btn) return;
 
     e.preventDefault();
-
+    
     const form = btn.closest('form');
     const action = btn.dataset.action;
 

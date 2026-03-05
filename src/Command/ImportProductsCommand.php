@@ -57,15 +57,15 @@ final class ImportProductsCommand extends Command
                 continue;
             }
 
-            if ($repo->findOneBy(['reference' => $row['reference']])) {
-                continue; // уже есть
-            }
+            // Добавление в базу данных продуктов и обновление уже созданных если есть новые данные
+            $product = $repo->findOneBy(['reference' => $row['reference']]);
 
-            // $product = new Product();
-            // $product->setReference($row['reference']);
-            // $product->setCategory($row['category'] ?? '');
-            $product = new Product();
-            $product->setReference($row['reference']);
+            if (!$product) {
+                $product = new Product();
+                $product->setReference($row['reference']);
+                $this->em->persist($product);
+                $created++;
+            }
 
             // ---- ВОТ СЮДА ВСТАВЛЯЕМ ----
             $label = trim((string) ($row['category'] ?? ''));
@@ -92,16 +92,15 @@ final class ImportProductsCommand extends Command
             $product->setCategory($categoryCache[$label]);
             // ---- ДО СЮДА ----
             $product->setTitle($row['title'] ?? '');
-           
             $product->setDescription($row['description'] ?? null);
             $product->setVolumeM3((float) ($row['volume_m3'] ?? 0));
-            // $product->setWeightKg((float) ($row['weight_kg'] ?? 0));
+            $product->setWeightKg((float) ($row['weight_kg'] ?? 0));
             $product->setPriceCents((int) round(((float) ($row['price_eur'] ?? 0)) * 100));
             $product->setImage($row['image'] ?? null);
             
 
-            $this->em->persist($product);
-            $created++;
+            // $this->em->persist($product);
+            // $created++;
         }
 
         $this->em->flush();
