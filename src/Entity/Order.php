@@ -202,11 +202,11 @@ class Order
         if (!$this->items->contains($item)) {
             $this->items->add($item);
             $item->setOrderRef($this);
-            $this->recalcTotal();
+            // $this->recalcTotal();
         }
         return $this;
     }
-    
+
     public function removeItem(OrderItem $item): static
     {
         if ($this->items->removeElement($item)) {

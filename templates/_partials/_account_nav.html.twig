@@ -6,7 +6,7 @@
             </a>
         </li>
         <li>
-            <a class="nav-link" href="{{ path('app_cart') }}">
+            <a class="nav-link" href="{{ path('app_cart_index') }}">
                 <i class="fa-solid fa-cart-shopping icon-primary"></i>
             </a>
         </li>
@@ -20,7 +20,7 @@
             </form>
         </li>
 
-{#         
+{#
         <li class="nav-item">
             <form class="d-inline" method="POST" action="{{ path('app_logout') }}">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">

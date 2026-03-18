@@ -26,7 +26,7 @@ class ProductType extends AbstractType
         $builder
             ->add('reference', TextType::class, [
                 'constraints' => [
-                    new NotBlank(message: 'Обязательное поле.'),
+                    new NotBlank(message: 'Champ obligatoire.'),
                     new Length(max: 64, maxMessage: 'Максимум {{ limit }} символов.'),
                 ],
             ])
@@ -36,12 +36,12 @@ class ProductType extends AbstractType
                 'placeholder' => 'Выберите категорию',
                 'required' => true,
                 'constraints' => [
-                    new NotBlank(message: 'Обязательное поле.'),
+                    new NotBlank(message: 'Champ obligatoire.'),
                 ],
             ])
             ->add('title', TextType::class, [
                 'constraints' => [
-                    new NotBlank(message: 'Обязательное поле.'),
+                    new NotBlank(message: 'Champ obligatoire.'),
                     new Length(max: 128, maxMessage: 'Максимум {{ limit }} символов.'),
 
                 ]

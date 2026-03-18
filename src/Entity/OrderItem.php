@@ -36,17 +36,17 @@ class OrderItem
     {
         return $this->id;
     }
-        
+
     public function getOrderRef(): ?Order
     {
         return $this->orderRef;
     }
-    
+
 
     public function setOrderRef(?Order $order): static
     {
         $this->orderRef = $order;
-        
+
         return $this;
     }
 
