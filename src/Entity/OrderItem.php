@@ -15,11 +15,11 @@ class OrderItem
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'items')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Order $orderRef = null;
+    #[ORM\JoinColumn(name: 'order_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')] // Вопросы на счет CASCADE уточнить нужно ли для этого проекта
+    private ?Order $order = null;
 
     #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    #[ORM\JoinColumn(name: 'product_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     private ?Product $product = null;
 
     // SNAPSHOT
@@ -37,15 +37,15 @@ class OrderItem
         return $this->id;
     }
 
-    public function getOrderRef(): ?Order
+    public function getOrder(): ?Order
     {
-        return $this->orderRef;
+        return $this->order;
     }
 
 
-    public function setOrderRef(?Order $order): static
+    public function setOrder(?Order $order): static
     {
-        $this->orderRef = $order;
+        $this->order = $order;
 
         return $this;
     }

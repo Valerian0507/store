@@ -17,7 +17,7 @@ class Order
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     private ?User $user = null;
 
     #[ORM\Column]
@@ -25,6 +25,9 @@ class Order
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\Column(length: 50, unique: true, nullable: true)]
+    private ?string $orderNumber = null;
 
     #[ORM\Column(length: 50)]
     private string $status = 'pending';
@@ -51,7 +54,7 @@ class Order
     private ?string $shippingCountry = null;
 
     /** @var Collection<int, OrderItem> */
-    #[ORM\OneToMany(mappedBy: 'orderRef', targetEntity: OrderItem::class, cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderItem::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $items;
 
     public function __construct()
@@ -201,7 +204,7 @@ class Order
     {
         if (!$this->items->contains($item)) {
             $this->items->add($item);
-            $item->setOrderRef($this);
+            $item->setOrder($this);
             // $this->recalcTotal();
         }
         return $this;
@@ -210,8 +213,8 @@ class Order
     public function removeItem(OrderItem $item): static
     {
         if ($this->items->removeElement($item)) {
-            if ($item->getOrderRef() === $this) {
-                $item->setOrderRef(null);
+            if ($item->getOrder() === $this) {
+                $item->setOrder(null);
             }
             $this->recalcTotal();
         }
@@ -225,5 +228,17 @@ class Order
             $sum += $item->getLineTotalCents();
         }
         $this->totalCents = $sum;
+    }
+
+    public function getOrderNumber(): ?string
+    {
+        return $this->orderNumber;
+    }
+
+    public function setOrderNumber(string $orderNumber): static
+    {
+        $this->orderNumber = $orderNumber;
+
+        return $this;
     }
 }
