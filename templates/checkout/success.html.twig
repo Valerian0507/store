@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Order confirmed {% endblock %}
+
+{% block body %}
+
+    <h1>Votre commande a été confirmée</h1>
+
+    <p>Merci pour votre commande.</p>
+
+    <ul>
+        <li>Order ID: {{order.id }} </li>
+        <li>Status: {{order.status }} </li>
+        <li>Total: {{ (order.totalCents / 100)|number_format(2, '.', ' ') }} €</li>
+    </ul>
+
+    <h2>Adresse de livraison</h2>
+    <ul>
+        <li> {{ order.shippingFirstName }} {{ order.shippingLastName }} </li>
+        <li> {{ order.shippingStreet }} </li>
+        <li> {{ order.shippingPostalCode }} {{order.shippingCity }} </li>
+        <li> {{ order.shippingCountry }} </li>
+    </ul>
+
+    <p>
+        <a href="{{ path('app_products_index') }}">Continuer vos achats</a>
+    </p>
+
+
+
+
+{% endblock %}

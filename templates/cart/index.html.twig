@@ -42,6 +42,11 @@
                     <input type="hidden" name="_token" value="{{ csrf_token('cart_remove_' ~ item.product.id) }}">
                     <button type="submit">Supprimer</button>
                 </form>
+                {# Можно будет переделать под <a> посмотреть в момент настройки стилей как вариант #}
+                <a href="{{ path('app_checkout_index') }}">Payer</a>
+                {# <form method="get" action="{{ path('app_checkout_index') }}">
+                    <button type="submit">Payer</button>
+                </form> #}
             </div>
         {% endfor %}
 

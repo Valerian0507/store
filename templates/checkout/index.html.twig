@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block body %}
+    <h1>Checkout</h1>
+
+    <form method="post" action="{{ path('app_checkout_submit') }}">
+        <input type="hidden" name="_token" value="{{ csrf_token('checkout') }}">
+
+        <div>
+            <label for="checkout_first_name">Prénom</label>
+            <input id="checkout_first_name" type="text" name="firstName" placeholder="ex. François" value="{{ shippingData.firstName|default('') }}" autocomplete="given-name" required>
+            {% if errors.firstName is defined %}
+                <div class="form-error">{{ errors.firstName }}</div>
+            {% endif %}
+        </div>
+        <div>
+            <label for="checkout_last_name">Nom</label>
+            <input id="checkout_last_name" type="text" name="lastName" placeholder="ex. Dupont" value="{{ shippingData.lastName|default('') }}" autocomplete="family-name" required>
+            {% if errors.lastName is defined %}
+                <div class="form-error">{{ errors.lastName }}</div>
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="checkout_street">Adresse</label>
+            <input id="checkout_street" type="text" name="street" placeholder="ex. Adresse complet : 8 rue de la Victoire " value="{{ shippingData.street|default('') }}" autocomplete="address-line1" required>
+            {% if errors.street is defined %}
+                <div class="form-error">{{ errors.street }}</div>
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="checkout_city">Ville</label>
+            <input id="checkout_city" type="text" name="city" placeholder="ex. Lyon" value="{{ shippingData.city|default('') }}" autocomplete="address-level2" required>
+            {% if errors.city is defined %}
+                <div class="form-error">{{ errors.city }}</div>
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="checkout_postal_code">Code Postal</label>
+            <input id="checkout_postal_code" type="text" name="postalCode" placeholder="ex. 69001" value="{{ shippingData.postalCode|default('') }}" autocomplete="postal-code" required>
+            {% if errors.postalCode is defined %}
+                <div class="form-error">{{ errors.postalCode }}</div>
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="checkout_country">Pays</label>
+            <input id="checkout_country" type="text" name="country" placeholder="ex. France" value="{{ shippingData.country|default('') }}" autocomplete="country-name" required>
+            {% if errors.country is defined %}
+                <div class="form-error">{{ errors.country }}</div>
+            {% endif %}
+        </div>
+
+        <button type="submit">Commander</button>
+    </form>
+
+
+
+
+{% endblock %}
