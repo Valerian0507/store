@@ -53,11 +53,11 @@ class Cart
 
     public function setUser(User $user): static
     {
+        $this->user = $user;
+
         if ($user->getCart() !== $this) {
             $user->setCart($this);
         }
-
-        $this->user = $user;
 
         return $this;
     }

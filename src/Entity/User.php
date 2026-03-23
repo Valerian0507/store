@@ -266,11 +266,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setCart(?Cart $cart): static
     {
+        $this->cart = $cart;
+
         if ($cart !== null && $cart->getUser() !== $this) {
             $cart->setUser($this);
         }
-
-        $this->cart = $cart;
 
         return $this;
     }
