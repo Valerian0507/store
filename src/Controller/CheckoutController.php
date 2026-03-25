@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\OrderRepository;
 use App\Service\Checkout\CheckoutService;
+use App\Service\Checkout\CheckoutSummaryBuilder;
 use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,12 +17,22 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_USER')]
 final class CheckoutController extends AbstractController
 {
+
     #[Route('', name: 'index', methods: ['GET'])]
-    public function index(): Response
+    public function index(CheckoutSummaryBuilder $checkoutSummaryBuilder): Response
     {
+        $summary = $checkoutSummaryBuilder->build();
+
+        if ($summary->isEmpty()) {
+            $this->addFlash('warning', 'Votre panier est vide.');
+
+            return $this->redirectToRoute('app_cart_index');
+        }
+
         $user = $this->getUser();
 
         return $this->render('checkout/index.html.twig', [
+            'summary' => $summary,
             'errors' => [],
             'shippingData' => [
                 'firstName' => $user instanceof User ? ($user->getFirstName() ?? '') : '',
@@ -36,8 +47,9 @@ final class CheckoutController extends AbstractController
 
     // Сбор данных для заказа и отправка, проверка CSRF, получение юзера, создание заказа, редирект
     #[Route('', name: 'submit', methods: ['POST'])]
-    public function submit(Request $request, CheckoutService $checkoutService): Response
+    public function submit(Request $request, CheckoutService $checkoutService, CheckoutSummaryBuilder $checkoutSummaryBuilder): Response
     {
+
         $user = $this->getUser();
 
         if (!$user instanceof User) {
@@ -63,6 +75,7 @@ final class CheckoutController extends AbstractController
 
         if ($errors !== []) {
             return $this->render('checkout/index.html.twig', [
+                'summary' => $checkoutSummaryBuilder->build(),
                 'errors' => $errors,
                 'shippingData' => $shippingData,
             ], new Response(status: 422));
@@ -79,7 +92,7 @@ final class CheckoutController extends AbstractController
         return $this->redirectToRoute('app_checkout_success', [
             'id' => $order->getId(),
         ]);
-        }
+    }
 
     #[Route('/success/{id}', name: 'success', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function success(int $id, OrderRepository $orderRepository): Response
@@ -101,7 +114,7 @@ final class CheckoutController extends AbstractController
     *
     * @return array<string, string>
     */
-    
+
     private function validateShippingData(array $shippingData): array
     {
         $errors = [];
