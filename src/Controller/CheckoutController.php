@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Repository\OrderRepository;
 use App\Service\Checkout\CheckoutService;
 use App\Service\Checkout\CheckoutSummaryBuilder;
+use App\Service\Checkout\OrderSuccessBuilder;
 use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -95,16 +96,21 @@ final class CheckoutController extends AbstractController
     }
 
     #[Route('/success/{id}', name: 'success', methods: ['GET'], requirements: ['id' => '\d+'])]
-    public function success(int $id, OrderRepository $orderRepository): Response
+    public function success(int $id, OrderSuccessBuilder $orderSuccessBuilder): Response
     {
         $user = $this->getUser();
+
         if (!$user instanceof User) {
             throw $this->createAccessDeniedException('User not authenticated.');
         }
-        $order = $orderRepository->find($id);
-        if (!$order || $order->getUser()?->getId() !== $user->getId()) {
+
+        $order = $orderSuccessBuilder->buildForUser($id, $user);
+
+        if ($order === null) {
             throw $this->createNotFoundException('Order not found.');
         }
+
+
         return $this->render('checkout/success.html.twig', [
             'order' => $order,
         ]);

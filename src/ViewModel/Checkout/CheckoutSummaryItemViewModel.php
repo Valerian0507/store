@@ -1,8 +1,8 @@
 <?php
 
-namespace App\DTO\Checkout;
+namespace App\ViewModel\Checkout;
 
-final readonly class CheckoutSummaryItemView
+final readonly class CheckoutSummaryItemViewModel
 {
     public function __construct(
         public int $productId,

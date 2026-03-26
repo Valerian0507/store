@@ -1,11 +1,11 @@
 <?php
 
-namespace App\DTO\Checkout;
+namespace App\ViewModel\Checkout;
 
-final readonly class CheckoutSummaryView
+final readonly class CheckoutSummaryViewModel
 {
     /**
-     * @param CheckoutSummaryItemView[] $items
+     * @param CheckoutSummaryItemViewModel[] $items
      */
     public function __construct(
         public array $items,

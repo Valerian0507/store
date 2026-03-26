@@ -2,8 +2,8 @@
 
 namespace App\Service\Checkout;
 
-use App\DTO\Checkout\CheckoutSummaryItemView;
-use App\DTO\Checkout\CheckoutSummaryView;
+use App\ViewModel\Checkout\CheckoutSummaryItemViewModel;
+use App\ViewModel\Checkout\CheckoutSummaryViewModel;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use App\Service\Cart\CartManager;
@@ -16,12 +16,12 @@ final class CheckoutSummaryBuilder
     ) {
     }
 
-    public function build(): CheckoutSummaryView
+    public function build(): CheckoutSummaryViewModel
     {
         $rawCart = $this->cartManager->getRaw();
 
         if ($rawCart === []) {
-            return new CheckoutSummaryView(
+            return new CheckoutSummaryViewModel(
                 items: [],
                 itemsCount: 0,
                 subtotalCents: 0,
@@ -61,7 +61,7 @@ final class CheckoutSummaryBuilder
             $unitPriceCents = $product->getPriceCents();
             $lineSubtotalCents = $unitPriceCents * $qty;
 
-            $items[] = new CheckoutSummaryItemView(
+            $items[] = new CheckoutSummaryItemViewModel(
                 productId: $productId,
                 title: $product->getTitle(),
                 unitPriceCents: $unitPriceCents,
@@ -74,7 +74,7 @@ final class CheckoutSummaryBuilder
             $subtotalCents += $lineSubtotalCents;
         }
 
-        return new CheckoutSummaryView(
+        return new CheckoutSummaryViewModel(
             items: $items,
             itemsCount: $itemsCount,
             subtotalCents: $subtotalCents,
