@@ -2,17 +2,229 @@
 
 namespace App\Controller;
 
+use App\Entity\Address;
+use App\Entity\User;
+use App\Form\AddressType;
+use App\Repository\AddressRepository;
+use App\Repository\OrderRepository;
+use App\Service\Address\AddressManager;
+use App\Service\Checkout\OrderSuccessBuilder;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-class ProfileController extends AbstractController
+#[Route('/profile', name: 'app_profile_')]
+#[IsGranted('ROLE_USER')]
+final class ProfileController extends AbstractController
 {
-    #[Route('/profile', name: 'app_profile')]
+    #[Route('', name: 'index', methods: ['GET'])]
     public function index(): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
+        $user = $this->getUser();
 
-        return $this->render('profile/dashboard.html.twig');
+        return $this->render('profile/index.html.twig', [
+            'user' => $user,
+        ]);
+    }
+
+    #[Route('/orders', name: 'orders', methods: ['GET'])]
+    public function orders(OrderRepository $orderRepository): Response
+    {
+        $user = $this->getUser();
+
+        if(!$user instanceof User) {
+            throw $this->createAccessDeniedException("Utilisateur n'est pas connecté.");
+        }
+
+        $orders = $orderRepository->findUserOrdersForProfile($user);
+
+        return $this->render('profile/orders/orders.html.twig', [
+            'orders' => $orders,
+        ]);
+    }
+
+    #[Route('/orders/{id}', name: 'orders_show', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function order(OrderSuccessBuilder $orderSuccessBuilder, int $id): Response
+    {
+        $user = $this->getUser();
+
+        if(!$user instanceof User) {
+            throw $this->createAccessDeniedException("Utilisateur n'est pas connecté.");
+        }
+
+        $orderViewModel = $orderSuccessBuilder->buildForUser($id, $user);
+
+        if ($orderViewModel === null) {
+            throw $this->createNotFoundException('Commande non trouvée.');
+        }
+
+        return $this->render('profile/orders/order_show.html.twig', [
+            'order' => $orderViewModel,
+        ]);
+    }
+
+
+
+
+    #[Route('/addresses', name: 'addresses', methods: ['GET'])]
+    public function addresses(AddressRepository $addressRepository): Response
+    {
+        $user = $this->getUser();
+
+        if(!$user instanceof User) {
+            throw $this->createAccessDeniedException("Utilisateur introuvable.");
+        }
+
+        $addresses = $addressRepository->findUserAddressesForProfile($user);
+
+
+        return $this->render('profile/addresses/addresses.html.twig',[
+            'addresses' => $addresses
+        ]);
+    }
+
+
+    #[Route('/addresses/new', name: 'addresses_new', methods: ['GET', 'POST'])]
+    public function newAddress(Request $request, AddressManager $addressManager): Response
+    {
+        $user = $this->getUser();
+
+        if(!$user instanceof User){
+            throw $this->createAccessDeniedException("Utilisateur introuvable.");
+        }
+
+        $address = new Address();
+
+        $form = $this->createForm(AddressType::class, $address);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $addressManager->createForUser($user, $address);
+
+            $this->addFlash('success', 'Adresse ajouté');
+
+            return $this->redirectToRoute('app_profile_addresses');
+        }
+
+        return $this->render('profile/addresses/address_form.html.twig', [
+            'form' => $form->createView(),
+            'pageTitle' => 'Nouvelle adresse',
+            'submitLabel' => 'Sauvegarder l\'adresse',
+
+        ]);
+
+    }
+
+
+    #[Route('/addresses/{id}/edit', name: 'addresses_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
+    public function editAddress(int $id, Request $request, AddressRepository $addressRepository, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        if(!$user instanceof User){
+            throw $this->createAccessDeniedException("Utilisateur introuvable.");
+        }
+
+        $address = $addressRepository->findOneByIdAndUser($id, $user);
+
+        if ($address === null) {
+            throw $this->createNotFoundException('Adresse introuvable.');
+        }
+
+        $form = $this->createForm(AddressType::class, $address);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $address->setUpdatedAt(new \DateTimeImmutable());
+
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Address updated successfully.');
+
+            return $this->redirectToRoute('app_profile_addresses');
+        }
+
+            return $this->render('profile/addresses/address_form.html.twig', [
+            'form' => $form->createView(),
+            'pageTitle' => 'Edit Address',
+            'submitLabel' => 'Update address',
+        ]);
+    }
+
+
+    #[Route('/addresses/{id}/delete', name: 'addresses_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
+    public function deleteAddress(
+        int $id,
+        Request $request, AddressRepository $addressRepository, EntityManagerInterface $entityManager, AddressManager $addressManager): Response
+        {
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException('User not found.');
+        }
+
+        $address = $addressRepository->findOneByIdAndUser($id, $user);
+
+        if ($address === null) {
+            throw $this->createNotFoundException('Address not found.');
+        }
+
+        if (
+            !$this->isCsrfTokenValid(
+                'delete_address_' . $address->getId(),
+                (string) $request->request->get('_token')
+            )
+        ) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
+        }
+
+        $wasDefault = $address->isDefault();
+
+        $entityManager->remove($address);
+        $entityManager->flush();
+
+        if ($wasDefault) {
+            $addressManager->assignNewDefaultAfterDeletion($user);
+        }
+
+        $this->addFlash('success', 'Address deleted successfully.');
+
+        return $this->redirectToRoute('app_profile_addresses');
+    }
+
+    #[Route('/addresses/{id}/default', name: 'addresses_set_default', methods: ['POST'], requirements: ['id' => '\d+'])]
+    public function setDefaultAddress(int $id, Request $request, AddressRepository $addressRepository, AddressManager $addressManager): Response
+    {
+        $user = $this->getUser();
+
+        if(!$user instanceof User){
+            throw $this->createAccessDeniedException("Utilisateur introuvable.");
+        }
+
+        $address = $addressRepository->findOneByIdAndUser($id, $user);
+
+        if($address === null) {
+            throw $this->createNotFoundException('Adresse introuvable.');
+        }
+
+        if (!$this->isCsrfTokenValid('set_default_address_' . $address->getId(), (string) $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
+        }
+
+        $addressManager->setDefaultForUser($user, $address);
+
+        $this->addFlash('success', 'Adresse par défaut mise à jour avec succès.');
+
+        return $this->redirectToRoute('app_profile_addresses');
+    }
+
+
+    #[Route('/payment-methods', name: 'payment_methods', methods: ['GET'])]
+    public function paymentMethods(): Response
+    {
+        return $this->render('profile/payment_methods.html.twig');
     }
 }

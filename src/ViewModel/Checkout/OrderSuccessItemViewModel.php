@@ -9,7 +9,7 @@ final readonly class OrderSuccessItemViewModel
         public int $quantity,
         public int $unitPriceCents,
         public int $lineTotalCents,
-        public ?string $imagePath = null,
+        public ?string $imagePath,
     ) {
     }
 }

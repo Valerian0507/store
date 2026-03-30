@@ -37,7 +37,7 @@ final class OrderSuccessBuilder
                 quantity: $quantity,
                 unitPriceCents: $unitPriceCents,
                 lineTotalCents: $lineTotalCents,
-                imagePath: null, // потом подставишь snapshot image, если добавишь
+                imagePath: $item->getProductImage(), // snapshot image
             );
         }
 
@@ -55,10 +55,22 @@ final class OrderSuccessBuilder
             default => ucfirst($order->getStatus()),
         };
 
+        $statusBadgeClass = match ($order->getStatus()) {
+            'pending' => 'bg-warning text-dark',
+            'paid' => 'bg-success text-white',
+            'shipped' => 'bg-primary text-white',
+            'cancelled' => 'bg-danger text-white',
+            default => 'bg-secondary text-white',
+        };
+
+
         return new OrderSuccessViewModel(
-            orderId: $order->getId(),
+            orderId: (int) $order->getId(),
+            reference: (string) $order->getReference(),
             status: $order->getStatus(),
             statusLabel: $statusLabel,
+            statusBadgeClass: $statusBadgeClass,
+            createdAt: $order->getCreatedAt(),
             subtotalCents: $subtotalCents,
             shippingCents: $shippingCents,
             totalCents: $order->getTotalCents(),

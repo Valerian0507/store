@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ pageTitle }}{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+        <div>
+            <h1 class="h2 fw-bold mb-1">{{ pageTitle }}</h1>
+            <p class="text-muted mb-0">
+                Fill in the address information below.
+            </p>
+        </div>
+
+        <a href="{{ path('app_profile_addresses') }}" class="btn btn-outline-secondary">
+            Back to My Addresses
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            {{ form_start(form) }}
+                <div class="row g-3">
+                    {# Добавить Fullname из имени и фамилии #}
+
+                    <div class="col-12 col-md-6">
+                        {{ form_row(form.country) }}
+                    </div>
+
+                    <div class="col-12">
+                        {{ form_row(form.street) }}
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        {{ form_row(form.postalCode) }}
+                    </div>
+
+                    <div class="col-12 col-md-8">
+                        {{ form_row(form.city) }}
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        {{ submitLabel }}
+                    </button>
+
+                    <a href="{{ path('app_profile_addresses') }}" class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

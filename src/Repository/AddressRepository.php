@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Address;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +17,40 @@ class AddressRepository extends ServiceEntityRepository
         parent::__construct($registry, Address::class);
     }
 
-    //    /**
-    //     * @return Address[] Returns an array of Address objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('a.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    // ищет все адреса пользователя
+    public function findUserAddressesForProfile(User $user): array
+    {
+        return $this->createQueryBuilder('address')
+            ->andWhere('address.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('address.createdAt', 'DESC')
+            ->addOrderBy('address.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 
-    //    public function findOneBySomeField($value): ?Address
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    // ищет один адрес по id
+    public function findOneByIdAndUser(int $id, User $user): ?Address
+    {
+        return $this->createQueryBuilder('address')
+            ->andWhere('address.id = :id')
+            ->setParameter('id', $id)
+            ->andWhere('address.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findDefaultAddressForUser(User $user): ?Address
+    {
+        return $this->createQueryBuilder('address')
+            ->andWhere('address.user = :user')
+            ->setParameter('user', $user)
+            ->andWhere('address.isDefault = :isDefault')
+            ->setParameter('isDefault', true)
+            ->orderBy('address.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+        } 
 }

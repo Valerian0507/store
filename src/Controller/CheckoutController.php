@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Address;
 use App\Entity\User;
+use App\Repository\AddressRepository;
 use App\Repository\OrderRepository;
 use App\Service\Checkout\CheckoutService;
 use App\Service\Checkout\CheckoutSummaryBuilder;
@@ -20,7 +22,7 @@ final class CheckoutController extends AbstractController
 {
 
     #[Route('', name: 'index', methods: ['GET'])]
-    public function index(CheckoutSummaryBuilder $checkoutSummaryBuilder): Response
+    public function index(CheckoutSummaryBuilder $checkoutSummaryBuilder, AddressRepository $addressRepository): Response
     {
         $summary = $checkoutSummaryBuilder->build();
 
@@ -32,25 +34,55 @@ final class CheckoutController extends AbstractController
 
         $user = $this->getUser();
 
+        $addresses = [];
+        $defaultAddress = null;
+        $selectedAddressId = 0;
+
+        $shippingData = [
+        'firstName' => $user instanceof User ? ($user->getFirstName() ?? '') : '',
+        'lastName' => $user instanceof User ? ($user->getLastName() ?? '') : '',
+        'street' => '',
+        'city' => '',
+        'postalCode' => '',
+        'country' => '',
+        ];
+
+        if($user instanceof User) {
+                $addresses = $addressRepository->findUserAddressesForProfile($user);
+                $defaultAddress = $addressRepository->findDefaultAddressForUser($user);
+
+                if($defaultAddress !== null) {
+                    $selectedAddressId = $defaultAddress->getId();
+
+                    $shippingData = [
+                'firstName' => $user->getFirstName() ?? '',
+                'lastName' => $user->getLastName() ?? '',
+                'street' => $defaultAddress->getStreet(),
+                'city' => $defaultAddress->getCity(),
+                'postalCode' => $defaultAddress->getPostalCode(),
+                'country' => $defaultAddress->getCountry(),
+                ];
+            }
+        }
+
+
         return $this->render('checkout/index.html.twig', [
+            'addresses' => $addresses,
+            'selectedAddressId' => $selectedAddressId,
             'summary' => $summary,
             'errors' => [],
-            'shippingData' => [
-                'firstName' => $user instanceof User ? ($user->getFirstName() ?? '') : '',
-                'lastName' => $user instanceof User ? ($user->getLastName() ?? '') : '',
-                'street' => '',
-                'city' => '',
-                'postalCode' => '',
-                'country' => '',
-            ],
+            'shippingData' => $shippingData,
         ]);
     }
 
     // Сбор данных для заказа и отправка, проверка CSRF, получение юзера, создание заказа, редирект
     #[Route('', name: 'submit', methods: ['POST'])]
-    public function submit(Request $request, CheckoutService $checkoutService, CheckoutSummaryBuilder $checkoutSummaryBuilder): Response
-    {
-
+    public function submit(
+        Request $request,
+        CheckoutService $checkoutService,
+        CheckoutSummaryBuilder $checkoutSummaryBuilder,
+        AddressRepository $addressRepository
+    ): Response {
         $user = $this->getUser();
 
         if (!$user instanceof User) {
@@ -63,19 +95,42 @@ final class CheckoutController extends AbstractController
             throw $this->createAccessDeniedException('Invalid CSRF token.');
         }
 
-        $shippingData = [
-            'firstName' => trim((string) $request->request->get('firstName', '')),
-            'lastName' => trim((string) $request->request->get('lastName', '')),
-            'street' => trim((string) $request->request->get('street', '')),
-            'city' => trim((string) $request->request->get('city', '')),
-            'postalCode' => trim((string) $request->request->get('postalCode', '')),
-            'country' => trim((string) $request->request->get('country', '')),
-        ];
+        $selectedAddressId = (int) $request->request->get('selectedAddress', 0);
+
+        $addresses = $addressRepository->findUserAddressesForProfile($user);
+
+        if ($selectedAddressId > 0) {
+            $address = $addressRepository->findOneByIdAndUser($selectedAddressId, $user);
+
+            if ($address === null) {
+                throw $this->createNotFoundException('Adresse introuvable.');
+            }
+
+            $shippingData = [
+                'firstName' => $user->getFirstName() ?? '',
+                'lastName' => $user->getLastName() ?? '',
+                'street' => $address->getStreet() ?? '',
+                'city' => $address->getCity() ?? '',
+                'postalCode' => $address->getPostalCode() ?? '',
+                'country' => $address->getCountry() ?? '',
+            ];
+        } else {
+            $shippingData = [
+                'firstName' => trim((string) $request->request->get('firstName', '')),
+                'lastName' => trim((string) $request->request->get('lastName', '')),
+                'street' => trim((string) $request->request->get('street', '')),
+                'city' => trim((string) $request->request->get('city', '')),
+                'postalCode' => trim((string) $request->request->get('postalCode', '')),
+                'country' => trim((string) $request->request->get('country', '')),
+            ];
+        }
 
         $errors = $this->validateShippingData($shippingData);
 
         if ($errors !== []) {
             return $this->render('checkout/index.html.twig', [
+                'addresses' => $addresses,
+                'selectedAddressId' => $selectedAddressId,
                 'summary' => $checkoutSummaryBuilder->build(),
                 'errors' => $errors,
                 'shippingData' => $shippingData,
@@ -168,3 +223,5 @@ final class CheckoutController extends AbstractController
 
 
 }
+
+

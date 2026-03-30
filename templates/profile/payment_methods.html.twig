@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Payment Methods{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h2 mb-1">Payment Methods</h1>
+            <p class="text-muted mb-0">
+                Placeholder page for future payment integration.
+            </p>
+        </div>
+
+        <a href="{{ path('app_profile_index') }}" class="btn btn-outline-secondary">
+            Back to Profile
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <p class="mb-2">
+                No real bank card data is stored in this application.
+            </p>
+            <p class="mb-0 text-muted">
+                In production, payment methods should be handled through a payment provider
+                using tokens or hosted forms.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

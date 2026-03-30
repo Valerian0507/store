@@ -1,212 +1,327 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Checkout{% endblock %}
+{% block title %}Checkout
+{% endblock %}
 
 {% block body %}
-<div class="container py-4">
-    <h1 class="mb-4">Checkout</h1>
+	<div class="container py-4">
+		<h1 class="mb-4">Checkout</h1>
 
-    {% if errors is not empty %}
-        <div class="alert alert-danger" role="alert">
-            Please correct the highlighted fields.
-        </div>
-    {% endif %}
+		{% if errors is not empty %}
+			<div class="alert alert-danger" role="alert">
+				Please correct the highlighted fields.
+			</div>
+		{% endif %}
 
-    <div class="row g-4">
-        <div class="col-12 col-lg-7">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h2 class="h4 mb-3">Shipping information</h2>
+		<div class="row g-4">
+			<div class="col-12 col-lg-7">
+				<div class="card shadow-sm">
+					<div class="card-body">
+						<h2 class="h4 mb-3">Adresses de livraison</h2>
+						<form method="post" action="{{ path('app_checkout_submit') }}">
+							<input type="hidden" name="_token" value="{{ csrf_token('checkout') }}">
 
-                    <form method="post" action="{{ path('app_checkout_submit') }}">
-                        <input type="hidden" name="_token" value="{{ csrf_token('checkout') }}">
+							{% if addresses is not empty %}
+								{% set currentAddress = null %}
 
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="firstName" class="form-label">First name</label>
-                                <input
-                                    id="firstName"
-                                    type="text"
-                                    name="firstName"
-                                    class="form-control {{ errors.firstName is defined ? 'is-invalid' : '' }}"
-                                    value="{{ shippingData.firstName|default('') }}"
-                                    autocomplete="given-name"
-                                    maxlength="100"
-                                    required
-                                >
-                                {% if errors.firstName is defined %}
-                                    <div class="invalid-feedback">
-                                        {{ errors.firstName }}
-                                    </div>
-                                {% endif %}
-                            </div>
+								{# 1. Если пользователь уже выбрал адрес, берем его #}
+								{% if selectedAddressId > 0 %}
+									{% for address in addresses %}
+										{% if selectedAddressId == address.id %}
+											{% set currentAddress = address %}
+										{% endif %}
+									{% endfor %}
+								{% endif %}
 
-                            <div class="col-md-6">
-                                <label for="lastName" class="form-label">Last name</label>
-                                <input
-                                    id="lastName"
-                                    type="text"
-                                    name="lastName"
-                                    class="form-control {{ errors.lastName is defined ? 'is-invalid' : '' }}"
-                                    value="{{ shippingData.lastName|default('') }}"
-                                    autocomplete="family-name"
-                                    maxlength="100"
-                                    required
-                                >
-                                {% if errors.lastName is defined %}
-                                    <div class="invalid-feedback">
-                                        {{ errors.lastName }}
-                                    </div>
-                                {% endif %}
-                            </div>
+								{# 2. Если адрес еще не выбран, пробуем взять default #}
+								{% if currentAddress is null %}
+									{% for address in addresses %}
+										{% if address.isDefault %}
+											{% set currentAddress = address %}
+										{% endif %}
+									{% endfor %}
+								{% endif %}
 
-                            <div class="col-12">
-                                <label for="street" class="form-label">Street</label>
-                                <input
-                                    id="street"
-                                    type="text"
-                                    name="street"
-                                    class="form-control {{ errors.street is defined ? 'is-invalid' : '' }}"
-                                    value="{{ shippingData.street|default('') }}"
-                                    autocomplete="address-line1"
-                                    maxlength="255"
-                                    required
-                                >
-                                {% if errors.street is defined %}
-                                    <div class="invalid-feedback">
-                                        {{ errors.street }}
-                                    </div>
-                                {% endif %}
-                            </div>
+								{# 3. Если default нет, берем первый адрес #}
+								{% if currentAddress is null %}
+									{% set currentAddress = addresses|first %}
+								{% endif %}
 
-                            <div class="col-md-6">
-                                <label for="city" class="form-label">City</label>
-                                <input
-                                    id="city"
-                                    type="text"
-                                    name="city"
-                                    class="form-control {{ errors.city is defined ? 'is-invalid' : '' }}"
-                                    value="{{ shippingData.city|default('') }}"
-                                    autocomplete="address-level2"
-                                    maxlength="120"
-                                    required
-                                >
-                                {% if errors.city is defined %}
-                                    <div class="invalid-feedback">
-                                        {{ errors.city }}
-                                    </div>
-                                {% endif %}
-                            </div>
+								<div class="checkout-selected-address mb-4" id="checkout-selected-address">
+									<div class="d-flex justify-content-between align-items-start gap-3">
+										<div>
+											<div class="fw-semibold mb-1">
+												Delivering to
+												{% if currentAddress.user.firstName or currentAddress.user.lastName %}
+													{{ currentAddress.user.firstName }}
+													{{ currentAddress.user.lastName }}
+												{% else %}
+													Account owner
+												{% endif %}
+											</div>
 
-                            <div class="col-md-3">
-                                <label for="postalCode" class="form-label">Postal code</label>
-                                <input
-                                    id="postalCode"
-                                    type="text"
-                                    name="postalCode"
-                                    class="form-control {{ errors.postalCode is defined ? 'is-invalid' : '' }}"
-                                    value="{{ shippingData.postalCode|default('') }}"
-                                    autocomplete="postal-code"
-                                    maxlength="20"
-                                    required
-                                >
-                                {% if errors.postalCode is defined %}
-                                    <div class="invalid-feedback">
-                                        {{ errors.postalCode }}
-                                    </div>
-                                {% endif %}
-                            </div>
+											<div class="text-muted">
+												{{ currentAddress.street }},
+												{{ currentAddress.city }},
+												{{ currentAddress.postalCode }},
+												{{ currentAddress.country }}
+											</div>
 
-                            <div class="col-md-3">
-                                <label for="country" class="form-label">Country</label>
-                                <input
-                                    id="country"
-                                    type="text"
-                                    name="country"
-                                    class="form-control {{ errors.country is defined ? 'is-invalid' : '' }}"
-                                    value="{{ shippingData.country|default('') }}"
-                                    autocomplete="country-name"
-                                    maxlength="120"
-                                    required
-                                >
-                                {% if errors.country is defined %}
-                                    <div class="invalid-feedback">
-                                        {{ errors.country }}
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </div>
+											{% if currentAddress.isDefault %}
+												<div class="text-muted small mt-1">Default address</div>
+											{% endif %}
+										</div>
 
-                        <button type="submit" class="btn btn-primary mt-4">
-                            Place order
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
+										<button type="button" class="checkout-change-link" id="checkout-change-address">
+											Change
+										</button>
+									</div>
+								</div>
 
-        <div class="col-12 col-lg-5">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h2 class="h4 mb-3">Order summary</h2>
+								<div class="checkout-addresses-panel mb-4 d-none" id="checkout-addresses-panel">
+									<div class="border-top pt-3">
+										<h3 class="h5 mb-3">Delivery addresses ({{ addresses|length }})</h3>
 
-                    {% if summary.isEmpty() %}
-                        <p class="text-muted mb-0">Your cart is empty.</p>
-                    {% else %}
-                        <div class="mb-3">
-                            {% for item in summary.items %}
-                                <div class="d-flex gap-3 py-3 border-bottom">
-                                    <div style="width: 72px; flex: 0 0 72px;">
-                                        {% if item.image %}
-                                            <img
-                                                src="{{ asset('uploads/products/' ~ item.image) }}"
-                                                alt="{{ item.title }}"
-                                                class="img-fluid rounded"
-                                            >
-                                        {% else %}
-                                            <img
-                                                src="{{ asset('images/product-placeholder.jpg') }}"
-                                                alt="No image"
-                                                class="img-fluid rounded"
-                                            >
-                                        {% endif %}
-                                    </div>
+										<div class="d-flex flex-column gap-3">
+											{% for address in addresses %}
+												<label class="checkout-address-option">
+													<div class="checkout-address-option__radio">
+														<input type="radio" name="selectedAddress" value="{{ address.id }}" {% if selectedAddressId == address.id %}checked{% endif %}>
+													</div>
 
-                                    <div class="flex-grow-1">
-                                        <div class="fw-semibold">{{ item.title }}</div>
-                                        <div class="text-muted small">
-                                            Qty: {{ item.quantity }}
-                                        </div>
-                                        <div class="text-muted small">
-                                            Unit price: {{ (item.unitPriceCents / 100)|number_format(2, '.', ' ') }} €
-                                        </div>
-                                    </div>
+													<div class="checkout-address-option__content">
+														<div class="fw-semibold">
+															{% if address.user.firstName or address.user.lastName %}
+																{{ address.user.firstName }}
+																{{ address.user.lastName }}
+															{% else %}
+																Account owner
+															{% endif %}
+														</div>
 
-                                    <div class="text-end fw-semibold">
-                                        {{ (item.subtotalCents / 100)|number_format(2, '.', ' ') }} €
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
+														<div>
+															{{ address.street }},
+															{{ address.city }},
+															{{ address.postalCode }},
+															{{ address.country }}
+														</div>
 
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Items</span>
-                            <span>{{ summary.itemsCount }}</span>
-                        </div>
+														{% if address.isDefault %}
+															<div class="text-muted small mt-1">Default address</div>
+														{% endif %}
+													</div>
+												</label>
+											{% endfor %}
 
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Subtotal</span>
-                            <span>{{ (summary.subtotalCents / 100)|number_format(2, '.', ' ') }} €</span>
-                        </div>
+											<div class="mt-3">
+												<button type="button" class="checkout-change-link" id="checkout-add-address">
+													Add a new address
+												</button>
 
-                        <div class="d-flex justify-content-between fw-bold fs-5 pt-2 border-top">
-                            <span>Total</span>
-                            <span>{{ (summary.totalCents / 100)|number_format(2, '.', ' ') }} €</span>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+												<input type="radio" name="selectedAddress" value="0" id="selectedAddressManual" class="d-none" {% if selectedAddressId == 0 %}checked{% endif %}>
+											</div>
+										</div>
+									</div>
+								</div>
+							{% endif %}
+
+							<div class="row g-3 d-none" id="checkout-manual-address-fields">
+								<div class="col-md-6">
+									<label for="firstName" class="form-label">First name</label>
+									<input id="firstName" type="text" name="firstName" class="js-manual-address-field form-control {{ errors.firstName is defined ? 'is-invalid' : '' }}" value="{{ shippingData.firstName|default('') }}" autocomplete="given-name" maxlength="100" required>
+									{% if errors.firstName is defined %}
+										<div class="invalid-feedback">
+											{{ errors.firstName }}
+										</div>
+									{% endif %}
+								</div>
+
+								<div class="col-md-6">
+									<label for="lastName" class="form-label">Last name</label>
+									<input id="lastName" type="text" name="lastName" class="js-manual-address-field form-control {{ errors.lastName is defined ? 'is-invalid' : '' }}" value="{{ shippingData.lastName|default('') }}" autocomplete="family-name" maxlength="100" required>
+									{% if errors.lastName is defined %}
+										<div class="invalid-feedback">
+											{{ errors.lastName }}
+										</div>
+									{% endif %}
+								</div>
+
+								<div class="col-12">
+									<label for="street" class="form-label">Street</label>
+									<input id="street" type="text" name="street" class="js-manual-address-field form-control {{ errors.street is defined ? 'is-invalid' : '' }}" value="{{ shippingData.street|default('') }}" autocomplete="address-line1" maxlength="255" required>
+									{% if errors.street is defined %}
+										<div class="invalid-feedback">
+											{{ errors.street }}
+										</div>
+									{% endif %}
+								</div>
+
+								<div class="col-md-6">
+									<label for="city" class="form-label">City</label>
+									<input id="city" type="text" name="city" class="js-manual-address-field form-control {{ errors.city is defined ? 'is-invalid' : '' }}" value="{{ shippingData.city|default('') }}" autocomplete="address-level2" maxlength="120" required>
+									{% if errors.city is defined %}
+										<div class="invalid-feedback">
+											{{ errors.city }}
+										</div>
+									{% endif %}
+								</div>
+
+								<div class="col-md-3">
+									<label for="postalCode" class="form-label">Postal code</label>
+									<input id="postalCode" type="text" name="postalCode" class="js-manual-address-field form-control {{ errors.postalCode is defined ? 'is-invalid' : '' }}" value="{{ shippingData.postalCode|default('') }}" autocomplete="postal-code" maxlength="20" required>
+									{% if errors.postalCode is defined %}
+										<div class="invalid-feedback">
+											{{ errors.postalCode }}
+										</div>
+									{% endif %}
+								</div>
+
+								<div class="col-md-3">
+									<label for="country" class="form-label">Country</label>
+									<input id="country" type="text" name="country" class="js-manual-address-field form-control {{ errors.country is defined ? 'is-invalid' : '' }}" value="{{ shippingData.country|default('') }}" autocomplete="country-name" maxlength="120" required>
+									{% if errors.country is defined %}
+										<div class="invalid-feedback">
+											{{ errors.country }}
+										</div>
+									{% endif %}
+								</div>
+							</div>
+
+							<button type="submit" class="btn btn-primary mt-4">
+								Place order
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-12 col-lg-5">
+				<div class="card shadow-sm">
+					<div class="card-body">
+						<h2 class="h4 mb-3">Order summary</h2>
+
+						{% if summary.isEmpty() %}
+							<p class="text-muted mb-0">Your cart is empty.</p>
+						{% else %}
+							<div class="mb-3">
+								{% for item in summary.items %}
+									<div class="d-flex gap-3 py-3 border-bottom">
+										<div style="width: 72px; flex: 0 0 72px;">
+											{% if item.image %}
+												<img src="{{ asset('uploads/products/' ~ item.image) }}" alt="{{ item.title }}" class="img-fluid rounded">
+											{% else %}
+												<img src="{{ asset('images/product-placeholder.jpg') }}" alt="No image" class="img-fluid rounded">
+											{% endif %}
+										</div>
+
+										<div class="flex-grow-1">
+											<div class="fw-semibold">{{ item.title }}</div>
+											<div class="text-muted small">
+												Qty:
+												{{ item.quantity }}
+											</div>
+											<div class="text-muted small">
+												Unit price:
+												{{ (item.unitPriceCents / 100)|number_format(2, '.', ' ') }}
+												€
+											</div>
+										</div>
+
+										<div class="text-end fw-semibold">
+											{{ (item.subtotalCents / 100)|number_format(2, '.', ' ') }}
+											€
+										</div>
+									</div>
+								{% endfor %}
+							</div>
+
+							<div class="d-flex justify-content-between mb-2">
+								<span>Items</span>
+								<span>{{ summary.itemsCount }}</span>
+							</div>
+
+							<div class="d-flex justify-content-between mb-2">
+								<span>Subtotal</span>
+								<span>{{ (summary.subtotalCents / 100)|number_format(2, '.', ' ') }}
+									€</span>
+							</div>
+
+							<div class="d-flex justify-content-between fw-bold fs-5 pt-2 border-top">
+								<span>Total</span>
+								<span>{{ (summary.totalCents / 100)|number_format(2, '.', ' ') }}
+									€</span>
+							</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+        function initCheckoutAddressUI() {
+            const changeButton = document.getElementById('checkout-change-address');
+            const addAddressButton = document.getElementById('checkout-add-address');
+            const addressPanel = document.getElementById('checkout-addresses-panel');
+            const manualFieldsWrapper = document.getElementById('checkout-manual-address-fields');
+            const manualFields = document.querySelectorAll('.js-manual-address-field');
+            const addressRadios = document.querySelectorAll('input[name="selectedAddress"]');
+            const manualAddressRadio = document.getElementById('selectedAddressManual');
+
+            if (!addressPanel || !manualFieldsWrapper) {
+                return;
+            }
+
+            function toggleManualAddressFields() {
+                const checkedRadio = document.querySelector('input[name="selectedAddress"]:checked');
+
+                if (!checkedRadio) {
+                    return;
+                }
+
+                const useManualAddress = checkedRadio.value === '0';
+
+                if (useManualAddress) {
+                    manualFieldsWrapper.classList.remove('d-none');
+                    manualFields.forEach((field) => {
+                        field.disabled = false;
+                    });
+                } else {
+                    manualFieldsWrapper.classList.add('d-none');
+                    manualFields.forEach((field) => {
+                        field.disabled = true;
+                    });
+                }
+            }
+
+            if (changeButton && !changeButton.dataset.bound) {
+                changeButton.addEventListener('click', () => {
+                    addressPanel.classList.toggle('d-none');
+                });
+                changeButton.dataset.bound = 'true';
+            }
+
+            if (addAddressButton && manualAddressRadio && !addAddressButton.dataset.bound) {
+                addAddressButton.addEventListener('click', () => {
+                    manualAddressRadio.checked = true;
+                    addressPanel.classList.remove('d-none');
+                    toggleManualAddressFields();
+                });
+                addAddressButton.dataset.bound = 'true';
+            }
+
+            addressRadios.forEach((radio) => {
+                if (!radio.dataset.bound) {
+                    radio.addEventListener('change', toggleManualAddressFields);
+                    radio.dataset.bound = 'true';
+                }
+            });
+
+            toggleManualAddressFields();
+        }
+
+        document.addEventListener('DOMContentLoaded', initCheckoutAddressUI);
+        document.addEventListener('turbo:load', initCheckoutAddressUI);
+    </script>
+
 {% endblock %}

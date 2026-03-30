@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Addresses
+{% endblock %}
+
+{% block body %}
+	<div class="container py-4">
+		<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+			<div>
+				<h1 class="h2 fw-bold mb-1">My Addresses</h1>
+				<p class="text-muted mb-0">
+					Manage your saved delivery addresses.
+				</p>
+			</div>
+
+			<div class="d-flex gap-2">
+				<a href="{{ path('app_profile_index') }}" class="btn btn-outline-secondary">
+					Back to Profile
+				</a>
+				<a href="{{ path('app_profile_addresses_new') }}" class="btn btn-primary">
+					Add address
+				</a>
+			</div>
+		</div>
+
+		{% if addresses is empty %}
+			<div class="card shadow-sm border-0">
+				<div class="card-body py-5 text-center">
+					<h2 class="h4 mb-3">No addresses yet</h2>
+					<p class="text-muted mb-4">
+						Save an address to make future checkout easier.
+					</p>
+					<a href="{{ path('app_profile_addresses_new') }}" class="btn btn-primary">
+						Create your first address
+					</a>
+				</div>
+			</div>
+		{% else %}
+			<div class="row g-3">
+				{% for address in addresses %}
+					<div class="col-12 col-md-6 col-xl-4">
+						<div class="address-card">
+							<div class="address-card__header">
+								<div class="fw-semibold">
+									{% if address.isDefault %}
+										Default
+									{% else %}
+										Saved address
+									{% endif %}
+								</div>
+
+								<div class="text-muted small">
+									Added on
+									{{ address.createdAt|date('d/m/Y') }}
+								</div>
+							</div>
+
+							<div class="address-card__body">
+								<div class="fw-semibold mb-2">
+									{% if address.user.firstName or address.user.lastName %}
+										{{ address.user.firstName }}
+										{{ address.user.lastName }}
+									{% else %}
+										Account owner
+									{% endif %}
+								</div>
+
+								<div>{{ address.street }}</div>
+								<div>{{ address.postalCode }}
+									{{ address.city }}</div>
+								<div>{{ address.country }}</div>
+							</div>
+
+							<div class="address-card__footer">
+								<a href="{{ path('app_profile_addresses_edit', { id: address.id }) }}" class="address-card__action-link">
+									Edit
+								</a>
+
+								{% if not address.isDefault %}
+									<span class="address-card__separator">|</span>
+
+									<form method="post" action="{{ path('app_profile_addresses_set_default', { id: address.id }) }}" class="address-card__action-form">
+										<input type="hidden" name="_token" value="{{ csrf_token('set_default_address_' ~ address.id) }}">
+
+										<button type="submit" class="address-card__action-button">
+											Set as default
+										</button>
+									</form>
+								{% endif %}
+
+								<span class="address-card__separator">|</span>
+
+								<form method="post" action="{{ path('app_profile_addresses_delete', { id: address.id }) }}" class="address-card__action-form">
+									<input type="hidden" name="_token" value="{{ csrf_token('delete_address_' ~ address.id) }}">
+
+									<button type="submit" class="address-card__action-button">
+										Remove
+									</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		{% endif %}
+	</div>
+{% endblock %}

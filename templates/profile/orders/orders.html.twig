@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Orders{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h2 fw-bold mb-1">My Orders</h1>
+            <p class="text-muted mb-0">
+                View your recent orders and track their status.
+            </p>
+        </div>
+
+        <a href="{{ path('app_profile_index') }}" class="btn btn-outline-secondary">
+            Back to Profile
+        </a>
+    </div>
+
+    {% if orders is empty %}
+        <div class="card shadow-sm border-0">
+            <div class="card-body py-5 text-center">
+                <h2 class="h4 mb-3">No orders yet</h2>
+                <p class="text-muted mb-4">
+                    You have not placed any orders yet.
+                </p>
+                <a href="{{ path('app_products_index') }}" class="btn btn-primary">
+                    Start shopping
+                </a>
+            </div>
+        </div>
+    {% else %}
+        <div class="d-flex flex-column gap-3">
+            {% for order in orders %}
+                {% set statusLabel = {
+                    'pending': 'Pending Payment',
+                    'paid': 'Paid',
+                    'shipped': 'Shipped',
+                    'cancelled': 'Cancelled'
+                }[order.status] ?? order.status|capitalize %}
+
+                {% set statusBadgeClass = {
+                    'pending': 'bg-warning text-dark',
+                    'paid': 'bg-success text-white',
+                    'shipped': 'bg-primary text-white',
+                    'cancelled': 'bg-danger text-white'
+                }[order.status] ?? 'bg-secondary text-white' %}
+
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-12 col-md-3">
+                                <div class="text-muted small mb-1">Reference</div>
+                                <div class="fw-semibold">
+                                    {{ order.reference ?? ('#' ~ order.id) }}
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-3">
+                                <div class="text-muted small mb-1">Date</div>
+                                <div>
+                                    {{ order.createdAt|date('d/m/Y H:i') }}
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-2">
+                                <div class="text-muted small mb-1">Status</div>
+                                <span class="badge {{ statusBadgeClass }}">
+                                    {{ statusLabel }}
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-md-2">
+                                <div class="text-muted small mb-1">Total</div>
+                                <div class="fw-semibold">
+                                    {{ (order.totalCents / 100)|number_format(2, '.', ' ') }} €
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-2 text-md-end">
+                                <a href="{{ path('app_profile_orders_show', { id: order.id }) }}" class="btn btn-outline-primary">
+                                    View details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

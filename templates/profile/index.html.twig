@@ -1,20 +1,60 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ProfileController!{% endblock %}
+{% block title %}My Profile{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="container py-5">
+    <div class="mx-auto" style="max-width: 1100px;">
+        <div class="mb-4">
+            <h1 class="fw-bold mb-2">My Account</h1>
+            <p class="text-muted mb-0">
+                Manage your orders, addresses, and payment methods.
+            </p>
+        </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+        <div class="row g-4">
+            <div class="col-12 col-md-6 col-xl-4">
+                <div class="card h-100 shadow-sm border-0 rounded-4">
+                    <div class="card-body p-4 d-flex flex-column">
+                        <h2 class="h4 mb-3">My Orders</h2>
+                        <p class="text-muted flex-grow-1">
+                            View your order history, track statuses, and open order details.
+                        </p>
+                        <a href="{{ path('app_profile_orders') }}" class="btn btn-primary">
+                            Go to orders
+                        </a>
+                    </div>
+                </div>
+            </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/alexs/Desktop/my_project_symfony/store/src/Controller/ProfileController.php</code></li>
-        <li>Your template at <code>C:/Users/alexs/Desktop/my_project_symfony/store/templates/profile/index.html.twig</code></li>
-    </ul>
+            <div class="col-12 col-md-6 col-xl-4">
+                <div class="card h-100 shadow-sm border-0 rounded-4">
+                    <div class="card-body p-4 d-flex flex-column">
+                        <h2 class="h4 mb-3">My Addresses</h2>
+                        <p class="text-muted flex-grow-1">
+                            Manage your delivery addresses for faster checkout.
+                        </p>
+                        <a href="{{ path('app_profile_addresses') }}" class="btn btn-outline-primary">
+                            Go to addresses
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-xl-4">
+                <div class="card h-100 shadow-sm border-0 rounded-4">
+                    <div class="card-body p-4 d-flex flex-column">
+                        <h2 class="h4 mb-3">Payment Methods</h2>
+                        <p class="text-muted flex-grow-1">
+                            Manage your saved payment methods securely through the payment provider.
+                        </p>
+                        <a href="{{ path('app_profile_payment_methods') }}" class="btn btn-outline-primary">
+                            Go to payment methods
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

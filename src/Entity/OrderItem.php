@@ -32,6 +32,9 @@ class OrderItem
     #[ORM\Column]
     private int $quantity = 1;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $productImage = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -108,15 +111,29 @@ class OrderItem
      * @return OrderItem
      */
     public static function fromProduct(Product $product, int $qty): self
-{
-    $item = new self();
-    $item->setProduct($product);
-    // У тебя title nullable, поэтому подстрахуемся
-    $item->setProductName($product->getTitle() ?? 'Product');
-    // getPriceCents() у тебя возвращает ?int → делаем безопасно
-    $item->setUnitPriceCents($product->getPriceCents() ?? 0);
-    $item->setQuantity($qty);
+    {
+        $item = new self();
+        $item->setProduct($product);
+        // У тебя title nullable, поэтому подстрахуемся
+        $item->setProductName($product->getTitle() ?? 'Product');
+        // getPriceCents() у тебя возвращает ?int → делаем безопасно
+        $item->setUnitPriceCents($product->getPriceCents() ?? 0);
+        $item->setQuantity($qty);
+        // Для сохранения картинки если даже продукт удалили
+        $item->setProductImage($product->getImage());
 
-    return $item;
-}
+        return $item;
+    }
+
+    public function getProductImage(): ?string
+    {
+        return $this->productImage;
+    }
+
+    public function setProductImage(?string $productImage): static
+    {
+        $this->productImage = $productImage;
+
+        return $this;
+    }
 }

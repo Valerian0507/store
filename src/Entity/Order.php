@@ -20,14 +20,12 @@ class Order
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     private ?User $user = null;
 
-    #[ORM\Column]
-    private \DateTimeImmutable $createdAt;
+    /** @var Collection<int, OrderItem> */
+    #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderItem::class, cascade: ['persist'], orphanRemoval: true)]
+    private Collection $items;
 
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $updatedAt = null;
-
-    #[ORM\Column(length: 50, unique: true, nullable: true)]
-    private ?string $orderNumber = null;
+    #[ORM\Column(length: 50, unique: true)]
+    private ?string $reference = null;
 
     #[ORM\Column(length: 50)]
     private string $status = 'pending';
@@ -41,7 +39,7 @@ class Order
     #[ORM\Column(length: 120, nullable: true)]
     private ?string $shippingLastName = null;
 
-    #[ORM\Column(length: 120, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $shippingStreet = null;
 
     #[ORM\Column(length: 120, nullable: true)]
@@ -53,9 +51,11 @@ class Order
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $shippingCountry = null;
 
-    /** @var Collection<int, OrderItem> */
-    #[ORM\OneToMany(mappedBy: 'order', targetEntity: OrderItem::class, cascade: ['persist'], orphanRemoval: true)]
-    private Collection $items;
+    #[ORM\Column]
+    private \DateTimeImmutable $createdAt;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     public function __construct()
     {
@@ -230,14 +230,14 @@ class Order
         $this->totalCents = $sum;
     }
 
-    public function getOrderNumber(): ?string
+    public function getReference(): ?string
     {
-        return $this->orderNumber;
+        return $this->reference;
     }
 
-    public function setOrderNumber(string $orderNumber): static
+    public function setReference(string $reference): static
     {
-        $this->orderNumber = $orderNumber;
+        $this->reference = $reference;
 
         return $this;
     }

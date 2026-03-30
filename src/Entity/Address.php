@@ -18,6 +18,9 @@ class Address
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private ?User $user = null;
 
+    // #[ORM\Column(length: 50)]
+    // private string $label;
+
     #[ORM\Column(length: 50)]
     private string $country;
 
@@ -145,4 +148,24 @@ class Address
         return $this;
     }
 
+
+    /**
+     * Get the value of label
+     */
+    // public function getLabel()
+    // {
+    //     return $this->label;
+    // }
+
+    // /**
+    //  * Set the value of label
+    //  *
+    //  * @return  self
+    //  */
+    // public function setLabel($label)
+    // {
+    //     $this->label = $label;
+
+    //     return $this;
+    // }
 }

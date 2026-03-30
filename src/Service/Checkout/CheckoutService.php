@@ -20,6 +20,11 @@ final class CheckoutService
 
         }
 
+    private function generateOrderReference(): string
+    {
+        return 'ORD-' . (new \DateTimeImmutable())->format('Ymd') . '-' . strtoupper(bin2hex(random_bytes(4)));
+    }
+
     /**
      * @param array{
      *     firstName: string,
@@ -52,6 +57,7 @@ final class CheckoutService
         $order = new Order();
         $order->setUser($user);
         $order->setStatus('pending');
+        $order->setReference($this->generateOrderReference());
 
         $order->setShippingFirstName($shippingData['firstName']);
         $order->setShippingLastName($shippingData['lastName']);
@@ -82,9 +88,6 @@ final class CheckoutService
         $this->cartManager->clear();
 
         return $order;
-
-
-
     }
 
 }

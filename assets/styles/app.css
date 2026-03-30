@@ -1,6 +1,5 @@
 @import '../vendor/bootstrap/dist/css/bootstrap.min.css';
 
-/*  */
 .icon-primary { color: #304880; }
 .btn-icon { background: none; border: 0; padding: 0; }
 .navbar .logo {
@@ -10,4 +9,108 @@
 
 body {
     background-color: white;
+}
+
+.address-card {
+    height: 100%;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #d5d9d9;
+    border-radius: 10px;
+    background: #fff;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(15, 17, 17, 0.08);
+}
+
+.address-card:hover {
+    box-shadow: 0 2px 6px rgba(15, 17, 17, 0.10);
+}
+
+.address-card__header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #e7e7e7;
+    background: #fff;
+}
+
+.address-card__body {
+    flex: 1;
+    padding: 1rem 1.25rem;
+    color: #0f1111;
+    line-height: 1.5;
+}
+
+.address-card__footer {
+    margin-top: auto;
+    padding: 1rem 1.25rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.address-card__action-form {
+    margin: 0;
+}
+
+.address-card__action-link,
+.address-card__action-button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #0066c0;
+    font-size: 0.92rem;
+    line-height: 1.4;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.address-card__action-link:hover,
+.address-card__action-button:hover {
+    color: #c7511f;
+    text-decoration: underline;
+}
+
+.address-card__separator {
+    color: #6b7280;
+    line-height: 1;
+}
+
+.checkout-address-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    padding: 0.25rem 0;
+    cursor: pointer;
+}
+
+.checkout-address-option__radio {
+    padding-top: 0.2rem;
+}
+
+.checkout-address-option__content {
+    color: #0f1111;
+    line-height: 1.45;
+}
+
+.checkout-selected-address {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eaeded;
+}
+
+.checkout-change-link {
+    background: none;
+    border: 0;
+    padding: 0;
+    color: #2162a1;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.checkout-change-link:hover {
+    color: #c7511f;
+    text-decoration: underline;
+}
+
+.checkout-addresses-panel {
+    padding-top: 0.5rem;
 }
