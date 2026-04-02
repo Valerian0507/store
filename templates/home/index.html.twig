@@ -1,13 +1,220 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Store{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
-  <section class="container">
-    <h1>Page d'accueille</h1>
-      <p>Découvrez notre sélection de spas gonflables et piscines à prix attractifs.</p>
+    <section class="home-hero">
+        <div class="container">
+            <div class="home-hero__content">
+                <span class="home-hero__eyebrow">Nouvelle saison</span>
 
-  </section>
+                <h1 class="home-hero__title">
+                    Profitez de toute la saison avec notre sélection de piscines, spas et équipements de loisirs
+                </h1>
 
+                <p class="home-hero__text">
+                    Découvrez des produits pensés pour le confort, la détente et l’entretien, avec une sélection adaptée
+                    à votre jardin, votre terrasse ou vos envies de bien-être.
+                </p>
 
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="{{ path('app_products_index') }}" class="btn btn-light btn-lg px-4">
+                        Voir les produits
+                    </a>
+
+                    <a href="#home-categories" class="btn btn-outline-light btn-lg px-4">
+                        Découvrir les catégories
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="home-section home-section--light" id="home-categories">
+        <div class="container">
+            <h2 class="home-section-title">Nos catégories</h2>
+            <p class="home-section-text">
+                Retrouvez nos univers principaux pour aménager votre espace extérieur et profiter pleinement de la saison.
+            </p>
+
+            <div class="row g-4">
+                <div class="col-12 col-md-6 col-xl-4">
+                    <article class="category-card">
+                        <img
+                            src="{{ asset('images/home/Piscine.png') }}"
+                            alt="Piscines"
+                            class="category-card__image"
+                        >
+                        <div class="category-card__body">
+                            <h3 class="category-card__title">Piscines</h3>
+                            <p class="category-card__text">
+                                Des piscines conçues pour allier confort, durabilité et plaisir tout au long de la saison.
+                            </p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-12 col-md-6 col-xl-4">
+                    <article class="category-card">
+                        <img
+                            src="{{ asset('images/home/spa.jpg') }}"
+                            alt="Spas"
+                            class="category-card__image"
+                        >
+                        <div class="category-card__body">
+                            <h3 class="category-card__title">Spas</h3>
+                            <p class="category-card__text">
+                                Des spas pensés pour la détente et le bien-être, avec une installation simple et rapide.
+                            </p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-12 col-md-6 col-xl-4">
+                    <article class="category-card">
+                        <img
+                            src="{{ asset('images/home/Accessoires.png') }}"
+                            alt="Accessoires"
+                            class="category-card__image"
+                        >
+                        <div class="category-card__body">
+                            <h3 class="category-card__title">Accessoires</h3>
+                            <p class="category-card__text">
+                                Bouées, jeux, confort et petits équipements pour compléter votre espace de loisirs.
+                            </p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-12 col-md-6 col-xl-4">
+                    <article class="category-card">
+                        <img
+                            src="{{ asset('images/home/Entretien Piscine.png') }}"
+                            alt="Entretien piscine"
+                            class="category-card__image"
+                        >
+                        <div class="category-card__body">
+                            <h3 class="category-card__title">Entretien</h3>
+                            <p class="category-card__text">
+                                Les essentiels pour garder une eau propre, saine et agréable au quotidien.
+                            </p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-12 col-md-6 col-xl-4">
+                    <article class="category-card">
+                        <img
+                            src="{{ asset('images/home/entretien-piscine-materiel-02.jpg') }}"
+                            alt="Matériel d'entretien"
+                            class="category-card__image"
+                        >
+                        <div class="category-card__body">
+                            <h3 class="category-card__title">Nettoyage</h3>
+                            <p class="category-card__text">
+                                Pompes, kits et solutions techniques pour une utilisation plus simple et plus fiable.
+                            </p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="col-12 col-md-6 col-xl-4">
+                    <article class="category-card">
+                        <img
+                            src="{{ asset('images/home/matelas-gonflable-intex-premaire-ii-electrique-2-pers.jpg') }}"
+                            alt="Matelas gonflables"
+                            class="category-card__image"
+                        >
+                        <div class="category-card__body">
+                            <h3 class="category-card__title">Matelas gonflables</h3>
+                            <p class="category-card__text">
+                                Des solutions pratiques et confortables pour les invités, le camping ou les moments de détente.
+                            </p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="home-section">
+        <div class="container">
+            <div class="home-promo">
+                <span class="home-promo__badge">Offre du moment</span>
+                <h2 class="home-promo__title">Préparez votre été avec notre sélection spéciale</h2>
+                <p class="home-promo__text">
+                    Profitez d’une mise en avant saisonnière sur les produits les plus recherchés : piscines, spas,
+                    entretien et accessoires pour l’extérieur.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="home-section">
+        <div class="container">
+            <h2 class="home-section-title">Pourquoi nous choisir</h2>
+            <p class="home-section-text">
+                Des engagements simples à afficher sur la page d’accueil avant d’ajouter la vraie logique métier.
+            </p>
+
+            <div class="row g-4">
+                <div class="col-12 col-md-6 col-xl-3">
+                    <article class="trust-card">
+                        <h3 class="trust-card__title">Produits sélectionnés</h3>
+                        <p class="trust-card__text">
+                            Une gamme pensée pour le confort, l’extérieur et la facilité d’utilisation.
+                        </p>
+                    </article>
+                </div>
+
+                <div class="col-12 col-md-6 col-xl-3">
+                    <article class="trust-card">
+                        <h3 class="trust-card__title">Paiement sécurisé</h3>
+                        <p class="trust-card__text">
+                            Un espace d’achat rassurant, clair et prêt à accueillir plus tard le vrai tunnel de vente.
+                        </p>
+                    </article>
+                </div>
+
+                <div class="col-12 col-md-6 col-xl-3">
+                    <article class="trust-card">
+                        <h3 class="trust-card__title">Livraison rapide</h3>
+                        <p class="trust-card__text">
+                            Un message simple pour mettre en avant la promesse logistique de la boutique.
+                        </p>
+                    </article>
+                </div>
+
+                <div class="col-12 col-md-6 col-xl-3">
+                    <article class="trust-card">
+                        <h3 class="trust-card__title">Support client</h3>
+                        <p class="trust-card__text">
+                            Une section de confiance utile pour rassurer avant même la fiche produit.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="home-section home-section--light home-section--newsletter">
+        <div class="container">
+            <div class="newsletter-box">
+                <div class="row align-items-center g-3">
+                    <div class="col-12 col-md-8">
+                        <h2 class="newsletter-box__title">Abonnez-vous à la newsletter</h2>
+                        <p class="newsletter-box__text">
+                            Recevez les nouveautés, les offres saisonnières et les mises en avant produits.
+                        </p>
+                    </div>
+
+                    <div class="col-12 col-md-4 d-flex align-items-center justify-content-md-end">
+                        <button type="button" class="btn btn-outline-dark btn-lg px-4">
+                            S’inscrire
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

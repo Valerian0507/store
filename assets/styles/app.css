@@ -3,7 +3,10 @@
 .icon-primary { color: #304880; }
 .btn-icon { background: none; border: 0; padding: 0; }
 .navbar .logo {
-  max-width: 40px;
+    max-width: 40px;
+    height: 32px;
+    width: auto;
+    display: block;
 }
 
 
@@ -11,6 +14,149 @@ body {
     background-color: white;
 }
 
+/* Navbar */
+.site-navbar .container {
+    align-items: center;
+}
+
+
+
+.site-navbar__nav {
+    gap: 0.5rem;
+}
+
+.site-navbar__nav .nav-link {
+    font-size: 1rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+}
+
+.site-navbar__account {
+    display: flex;
+    align-items: center;
+}
+
+.site-navbar__account .navbar-nav {
+  flex-direction: row;
+  gap: 0.35rem;
+}
+
+.site-navbar__account .nav-link,
+.site-navbar__account .btn.nav-link {
+  padding-left: 0.4rem;
+  padding-right: 0.4rem;
+}
+
+@media (max-width: 991.98px) {
+    .site-navbar .container {
+        max-width: 100%;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    .site-navbar__brand .logo {
+        height: 32px;
+    }
+
+    .site-navbar .navbar-toggler {
+        padding: 0.35rem 0.55rem;
+    }
+
+    .site-navbar__nav {
+        gap: 0;
+    }
+
+    .site-navbar__nav .nav-link {
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .navbar .container {
+        max-width: 100%;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    .navbar .logo {
+        max-width: 34px;
+    }
+
+    .navbar .navbar-nav {
+        gap: 0.2rem;
+    }
+
+    .navbar .navbar-nav .nav-link {
+        font-size: 0.95rem;
+        padding-left: 0.45rem;
+        padding-right: 0.45rem;
+    }
+
+    .navbar .navbar-nav.ms-auto {
+        flex-direction: row;
+        gap: 0.2rem;
+    }
+
+    .navbar .navbar-nav.ms-auto .nav-link,
+    .navbar .navbar-nav.ms-auto .btn.nav-link {
+        padding-left: 0.3rem;
+        padding-right: 0.3rem;
+    }
+
+    .navbar .navbar-toggler {
+        display: none;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .navbar .container {
+        max-width: 100%;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .navbar .logo {
+        max-width: 32px;
+    }
+
+    .navbar .navbar-toggler {
+        padding: 0.35rem 0.55rem;
+    }
+
+    .navbar .navbar-collapse {
+        margin-top: 0.75rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .navbar .navbar-nav:first-child {
+        gap: 0;
+    }
+
+    .navbar .navbar-nav:first-child .nav-link {
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .navbar .navbar-nav.ms-auto {
+        margin-top: 0.75rem;
+        padding-top: 0.5rem;
+        flex-direction: row;
+        gap: 0.35rem;
+    }
+}
+
+
+}
+
+
+/* Address-card */
 .address-card {
     height: 100%;
     min-height: 280px;
@@ -75,6 +221,8 @@ body {
     line-height: 1;
 }
 
+
+/* Checkout */
 .checkout-address-option {
     display: flex;
     align-items: flex-start;

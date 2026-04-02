@@ -1,244 +1,544 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Produits{% endblock %}
+{% block title %}Produits
+{% endblock %}
 
 {% block stylesheets %}
+	<style>
+		.products-page {
+			padding-top: 2rem;
+			padding-bottom: 2.5rem;
+		}
 
-    <style>
-        h1 {
-            font-size: 3em;
-        }
+		.products-page__title {
+			margin-bottom: 1.5rem;
+			font-size: 2.4rem;
+			line-height: 1.1;
+			font-weight: 700;
+			color: #10204a;
+		}
 
-        form{
-            margin: 12px 0 20px;
-        }
+		.products-page__filters {
+			display: grid;
+			grid-template-columns: 180px minmax(0, 1fr) 180px auto;
+			gap: 12px;
+			align-items: end;
+			margin: 0 0 1.75rem;
+			padding: 1rem 0;
+			background: #fff;
+		}
 
-        .catalogue{
-            display:grid;
-            grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
-            gap:16px;
-            align-items:stretch;
-        }
+		.products-page__field {
+			display: flex;
+			flex-direction: column;
+			gap: 0.45rem;
+			min-width: 0;
+		}
 
-        .card{
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 12px;
-            background: #fff;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+		.products-page__label {
+			font-size: 0.9rem;
+			font-weight: 600;
+			color: #344054;
+		}
 
-        .imgWrap{
-            display:block;
-            aspect-ratio: 1 / 1;
-            border:1px solid #eee;
-            overflow:hidden;
-            margin-bottom:10px;
-        }
+		.products-page__input,
+		.products-page__select {
+			width: 100%;
+			height: 44px;
+			padding: 0 0.9rem;
+			border: 1px solid #d0d5dd;
+			border-radius: 0.75rem;
+			background: #fff;
+			color: #101828;
+			outline: none;
+		}
 
-        .imgWrap img{
-            width:100%;
-            height:100%;
-            object-fit:contain;
-            display:block;
-        }
+		.products-page__input:focus,
+		.products-page__select:focus {
+			border-color: #98a2b3;
+			box-shadow: 0 0 0 3px rgba(48, 72, 128, 0.08);
+		}
 
-        .title{ margin-bottom:6px; }
-        .price{ font-weight:bold; margin-bottom:6px; }
-        .ref{ font-size:12px; color:#666; }
+		.products-page__submit {
+			height: 44px;
+			padding: 0 1.1rem;
+			border: 1px solid #10204a;
+			border-radius: 0.75rem;
+			background: #10204a;
+			color: #fff;
+			font-weight: 600;
+			cursor: pointer;
+			transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+		}
 
-        /**Paginated*/
+		.products-page__submit:hover {
+			background: #18306d;
+			border-color: #18306d;
+		}
 
-        .paginated{
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            gap:14px;
+		.products-page__submit:active {
+			transform: translateY(1px);
+		}
 
-            margin:28px auto;
+		.products-page__empty {
+			margin: 1rem 0 0;
+			color: #475467;
+		}
 
-            /*background: radial-gradient(120% 120% at 50% 0%, #0b1030 0%, #050713 60%);*/
-            /*border-radius:14px;*/
-        }
+		.products-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+			gap: 16px;
+			align-items: stretch;
+		}
 
-        .paginated a{
-            all: unset;
-            cursor: pointer;
+		.product-card {
+			height: 100%;
+			min-height: 390px;
+			border: 1px solid #d9dde5;
+			border-radius: 1.25rem;
+			background: #fff;
+			display: flex;
+			flex-direction: column;
+			overflow: hidden;
+			box-shadow: 0 8px 24px rgba(12, 28, 58, 0.06);
+			transition: transform 0.15s ease, box-shadow 0.15s ease;
+		}
 
-            width:42px;
-            height:42px;
+		.product-card:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 12px 28px rgba(12, 28, 58, 0.09);
+		}
 
-            display:inline-flex;
-            align-items:center;
-            justify-content:center;
+		.product-card__image-link {
+			height: 260px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: #ffffff;
+			border-bottom: 1px solid #e6e0d8;
+			padding: 0.75rem;
+			text-decoration: none;
+		}
 
-            border-radius:50%;
-            border:1px solid #cfd3da;
+		.product-card__image-link img {
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
+			display: block;
+		}
 
-            color:#000000;
-            font-size:20px;
-            line-height:1;
+		.product-card__meta {
+			padding: 1rem;
+			background: #f5f1eb;
+		}
 
-            background:#fff;
+		.product-card__title {
+			margin: 0 0 0.55rem;
+			font-size: 1rem;
+			font-weight: 700;
+			line-height: 1.35;
 
-            transition:
-                border-color .15s ease,
-                background-color .15s ease,
-                box-shadow .15s ease,
-                transform .1s ease;
-        }
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
 
-        .paginated a:hover{
-            background:#f4f6fb;
-            border-color:#d9d2d2;
-            box-shadow:0 4px 10px rgba(37,99,235,.15);
-            transform: translateY(-1px);
-        }
+			min-height: calc(1em * 1.35 * 2);
+		}
 
-        .paginated a:active{
-            transform: translateY(0);
-        }
+		.product-card__title a {
+			color: #10204a;
+			text-decoration: none;
+		}
 
-        .paginated .is-current{
-            background: #d9d2d2;
-            color:#fff;
-            border-color:#d9d2d2;
-            pointer-events:none;
-        }
+		.product-card__title a:hover {
+			text-decoration: underline;
+		}
 
-        .paginated .dots{
-            padding:0 6px;
-            color:#9ca3af;
-            user-select:none;
-        }
+		.product-card__price {
+			margin: 0 0 0.35rem;
+			font-size: 1rem;
+			font-weight: 700;
+			color: #0d1b3d;
+		}
 
+		.product-card__ref {
+			margin: 0 0 0.35rem;
+			font-size: 0.85rem;
+			color: #667085;
+		}
 
-    </style>
+		.product-card__actions {
+			margin-top: 0.85rem;
+		}
 
+		.product-card__actions form {
+			margin: 0;
+		}
+
+		.product-card__add-button {
+			width: 100%;
+			min-height: 42px;
+			padding: 0.7rem 0.9rem;
+			border: 1px solid #10204a;
+			border-radius: 0.75rem;
+			background: #10204a;
+			color: #fff;
+			font-size: 0.92rem;
+			font-weight: 600;
+			cursor: pointer;
+			transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+		}
+
+		.product-card__add-button:hover {
+			background: #18306d;
+			border-color: #18306d;
+		}
+
+		.product-card__add-button:active {
+			transform: translateY(1px);
+		}
+
+		.paginated {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 14px;
+			margin: 28px auto 0;
+			flex-wrap: wrap;
+		}
+
+		.paginated a {
+			all: unset;
+			cursor: pointer;
+			width: 42px;
+			height: 42px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 50%;
+			border: 1px solid #cfd3da;
+			color: #000;
+			font-size: 20px;
+			line-height: 1;
+			background: #fff;
+			transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+		}
+
+		.paginated a:hover {
+			background: #f4f6fb;
+			border-color: #d9d2d2;
+			box-shadow: 0 4px 10px rgba(37, 99, 235, 0.15);
+			transform: translateY(-1px);
+		}
+
+		.paginated a:active {
+			transform: translateY(0);
+		}
+
+		.paginated .is-current {
+			background: #10204a;
+			color: #fff;
+			border-color: #10204a;
+			pointer-events: none;
+		}
+
+		.paginated .dots {
+			padding: 0 6px;
+			color: #9ca3af;
+			user-select: none;
+		}
+
+		@media(max-width: 991.98px) {
+			.products-page__title {
+				font-size: 2rem;
+			}
+
+			.products-page__filters {
+				grid-template-columns: 1fr 1fr;
+			}
+
+			.products-page__submit {
+				width: 100%;
+			}
+		}
+
+		@media(max-width: 767.98px) {
+			.products-grid {
+				grid-template-columns: 1fr;
+				gap: 12px;
+			}
+
+			.product-card {
+				display: grid;
+				grid-template-columns: 120px 1fr;
+				min-height: auto;
+				border-radius: 1rem;
+			}
+
+			.product-card__image-link {
+				height: 100%;
+				min-height: 120px;
+				border-bottom: 0;
+				border-right: 1px solid #e6e0d8;
+				padding: 0.65rem;
+			}
+
+			.product-card__meta {
+				min-height: auto;
+				padding: 0.85rem;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				background: #f5f1eb;
+			}
+
+			.product-card__title {
+				margin: 0 0 0.35rem;
+				font-size: 0.98rem;
+				line-height: 1.3;
+				min-height: auto;
+				-webkit-line-clamp: 2;
+			}
+
+			.product-card__price {
+				margin: 0 0 0.3rem;
+				font-size: 1rem;
+			}
+
+			.product-card__ref {
+				font-size: 0.82rem;
+			}
+		}
+		@media (max-width: 430.98px) {
+    .products-page {
+        padding-top: 1rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .products-page__title {
+        margin-bottom: 1rem;
+        font-size: 1.55rem;
+        line-height: 1.15;
+    }
+
+    .products-page__filters {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+        padding: 0.8rem;
+        margin-bottom: 1rem;
+        border-radius: 0.9rem;
+    }
+
+    .products-page__label {
+        font-size: 0.85rem;
+    }
+
+    .products-page__input,
+    .products-page__select,
+    .products-page__submit {
+        height: 42px;
+        font-size: 0.95rem;
+    }
+
+    .products-page__submit {
+        width: 100%;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .product-card {
+        display: flex;
+        flex-direction: column;
+        min-height: 320px;
+        border-radius: 1rem;
+    }
+
+    .product-card__image-link {
+        height: 150px;
+        min-height: 150px;
+        padding: 0.5rem;
+        border-right: 0;
+        border-bottom: 1px solid #e6e0d8;
+    }
+
+    .product-card__meta {
+        min-height: auto;
+        padding: 0.75rem;
+        background: #f5f1eb;
+        display: block;
+    }
+
+    .product-card__title {
+        margin: 0 0 0.3rem;
+        font-size: 0.9rem;
+        line-height: 1.25;
+        min-height: calc(0.9rem * 1.25 * 2);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .product-card__price {
+        margin: 0 0 0.25rem;
+        font-size: 0.92rem;
+    }
+
+    .product-card__ref {
+        font-size: 0.75rem;
+    }
+
+    .product-card__actions {
+        margin-top: 0.5rem;
+    }
+
+    .product-card__add-button {
+        width: 100%;
+        min-height: 36px;
+        padding: 0.45rem 0.65rem;
+        font-size: 0.8rem;
+        border-radius: 0.7rem;
+    }
+
+    .paginated {
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .paginated a {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+}
+	</style>
 {% endblock %}
 
 {% block body %}
-    <section  class="container">
-        <h1>Catalogue des produits</h1>
+	<section class="container products-page">
+		<h1 class="products-page__title">Catalogue des produits</h1>
 
-        <form method="get" class="filters">
-            <label class="filter-categorie">
-                Catégorie:
-                <select name="category" class="category" onchange="this.form.submit()">
-                    <option value="">Toutes</option>
-                    {% for c in categories %}
-                      <option value="{{ c.id }}" {{ c.id == category ? 'selected' : '' }}>
-                        {{ c.label|capitalize }}
-                      </option>
-                    {% endfor %}
-                </select>
-            </label>
+		<form method="get" class="products-page__filters">
+			<label class="products-page__field">
+				<span class="products-page__label">Catégorie</span>
+				<select name="category" class="products-page__select" onchange="this.form.submit()">
+					<option value="">Toutes</option>
+					{% for c in categories %}
+						<option value="{{ c.id }}" {{ c.id == category ? 'selected' : '' }}>
+							{{ c.label|capitalize }}
+						</option>
+					{% endfor %}
+				</select>
+			</label>
 
-            <label class="filter-recherche">
-                Recherche:
-                <input type="search" name="q" value="{{ q ?? '' }}" placeholder="Nom du produit">
-            </label>
-            <button type="submit">Rechercher</button>
+			<label class="products-page__field">
+				<span class="products-page__label">Recherche</span>
+				<input type="search" name="q" value="{{ q ?? '' }}" placeholder="Nom du produit" class="products-page__input">
+			</label>
 
-            <label class="filter-trier">
-                Trier:
-                <select name="sort" class="sort" onchange="this.form.submit()">
-                    <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Nouveautés</option>
-                    <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Prix ↑</option>
-                    <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Prix ↓</option>
-                    <option value="title_asc" {% if sort == 'title_asc' %}selected{% endif %}>Titre A→Z</option>
-                    <option value="title_desc" {% if sort == 'title_desc' %}selected{% endif %}>Titre Z→A</option>
-                </select>
-            </label>
-        </form>
+			<label class="products-page__field">
+				<span class="products-page__label">Trier</span>
+				<select name="sort" class="products-page__select" onchange="this.form.submit()">
+					<option value="newest" {% if sort == 'newest' %} selected {% endif %}>Nouveautés</option>
+					<option value="price_asc" {% if sort == 'price_asc' %} selected {% endif %}>Prix ↑</option>
+					<option value="price_desc" {% if sort == 'price_desc' %} selected {% endif %}>Prix ↓</option>
+					<option value="title_asc" {% if sort == 'title_asc' %} selected {% endif %}>Titre A→Z</option>
+					<option value="title_desc" {% if sort == 'title_desc' %} selected {% endif %}>Titre Z→A</option>
+				</select>
+			</label>
 
-        {% set baseParams = {} %}
-        {% if category %}
-            {% set baseParams = baseParams|merge({category: category}) %}
-        {% endif %}
-        {% if sort %}
-            {% set baseParams = baseParams|merge({sort: sort}) %}
-        {% endif %}
-        {% if q %}
-            {% set baseParams = baseParams|merge({q: q}) %}
-        {% endif %}
+			<button type="submit" class="products-page__submit">Rechercher</button>
+		</form>
 
-        {% if products is empty %}
-        {% if q %}
-            <p>Aucun produit trouvé pour « <strong>{{ q }}</strong> ».</p>
-        {% else %}
-            <p>Aucun produit disponible.</p>
-        {% endif %}
-        {% else %}
+		{% set baseParams = {} %}
+		{% if category %}
+			{% set baseParams = baseParams|merge({category: category}) %}
+		{% endif %}
+		{% if sort %}
+			{% set baseParams = baseParams|merge({sort: sort}) %}
+		{% endif %}
+		{% if q %}
+			{% set baseParams = baseParams|merge({q: q}) %}
+		{% endif %}
 
+		{% if products is empty %}
+			{% if q %}
+				<p class="products-page__empty">Aucun produit trouvé pour «
+					<strong>{{ q }}</strong>
+					».</p>
+			{% else %}
+				<p class="products-page__empty">Aucun produit disponible.</p>
+			{% endif %}
+		{% else %}
+			<div class="products-grid">
+				{% for product in products %}
+					<article class="product-card">
+						<a href="{{ path('app_products_show', {id: product.id}) }}" class="product-card__image-link">
+							{% if product.image %}
+								<img src="{{ asset('uploads/products/' ~ product.image) }}" alt="{{ product.title }}" onerror="this.onerror=null;this.src='{{ asset('images/products/no-image.jpg') }}';">
+							{% else %}
+								<img src="{{ asset('images/products/no-image.jpg') }}" alt="No image">
+							{% endif %}
+						</a>
 
-        <div class="catalogue">
-            {% for product in products %}
-            <article class="card">
-                <a href="{{ path('app_products_show', {id: product.id}) }}" class="imgWrap">
-                    {% if product.image %}
-                        <img src="{{ asset('uploads/products/' ~ product.image) }}" alt="{{ product.title }}"
-                        onerror="this.onerror=null;this.src='{{ asset('images/products/no-image.jpg') }}';">
-                    {% else %}
-                        <img src="{{ asset('images/products/no-image.jpg') }}" alt="No image">
-                    {% endif %}
-                </a>
-                <div class="meta">
-                    <div class="title">
-                        <a href="{{ path('app_products_show', {id: product.id}) }}">{{ product.title }}</a>
-                    </div>
-                    <div class="price">Prix: {{ product.getPriceEur() }}€</div>
-                    <div class="ref">ref: {{ product.reference }}</div>
-                </div>
-            </article>
-            {% endfor %}
-        </div>
+						<div class="product-card__meta">
+							<h2 class="product-card__title">
+								<a href="{{ path('app_products_show', {id: product.id}) }}">{{ product.title }}</a>
+							</h2>
 
+							<p class="product-card__ref">Réf :
+								{{ product.reference }}</p>
+							<p class="product-card__price">Prix :
+								{{ product.getPriceEur() }}
+								€</p>
+							<div class="product-card__actions">
+								<form method="post" action="{{ path('app_cart_add', {id: product.id}) }}">
+									<input type="hidden" name="_token" value="{{ csrf_token('cart_add_' ~ product.id) }}">
+									<button type="submit" class="product-card__add-button">
+										Ajouter au panier
+									</button>
+								</form>
+							</div>
+						</div>
 
+					</article>
+				{% endfor %}
+			</div>
 
-        {% if pages > 1 %}
-            <nav class="paginated">
-                {# ← #}
-                {% if page > 1 %}
-                    <a href="{{ path('app_products_index', baseParams|merge({page: page - 1})) }}" class="previous">‹</a>
-                {% endif %}
+			{% if pages > 1 %}
+				<nav class="paginated">
+					{% if page > 1 %}
+						<a href="{{ path('app_products_index', baseParams|merge({page: page - 1})) }}" class="previous">‹</a>
+					{% endif %}
 
-                {# 1 #}
-                <a href="{{ path('app_products_index', baseParams|merge({page: 1})) }}"
-                   class="{{ page == 1 ? 'is-current' : '' }}">1</a>
+					<a href="{{ path('app_products_index', baseParams|merge({page: 1})) }}" class="{{ page == 1 ? 'is-current' : '' }}">1</a>
 
-                {# … left #}
-                {% if pagination.start > 2 %}
-                    <span class="dots">…</span>
-                {% endif %}
+					{% if pagination.start > 2 %}
+						<span class="dots">…</span>
+					{% endif %}
 
-                {# center #}
-                {% for p in pagination.start..pagination.end %}
-                    {% if p > 1 and p < pages %}
-                        <a href="{{ path('app_products_index', baseParams|merge({page: p})) }}"
-                           class="{{ page == p ? 'is-current' : '' }}">{{ p }}</a>
-                    {% endif %}
-                {% endfor %}
+					{% for p in pagination.start..pagination.end %}
+						{% if p > 1 and p < pages %}
+							<a href="{{ path('app_products_index', baseParams|merge({page: p})) }}" class="{{ page == p ? 'is-current' : '' }}">{{ p }}</a>
+						{% endif %}
+					{% endfor %}
 
-                {# … right #}
-                {% if pagination.end < pages - 1 %}
-                    <span class="dots">…</span>
-                {% endif %}
+					{% if pagination.end < pages - 1 %}
+						<span class="dots">…</span>
+					{% endif %}
 
-                {# last #}
-                <a href="{{ path('app_products_index', baseParams|merge({page: pages})) }}"
-                   class="{{ page == pages ? 'is-current' : '' }}">{{ pages }}</a>
+					<a href="{{ path('app_products_index', baseParams|merge({page: pages})) }}" class="{{ page == pages ? 'is-current' : '' }}">{{ pages }}</a>
 
-                {# → #}
-                {% if page < pages %}
-                    <a href="{{ path('app_products_index', baseParams|merge({page: page + 1})) }}" class="next">›</a>
-                {% endif %}
-            </nav>
-        {% endif %}
-        {% endif %}
-
-    </section>
-
+					{% if page < pages %}
+						<a href="{{ path('app_products_index', baseParams|merge({page: page + 1})) }}" class="next">›</a>
+					{% endif %}
+				</nav>
+			{% endif %}
+		{% endif %}
+	</section>
 {% endblock %}

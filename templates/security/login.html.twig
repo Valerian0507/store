@@ -1,46 +1,224 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in{% endblock %}
+{% block title %}Connexion{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .auth-page {
+            min-height: calc(100vh - 140px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 460px;
+            padding: 2rem;
+            border: 1px solid #e6e8ee;
+            border-radius: 1.25rem;
+            background: #fff;
+            box-shadow: 0 10px 28px rgba(12, 28, 58, 0.08);
+        }
+
+        .auth-card__title {
+            margin-bottom: 0.35rem;
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: #10204a;
+            text-align: center;
+        }
+
+        .auth-card__subtitle {
+            margin-bottom: 1.5rem;
+            color: #667085;
+            text-align: center;
+        }
+
+        .auth-form__group {
+            margin-bottom: 1rem;
+        }
+
+        .auth-form__label {
+            display: block;
+            margin-bottom: 0.45rem;
+            font-weight: 600;
+            color: #344054;
+        }
+
+        .auth-form__input {
+            width: 100%;
+            height: 48px;
+            padding: 0 0.95rem;
+            border: 1px solid #d0d5dd;
+            border-radius: 0.8rem;
+            background: #fff;
+            color: #101828;
+            outline: none;
+        }
+
+        .auth-form__input:focus {
+            border-color: #98a2b3;
+            box-shadow: 0 0 0 3px rgba(48, 72, 128, 0.08);
+        }
+
+        .auth-form__row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .auth-form__remember {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #344054;
+        }
+
+        .auth-form__link {
+            color: #304880;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .auth-form__link:hover {
+            text-decoration: underline;
+        }
+
+        .auth-form__submit {
+            width: 100%;
+            min-height: 48px;
+            border: 1px solid #10204a;
+            border-radius: 999px;
+            background: #10204a;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color .15s ease, border-color .15s ease, transform .1s ease;
+        }
+
+        .auth-form__submit:hover {
+            background: #18306d;
+            border-color: #18306d;
+        }
+
+        .auth-form__submit:active {
+            transform: translateY(1px);
+        }
+
+        .auth-card .alert {
+            border-radius: 0.9rem;
+        }
+
+        .auth-form__footer {
+            margin-top: 1rem;
+            text-align: center;
+            color: #667085;
+        }
+
+        @media (max-width: 575.98px) {
+            .auth-page {
+                padding: 1rem 0;
+                min-height: auto;
+            }
+
+            .auth-card {
+                padding: 1.25rem;
+                border-radius: 1rem;
+            }
+
+            .auth-card__title {
+                font-size: 1.55rem;
+            }
+
+            .auth-form__row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">{{ message }}</div>
-    {% endfor %}
+    <section class="container auth-page">
+        <div class="auth-card">
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
 
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">{{ message }}</div>
-    {% endfor %}
-<p>Locale: {{ app.request.locale }}</p>
-    <form  class="container" method="post">
-        {% if error %}
-          <div class="alert alert-danger">
-            {{ error.messageKey|trans(error.messageData, 'security') }}
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
 
-            {% if error.messageKey == 'error.email_not_verified' %}
-              <div class="mt-2">
-                <a href="{{ path('app_resend_verify_email') }}">Renvoyer l'email de vérification</a>
-              </div>
+            {% if error %}
+                <div class="alert alert-danger">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+
+                    {% if error.messageKey == 'error.email_not_verified' %}
+                        <div class="mt-2">
+                            <a href="{{ path('app_resend_verify_email') }}" class="auth-form__link">
+                                Renvoyer l’email de vérification
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
             {% endif %}
-          </div>
-        {% endif %}
-                
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="username">Email</label>
-        <input type="email" value="{{ last_username }}" name="email" id="username" class="form-control" autocomplete="email" required autofocus>
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" class="form-control" autocomplete="current-password" required>
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-        {#            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.#}
-        {#            See https://symfony.com/doc/current/security/remember_me.html#}
+            <h1 class="auth-card__title">Connectez-vous</h1>
+            <p class="auth-card__subtitle">Accédez à votre compte pour continuer.</p>
 
-        <div class="checkbox mb-3">
-            <input type="checkbox" name="_remember_me" id="_remember_me">
-            <label for="_remember_me">Remember me</label>
+            <form method="post">
+                <div class="auth-form__group">
+                    <label for="username" class="auth-form__label">E-mail</label>
+                    <input
+                        type="email"
+                        value="{{ last_username }}"
+                        name="email"
+                        id="username"
+                        class="auth-form__input"
+                        autocomplete="email"
+                        required
+                        autofocus
+                        placeholder="Votre e-mail"
+                    >
+                </div>
+
+                <div class="auth-form__group">
+                    <label for="password" class="auth-form__label">Mot de passe</label>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        class="auth-form__input"
+                        autocomplete="current-password"
+                        required
+                        placeholder="Votre mot de passe"
+                    >
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <div class="auth-form__row">
+                    <label for="_remember_me" class="auth-form__remember">
+                        <input type="checkbox" name="_remember_me" id="_remember_me">
+                        <span>Se souvenir de moi</span>
+                    </label>
+
+                    {# Если у тебя есть route для reset password, потом можно раскомментировать #}
+                    {# <a href="{{ path('app_forgot_password_request') }}" class="auth-form__link">Mot de passe oublié ?</a> #}
+                </div>
+
+                <button class="auth-form__submit" type="submit">
+                    Connexion
+                </button>
+            </form>
+            <p class="auth-form__footer">
+                Vous n’avez pas de compte ?
+                <a href="{{ path('app_register') }}" class="auth-form__link">Inscrivez-vous</a>
+            </p>
         </div>
-
-        <button class="btn btn-lg btn-primary" type="submit">
-            Sign in
-        </button>
-    </form>
+    </section>
 {% endblock %}

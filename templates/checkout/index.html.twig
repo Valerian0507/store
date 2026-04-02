@@ -20,56 +20,35 @@
 						<h2 class="h4 mb-3">Adresses de livraison</h2>
 						<form method="post" action="{{ path('app_checkout_submit') }}">
 							<input type="hidden" name="_token" value="{{ csrf_token('checkout') }}">
-
+							{% set useManualAddress = selectedAddressId == 0 %}
 							{% if addresses is not empty %}
-								{% set currentAddress = null %}
-
-								{# 1. Если пользователь уже выбрал адрес, берем его #}
-								{% if selectedAddressId > 0 %}
-									{% for address in addresses %}
-										{% if selectedAddressId == address.id %}
-											{% set currentAddress = address %}
-										{% endif %}
-									{% endfor %}
-								{% endif %}
-
-								{# 2. Если адрес еще не выбран, пробуем взять default #}
-								{% if currentAddress is null %}
-									{% for address in addresses %}
-										{% if address.isDefault %}
-											{% set currentAddress = address %}
-										{% endif %}
-									{% endfor %}
-								{% endif %}
-
-								{# 3. Если default нет, берем первый адрес #}
-								{% if currentAddress is null %}
-									{% set currentAddress = addresses|first %}
-								{% endif %}
-
-								<div class="checkout-selected-address mb-4" id="checkout-selected-address">
-									<div class="d-flex justify-content-between align-items-start gap-3">
+								<div class="checkout-selected-address mb-4 {% if useManualAddress %}d-none{% endif %}" id="checkout-selected-address">
+                                	<div class="d-flex justify-content-between align-items-start gap-3">
 										<div>
 											<div class="fw-semibold mb-1">
 												Delivering to
-												{% if currentAddress.user.firstName or currentAddress.user.lastName %}
-													{{ currentAddress.user.firstName }}
-													{{ currentAddress.user.lastName }}
-												{% else %}
-													Account owner
+												<span id="checkout-current-fullname">
+													{% if currentAddress is not null and (currentAddress.user.firstName or currentAddress.user.lastName) %}
+														{{ currentAddress.user.firstName }}
+														{{ currentAddress.user.lastName }}
+													{% else %}
+														Account owner
+													{% endif %}
+												</span>
+											</div>
+
+											<div class="text-muted" id="checkout-current-address-line">
+												{% if currentAddress is not null %}
+													{{ currentAddress.street }},
+													{{ currentAddress.city }},
+													{{ currentAddress.postalCode }},
+													{{ currentAddress.country }}
 												{% endif %}
 											</div>
 
-											<div class="text-muted">
-												{{ currentAddress.street }},
-												{{ currentAddress.city }},
-												{{ currentAddress.postalCode }},
-												{{ currentAddress.country }}
+											<div class="text-muted small mt-1 {% if currentAddress is null or not currentAddress.isDefault %}d-none{% endif %}" id="checkout-current-default-badge">
+												Default address
 											</div>
-
-											{% if currentAddress.isDefault %}
-												<div class="text-muted small mt-1">Default address</div>
-											{% endif %}
 										</div>
 
 										<button type="button" class="checkout-change-link" id="checkout-change-address">
@@ -79,14 +58,14 @@
 								</div>
 
 								<div class="checkout-addresses-panel mb-4 d-none" id="checkout-addresses-panel">
-									<div class="border-top pt-3">
+                                	<div class="border-top pt-3">
 										<h3 class="h5 mb-3">Delivery addresses ({{ addresses|length }})</h3>
 
 										<div class="d-flex flex-column gap-3">
 											{% for address in addresses %}
 												<label class="checkout-address-option">
 													<div class="checkout-address-option__radio">
-														<input type="radio" name="selectedAddress" value="{{ address.id }}" {% if selectedAddressId == address.id %}checked{% endif %}>
+														<input type="radio" name="selectedAddress" value="{{ address.id }}" data-first-name="{{ address.user.firstName|default('') }}" data-last-name="{{ address.user.lastName|default('') }}" data-street="{{ address.street }}" data-city="{{ address.city }}" data-postal-code="{{ address.postalCode }}" data-country="{{ address.country }}" data-is-default="{{ address.isDefault ? '1' : '0' }}" {% if selectedAddressId == address.id %} checked {% endif %}>
 													</div>
 
 													<div class="checkout-address-option__content">
@@ -106,6 +85,12 @@
 															{{ address.country }}
 														</div>
 
+														<div class="mt-1 d-flex gap-2 flex-wrap">
+															<a href="{{ path('app_profile_addresses_edit', { id: address.id }) }}" class="small text-decoration-none">
+																Edit address
+															</a>
+														</div>
+
 														{% if address.isDefault %}
 															<div class="text-muted small mt-1">Default address</div>
 														{% endif %}
@@ -118,14 +103,21 @@
 													Add a new address
 												</button>
 
-												<input type="radio" name="selectedAddress" value="0" id="selectedAddressManual" class="d-none" {% if selectedAddressId == 0 %}checked{% endif %}>
+												<input type="radio" name="selectedAddress" value="0" id="selectedAddressManual" class="d-none" {% if selectedAddressId == 0 %} checked {% endif %}>
 											</div>
 										</div>
 									</div>
 								</div>
 							{% endif %}
+                            {% if addresses is not empty %}
+                                <div class="{% if not useManualAddress %}d-none{% endif %} mb-3" id="checkout-manual-actions">
+                                    <button type="button" class="checkout-change-link" id="checkout-use-saved-addresses">
+                                        Use a saved address
+                                    </button>
+                                </div>
+                            {% endif %}
 
-							<div class="row g-3 d-none" id="checkout-manual-address-fields">
+							<div class="row g-3 {% if not useManualAddress %}d-none{% endif %}" id="checkout-manual-address-fields">
 								<div class="col-md-6">
 									<label for="firstName" class="form-label">First name</label>
 									<input id="firstName" type="text" name="firstName" class="js-manual-address-field form-control {{ errors.firstName is defined ? 'is-invalid' : '' }}" value="{{ shippingData.firstName|default('') }}" autocomplete="given-name" maxlength="100" required>
@@ -259,7 +251,9 @@
 	</div>
 
 	<script>
-        function initCheckoutAddressUI() {
+		function initCheckoutAddressUI() {
+            const manualActions = document.getElementById('checkout-manual-actions');
+            const useSavedAddressesButton = document.getElementById('checkout-use-saved-addresses');
             const changeButton = document.getElementById('checkout-change-address');
             const addAddressButton = document.getElementById('checkout-add-address');
             const addressPanel = document.getElementById('checkout-addresses-panel');
@@ -268,8 +262,50 @@
             const addressRadios = document.querySelectorAll('input[name="selectedAddress"]');
             const manualAddressRadio = document.getElementById('selectedAddressManual');
 
-            if (!addressPanel || !manualFieldsWrapper) {
+            const selectedAddressBlock = document.getElementById('checkout-selected-address');
+            const currentFullname = document.getElementById('checkout-current-fullname');
+            const currentAddressLine = document.getElementById('checkout-current-address-line');
+            const currentDefaultBadge = document.getElementById('checkout-current-default-badge');
+
+            if (! manualFieldsWrapper) {
                 return;
+            }
+
+            function updateSelectedAddressSummary() {
+                const checkedRadio = document.querySelector('input[name="selectedAddress"]:checked');
+
+                if (!checkedRadio || checkedRadio.value === '0') {
+                    if (selectedAddressBlock) {
+                        selectedAddressBlock.classList.add('d-none');
+                    }
+                    return;
+                }
+
+                const firstName = checkedRadio.dataset.firstName ?? '';
+                const lastName = checkedRadio.dataset.lastName ?? '';
+                const street = checkedRadio.dataset.street ?? '';
+                const city = checkedRadio.dataset.city ?? '';
+                const postalCode = checkedRadio.dataset.postalCode ?? '';
+                const country = checkedRadio.dataset.country ?? '';
+                const isDefault = checkedRadio.dataset.isDefault === '1';
+
+                const fullName = `${firstName} ${lastName}`.trim();
+
+                if (currentFullname) {
+                    currentFullname.textContent = fullName !== '' ? fullName : 'Account owner';
+                }
+
+                if (currentAddressLine) {
+                    currentAddressLine.textContent = `${street}, ${city}, ${postalCode}, ${country}`;
+                }
+
+                if (currentDefaultBadge) {
+                    currentDefaultBadge.classList.toggle('d-none', !isDefault);
+                }
+
+                if (selectedAddressBlock) {
+                    selectedAddressBlock.classList.remove('d-none');
+                }
             }
 
             function toggleManualAddressFields() {
@@ -286,17 +322,39 @@
                     manualFields.forEach((field) => {
                         field.disabled = false;
                     });
+
+                    if (manualActions) {
+                        manualActions.classList.remove('d-none');
+                    }
+
+                    if (selectedAddressBlock) {
+                        selectedAddressBlock.classList.add('d-none');
+                    }
+
+                    if (addressPanel) {
+                        addressPanel.classList.add('d-none');
+                    }
                 } else {
                     manualFieldsWrapper.classList.add('d-none');
                     manualFields.forEach((field) => {
                         field.disabled = true;
                     });
+
+                    if (manualActions) {
+                        manualActions.classList.add('d-none');
+                    }
+
+                    updateSelectedAddressSummary();
+
+                    if (addressPanel) {
+                        addressPanel.classList.add('d-none');
+                    }
                 }
             }
 
-            if (changeButton && !changeButton.dataset.bound) {
+            if (changeButton && addressPanel && ! changeButton.dataset.bound) {
                 changeButton.addEventListener('click', () => {
-                    addressPanel.classList.toggle('d-none');
+                addressPanel.classList.toggle('d-none');
                 });
                 changeButton.dataset.bound = 'true';
             }
@@ -304,24 +362,42 @@
             if (addAddressButton && manualAddressRadio && !addAddressButton.dataset.bound) {
                 addAddressButton.addEventListener('click', () => {
                     manualAddressRadio.checked = true;
-                    addressPanel.classList.remove('d-none');
                     toggleManualAddressFields();
                 });
                 addAddressButton.dataset.bound = 'true';
             }
 
+            if (useSavedAddressesButton && addressPanel && !useSavedAddressesButton.dataset.bound) {
+                useSavedAddressesButton.addEventListener('click', () => {
+                    addressPanel.classList.remove('d-none');
+
+                    if (manualFieldsWrapper) {
+                        manualFieldsWrapper.classList.add('d-none');
+                    }
+
+                    if (manualActions) {
+                        manualActions.classList.add('d-none');
+                    }
+                });
+                useSavedAddressesButton.dataset.bound = 'true';
+            }
+
             addressRadios.forEach((radio) => {
                 if (!radio.dataset.bound) {
-                    radio.addEventListener('change', toggleManualAddressFields);
-                    radio.dataset.bound = 'true';
+                radio.addEventListener('change', () => {
+                toggleManualAddressFields();
+                updateSelectedAddressSummary();
+                });
+                radio.dataset.bound = 'true';
                 }
             });
 
-            toggleManualAddressFields();
-        }
+                toggleManualAddressFields();
+                updateSelectedAddressSummary();
+            }
 
-        document.addEventListener('DOMContentLoaded', initCheckoutAddressUI);
-        document.addEventListener('turbo:load', initCheckoutAddressUI);
-    </script>
+            document.addEventListener('DOMContentLoaded', initCheckoutAddressUI);
+            document.addEventListener('turbo:load', initCheckoutAddressUI);
+	</script>
 
 {% endblock %}

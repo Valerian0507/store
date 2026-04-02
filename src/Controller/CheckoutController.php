@@ -35,7 +35,7 @@ final class CheckoutController extends AbstractController
         $user = $this->getUser();
 
         $addresses = [];
-        $defaultAddress = null;
+        $currentAddress = null;
         $selectedAddressId = 0;
 
         $shippingData = [
@@ -49,24 +49,25 @@ final class CheckoutController extends AbstractController
 
         if($user instanceof User) {
                 $addresses = $addressRepository->findUserAddressesForProfile($user);
-                $defaultAddress = $addressRepository->findDefaultAddressForUser($user);
+                $currentAddress = $addressRepository->findDefaultAddressForUser($user);
 
-                if($defaultAddress !== null) {
-                    $selectedAddressId = $defaultAddress->getId();
+                if($currentAddress !== null) {
+                    $selectedAddressId = $currentAddress->getId();
 
-                    $shippingData = [
+                $shippingData = [
                 'firstName' => $user->getFirstName() ?? '',
                 'lastName' => $user->getLastName() ?? '',
-                'street' => $defaultAddress->getStreet(),
-                'city' => $defaultAddress->getCity(),
-                'postalCode' => $defaultAddress->getPostalCode(),
-                'country' => $defaultAddress->getCountry(),
+                'street' => $currentAddress->getStreet(),
+                'city' => $currentAddress->getCity(),
+                'postalCode' => $currentAddress->getPostalCode(),
+                'country' => $currentAddress->getCountry(),
                 ];
             }
         }
 
 
         return $this->render('checkout/index.html.twig', [
+            'currentAddress' => $currentAddress,
             'addresses' => $addresses,
             'selectedAddressId' => $selectedAddressId,
             'summary' => $summary,
@@ -98,6 +99,7 @@ final class CheckoutController extends AbstractController
         $selectedAddressId = (int) $request->request->get('selectedAddress', 0);
 
         $addresses = $addressRepository->findUserAddressesForProfile($user);
+        $currentAddress = null;
 
         if ($selectedAddressId > 0) {
             $address = $addressRepository->findOneByIdAndUser($selectedAddressId, $user);
@@ -105,6 +107,8 @@ final class CheckoutController extends AbstractController
             if ($address === null) {
                 throw $this->createNotFoundException('Adresse introuvable.');
             }
+
+            $currentAddress = $address;
 
             $shippingData = [
                 'firstName' => $user->getFirstName() ?? '',
@@ -130,6 +134,7 @@ final class CheckoutController extends AbstractController
         if ($errors !== []) {
             return $this->render('checkout/index.html.twig', [
                 'addresses' => $addresses,
+                'currentAddress' => $currentAddress,
                 'selectedAddressId' => $selectedAddressId,
                 'summary' => $checkoutSummaryBuilder->build(),
                 'errors' => $errors,

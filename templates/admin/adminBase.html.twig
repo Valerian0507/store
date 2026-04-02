@@ -1,6 +1,7 @@
 {# templates/admin/adminBase.html.twig #}
 
 <!DOCTYPE html>
+<html lang="fr">
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Admin{% endblock %}</title>
@@ -16,7 +17,7 @@
 
     <body class="admin">
     <header class="admin-header">
-        {% include 'admin/_partials/_nav.html.twig' %}
+        {% include '_partials/_navbar.html.twig' %}
     </header>
 
     <main class="admin-main">
@@ -42,7 +43,7 @@
     if (!btn) return;
 
     e.preventDefault();
-    
+
     const form = btn.closest('form');
     const action = btn.dataset.action;
 

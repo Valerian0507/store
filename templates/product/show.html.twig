@@ -2,44 +2,353 @@
 
 {% block title %}{{ product.title }}{% endblock %}
 
+{% block stylesheets %}
+    <style>
+        .product-show {
+            padding: 2rem 0 3rem;
+        }
+
+        .product-show__back {
+            display: inline-block;
+            margin-bottom: 1.25rem;
+            color: #304880;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .product-show__back:hover {
+            text-decoration: underline;
+        }
+
+        .product-show__layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .product-show__media {
+            border: 1px solid #e6e8ee;
+            border-radius: 1.25rem;
+            background: #fff;
+            overflow: hidden;
+            box-shadow: 0 10px 28px rgba(12, 28, 58, 0.06);
+        }
+
+        .product-show__image-wrap {
+            height: 560px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+        }
+
+        .product-show__image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .product-show__panel {
+            border: 1px solid #e6e8ee;
+            border-radius: 1.25rem;
+            background: #f5f1eb;
+            padding: 1.5rem;
+            box-shadow: 0 10px 28px rgba(12, 28, 58, 0.06);
+        }
+
+
+        .product-show__title {
+            margin: 0 0 0.75rem;
+            font-size: 2.25rem;
+            line-height: 1.1;
+            font-weight: 700;
+            color: #10204a;
+        }
+
+        .product-show__ref {
+            margin: 0 0 1rem;
+            color: #667085;
+            font-size: 0.95rem;
+        }
+
+        .product-show__status {
+            margin-bottom: 0.35rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .product-show__status--ok {
+            color: #2f9e44;
+        }
+
+        .product-show__status--out {
+            color: #c92a2a;
+        }
+
+        .product-show__delivery {
+            margin: 0 0 1.25rem;
+            color: #5b6477;
+        }
+
+        .product-show__price {
+            margin: 0 0 0.25rem;
+            font-size: 2.3rem;
+            line-height: 1;
+            font-weight: 700;
+            color: #0d1b3d;
+        }
+
+        .product-show__meta {
+            margin: 0 0 1.5rem;
+            padding: 0;
+            list-style: none;
+            display: grid;
+            gap: 0.55rem;
+            color: #4b5565;
+        }
+
+        .product-show__meta strong {
+            color: #10204a;
+        }
+
+        .product-show__buy-box {
+            padding-top: 1.25rem;
+            border-top: 1px solid #ddd6ce;
+        }
+
+        .product-show__form {
+            display: grid;
+            grid-template-columns: 110px 1fr;
+            gap: 0.75rem;
+            align-items: stretch;
+        }
+
+        .product-show__qty {
+            width: 100%;
+            height: 52px;
+            padding: 0 0.85rem;
+            border: 1px solid #cfd4dc;
+            border-radius: 0.85rem;
+            background: #fff;
+            font-size: 1rem;
+        }
+
+        .product-show__submit {
+            min-height: 52px;
+            padding: 0 1.2rem;
+            border: 1px solid #10204a;
+            border-radius: 999px;
+            background: #10204a;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color .15s ease, border-color .15s ease, transform .1s ease;
+        }
+
+        .product-show__submit:hover {
+            background: #18306d;
+            border-color: #18306d;
+        }
+
+        .product-show__submit:active {
+            transform: translateY(1px);
+        }
+
+        .product-show__details {
+            margin-top: 2rem;
+            border: 1px solid #e6e8ee;
+            border-radius: 1.25rem;
+            background: #fff;
+            padding: 1.5rem;
+            box-shadow: 0 10px 28px rgba(12, 28, 58, 0.05);
+        }
+
+        .product-show__section + .product-show__section {
+            margin-top: 1.75rem;
+            padding-top: 1.75rem;
+            border-top: 1px solid #edf0f5;
+        }
+
+        .product-show__section-title {
+            margin: 0 0 0.9rem;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #10204a;
+        }
+
+        .product-show__description {
+            margin: 0;
+            line-height: 1.7;
+            color: #4b5565;
+        }
+
+        .product-show__features {
+            margin: 0;
+            padding-left: 1.2rem;
+            color: #4b5565;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 991.98px) {
+            .product-show__layout {
+                grid-template-columns: 1fr;
+            }
+
+            .product-show__image-wrap {
+                height: 430px;
+            }
+
+            .product-show__title {
+                font-size: 1.9rem;
+            }
+
+            .product-show__price {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .product-show {
+                padding: 1.5rem 0 2rem;
+            }
+
+            .product-show__image-wrap {
+                height: 320px;
+                padding: 1rem;
+            }
+
+            .product-show__panel,
+            .product-show__details {
+                padding: 1.1rem;
+            }
+
+            .product-show__title {
+                font-size: 1.55rem;
+            }
+
+            .product-show__price {
+                font-size: 1.7rem;
+            }
+
+            .product-show__form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
-    <a href="{{ path('app_products_index') }}">← Retourner au catalogue</a>
+    <section class="container product-show">
+        <a href="{{ path('app_products_index') }}" class="product-show__back">
+            ← Retour au catalogue
+        </a>
 
-    <section  class="container">
-        {% if product.image %}
-            <img class="img-fluid" src="{{ asset('uploads/products/' ~ product.image) }}"
-                 alt="{{ product.title }}"
-                 onerror="this.onerror=null;this.src='{{ asset('images/products/no-image.jpg') }}';"
-                 >
-        {% else %}
-            <img class="img-fluid" src="{{ asset('images/products/no-image.jpg') }}"
-                 alt="No image">
-        {% endif %}
+        <div class="product-show__layout">
+            <div class="product-show__media">
+                <div class="product-show__image-wrap">
+                    {% if product.image %}
+                        <img
+                            src="{{ asset('uploads/products/' ~ product.image) }}"
+                            alt="{{ product.title }}"
+                            class="product-show__image"
+                            onerror="this.onerror=null;this.src='{{ asset('images/products/no-image.jpg') }}';"
+                        >
+                    {% else %}
+                        <img
+                            src="{{ asset('images/products/no-image.jpg') }}"
+                            alt="No image"
+                            class="product-show__image"
+                        >
+                    {% endif %}
+                </div>
+            </div>
 
-        {#        {% if product.image %}#}
-{#             <img class="img-fluid" src="{{ asset('images/products/' ~ product.image) }}">#}
-{#        {% endif %}#}
-        <h2>{{ product.title }}</h2>
+            <aside class="product-show__panel">
+                <h1 class="product-show__title">{{ product.title }}</h1>
 
-        <p><b>Prix:</b> {{ product.getPriceEur() }}</p>
-        <p><b>Catégorie:</b> {{ product.category }}</p>
-        <p><b>Reference:</b> {{ product.reference }}</p>
+                <p class="product-show__ref">
+                    Référence : {{ product.reference }}
+                </p>
 
-        {% if product.description %}
-            <h3>Description</h3>
-            <p>{{ product.description }}</p>
-        {% endif %}
+                {% if product.stock > 0 %}
+                    <div class="product-show__status product-show__status--ok">
+                        En stock
+                    </div>
+                    <p class="product-show__delivery">Disponible immédiatement</p>
+                {% else %}
+                    <div class="product-show__status product-show__status--out">
+                        Rupture de stock
+                    </div>
+                    <p class="product-show__delivery">Produit actuellement indisponible</p>
+                {% endif %}
 
-        <h3>Caractéristiques</h3>
-        <ul>
-            <li>Volume (м³): {{ product.volumeM3 }}</li>
-            <li>Poids (kg): {{ product.weightKg }}</li>
-        </ul>
+                <div class="product-show__price">
+                    {{ product.getPriceEur() }} €
+                </div>
+                    <p class="product-show__delivery">Livraison gratuit</p>
+
+                {# <ul class="product-show__meta">
+                    <li>
+                        <strong>Catégorie :</strong>
+                        {{ product.category ? product.category.label : '—' }}
+                    </li>
+                    <li>
+                        <strong>Volume (m³) :</strong>
+                        {{ product.volumeM3 is not null ? product.volumeM3 : '—' }}
+                    </li>
+                    <li>
+                        <strong>Poids (kg) :</strong>
+                        {{ product.weightKg is not null ? product.weightKg : '—' }}
+                    </li>
+                </ul> #}
+
+                <div class="product-show__buy-box">
+                    <form method="post" action="{{ path('app_cart_add', { id: product.id }) }}" class="product-show__form">
+                        <input
+                            type="number"
+                            name="qty"
+                            value="1"
+                            min="1"
+                            class="product-show__qty"
+                            {% if product.stock < 1 %}disabled{% endif %}
+                        >
+                        <input type="hidden" name="_token" value="{{ csrf_token('cart_add_' ~ product.id) }}">
+
+                        <button
+                            type="submit"
+                            class="product-show__submit"
+                            {% if product.stock < 1 %}disabled{% endif %}
+                        >
+                            Ajouter au panier
+                        </button>
+                    </form>
+                </div>
+            </aside>
+        </div>
+
+        <div class="product-show__details">
+            {% if product.description %}
+                <section class="product-show__section">
+                    <h2 class="product-show__section-title">Description</h2>
+                    <p class="product-show__description">
+                        {{ product.description }}
+                    </p>
+                </section>
+            {% endif %}
+
+            <section class="product-show__section">
+                <h2 class="product-show__section-title">Caractéristiques</h2>
+                <ul class="product-show__features">
+                    <li>Catégorie : {{ product.category ? product.category.label : '—' }}</li>
+                    <li>Référence : {{ product.reference }}</li>
+                    <li>Volume (m³) : {{ product.volumeM3 is not null ? product.volumeM3 : '—' }}</li>
+                    <li>Poids (kg) : {{ product.weightKg is not null ? product.weightKg : '—' }}</li>
+                </ul>
+            </section>
+        </div>
     </section>
-    <form method="post" action="{{ path('app_cart_add', { id: product.id }) }}">
-        <input type="number" name="qty" value="1" min="1">
-        <input type="hidden" name="_token" value="{{ csrf_token('cart_add_' ~ product.id) }}">
-        <button type="submit">Ajouter au panier</button>
-    </form>
-
 {% endblock %}
