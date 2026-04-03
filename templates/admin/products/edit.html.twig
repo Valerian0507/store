@@ -2,53 +2,53 @@
 
 {% block title %}Admin · Edit product{% endblock %}
 
-{% block body %}
-    <section class="container">
-        <h1>Edit product #{{ product.id }}</h1>
+{% block admin_content %}
+<section class="container">
+    <h1>Modifier le produit #{{ product.id }}</h1>
 
-        {{ form_start(form) }}
-        {{ form_errors(form) }}
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
 
-        {{ form_row(form.reference) }}
-        {{ form_row(form.category) }}
-        {{ form_row(form.title) }}
-        {{ form_row(form.description) }}
-        {{ form_row(form.volumeM3) }}
-        {{ form_row(form.weightKg) }}
-        {{ form_row(form.priceCents) }}
+    {{ form_row(form.reference) }}
+    {{ form_row(form.category) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.volumeM3) }}
+    {{ form_row(form.weightKg) }}
+    {{ form_row(form.priceCents) }}
 
-        {% if product.image %}
-            <div class="mb-3">
-                <div class="mb-2">
-                    <strong>Current image:</strong> <code>{{ product.image }}</code>
-                </div>
-                <img
-                    src="{{ asset('uploads/products/' ~ product.image) }}"
-                    alt="Current image"
-                    style="max-width:240px; height:auto; border:1px solid #ddd; padding:6px; border-radius:8px;"
-                    onerror="this.onerror=null;this.src='{{ asset('images/products/no-image.jpg') }}';"
-                >
-
-                <div class = "mt-2">
-                    <input type="hidden"
-                           name="_token_delete_image"
-                           value="{{ csrf_token('delete_product_image_' ~ product.id) }}">
-
-                    <button type="button"
-                            class="btn btn-danger btn-sm js-delete-image"
-                            data-action="{{ path('admin_products_delete_image', {id: product.id}) }}">
-                      Supprimer l'image
-                    </button>
-                </div>
+    {% if product.image %}
+        <div class="mb-3">
+            <div class="mb-2">
+                <strong>Image actuelle:</strong> <code>{{ product.image }}</code>
             </div>
-        {% endif %}
 
-        {{ form_row(form.image, { help: 'Place pour le message' }) }}
-{#        {{ form_row(form.image) }}#}
-        <button class="btn btn-primary">Modifier</button>
-        <a class="btn btn-link" href="{{ path('admin_products_index') }}">Cancel</a>
+            <img
+                src="{{ asset('uploads/products/' ~ product.image) }}"
+                alt="Current image"
+                style="max-width:240px; height:auto; border:1px solid #ddd; padding:6px; border-radius:8px;"
+                onerror="this.onerror=null;this.src='{{ asset('images/products/no-image.jpg') }}';"
+            >
 
-        {{ form_end(form) }}
-    
-    </section>
+            <div class="mt-2">
+                <input type="hidden"
+                       name="_token_delete_image"
+                       value="{{ csrf_token('delete_product_image_' ~ product.id) }}">
+
+                <button type="button"
+                        class="btn btn-danger btn-sm js-delete-image"
+                        data-action="{{ path('admin_products_delete_image', {id: product.id}) }}">
+                    Supprimer l'image
+                </button>
+            </div>
+        </div>
+    {% endif %}
+
+    {{ form_row(form.image, { help: 'Place pour le message' }) }}
+
+    <button class="btn btn-primary">Modifier</button>
+    <a class="btn btn-link" href="{{ path('admin_products_index') }}">Fermer</a>
+
+    {{ form_end(form) }}
+</section>
 {% endblock %}

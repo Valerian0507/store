@@ -4,6 +4,7 @@
 <html lang="fr">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Admin{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
 
@@ -12,57 +13,56 @@
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
             <script src="https://kit.fontawesome.com/bc43524f66.js" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         {% endblock %}
     </head>
 
     <body class="admin">
-    <header class="admin-header">
-        {% include '_partials/_navbar.html.twig' %}
-    </header>
+        <header class="admin-header">
+            {% include '_partials/_navbar.html.twig' %}
+        </header>
 
-    <main class="admin-main">
-        {# флешки подключим позже — но блок оставим уже сейчас #}
-        {% include '_partials/_flash.html.twig' %}
+        <main class="admin-main">
+            {# флешки подключим позже — но блок оставим уже сейчас #}
+            {% include '_partials/_flash.html.twig' %}
 
+            {% block body %}
+                <div class="admin-layout">
+                    {% block admin_content %}{% endblock %}
+                </div>
+            {% endblock %}
+        </main>
 
-        {% block body %}
-            <div class="admin-layout">
-                {% block admin_content %}{% endblock %}
-            </div>
-        {% endblock %}
-    </main>
+        <footer class="admin-footer">
+            {% include '_partials/_footer.html.twig' %}
+        </footer>
 
-    <footer class="admin-footer">
-        {% include '_partials/_footer.html.twig' %}
-    </footer>
+        <script>
+            document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.js-delete-image');
+            if (!btn) return;
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-    document.addEventListener('click', function (e) {
-    const btn = e.target.closest('.js-delete-image');
-    if (!btn) return;
+            e.preventDefault();
 
-    e.preventDefault();
+            const form = btn.closest('form');
+            const action = btn.dataset.action;
 
-    const form = btn.closest('form');
-    const action = btn.dataset.action;
-
-    Swal.fire({
-        title: 'Supprimer l’image ?',
-        text: "Cette action est irréversible.",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Oui, supprimer',
-        cancelButtonText: 'Annuler'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            form.action = action;
-            form.method = 'post';
-            form.submit();
-        }
-    });
-});
-</script>
+            Swal.fire({
+                title: 'Supprimer l’image ?',
+                text: "Cette action est irréversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Oui, supprimer',
+                cancelButtonText: 'Annuler'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.action = action;
+                    form.method = 'post';
+                    form.submit();
+                }
+            });
+        });
+        </script>
 
     </body>
 </html>

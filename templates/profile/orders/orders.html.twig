@@ -33,10 +33,10 @@
         <div class="d-flex flex-column gap-3">
             {% for order in orders %}
                 {% set statusLabel = {
-                    'pending': 'Pending Payment',
-                    'paid': 'Paid',
-                    'shipped': 'Shipped',
-                    'cancelled': 'Cancelled'
+                    'pending': 'En attente de paiement',
+                    'paid': 'Payée',
+                    'shipped': 'Expédiée',
+                    'cancelled': 'Annulée'
                 }[order.status] ?? order.status|capitalize %}
 
                 {% set statusBadgeClass = {

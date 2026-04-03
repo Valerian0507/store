@@ -1,0 +1,150 @@
+{% extends 'admin/adminBase.html.twig' %}
+
+{% block title %}Commande {{ order.reference }}{% endblock %}
+
+{% block admin_content %}
+<div class="container">
+    {% set statusBadgeClasses = {
+        'pending': 'bg-warning text-dark',
+        'paid': 'bg-success text-white',
+        'shipped': 'bg-primary text-white',
+        'cancelled': 'bg-danger text-white'
+    } %}
+
+    <div class="d-flex justify-content-between align-items-center mb-4 mt-4">
+        <h2 class="mb-0">Commande {{ order.reference }}</h2>
+        <a href="{{ path('admin_orders_index') }}" class="btn btn-outline-secondary btn-sm">
+            Retour à la liste
+        </a>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-12 col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h2 class="h5 mb-3">Informations générales</h2>
+
+                    <p class="mb-2">
+                        <strong>Référence :</strong>
+                        {{ order.reference }}
+                    </p>
+
+                    <p class="mb-2">
+                        <strong>Date de création :</strong>
+                        {{ order.createdAt|date('d/m/Y H:i') }}
+                    </p>
+                    
+                    <p class="mb-2">
+                        <strong>Dernière mise à jour :</strong>
+                        {% if order.updatedAt %}
+                            {{ order.updatedAt|date('d/m/Y H:i') }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </p>
+
+                    <p class="mb-3">
+                        <strong>Statut :</strong>
+                        <span class="badge {{ statusBadgeClasses[order.status] ?? 'bg-secondary text-white' }}">
+                            {{ statusLabels[order.status] ?? order.status|capitalize }}
+                        </span>
+                    </p>
+
+                    <form method="post" action="{{ path('admin_orders_update_status', { id: order.id }) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('admin_order_status_' ~ order.id) }}">
+
+                        <label for="order-status" class="form-label">Modifier le statut</label>
+
+                        <select name="status" id="order-status" class="form-select mb-3">
+                            {% for statusValue, statusLabel in statusLabels %}
+                                <option value="{{ statusValue }}" {{ order.status == statusValue ? 'selected' : '' }}>
+                                    {{ statusLabel }}
+                                </option>
+                            {% endfor %}
+                        </select>
+
+                        <button type="submit" class="btn btn-primary">
+                            Mettre à jour
+                        </button>
+                    </form>
+
+                    <hr>
+
+                    <p class="mb-0">
+                        <strong>Total :</strong>
+                        {{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h2 class="h5 mb-3">Client</h2>
+
+                    <p class="mb-2">
+                        <strong>Email :</strong>
+                        {{ order.user ? order.user.email : '—' }}
+                    </p>
+
+                    <p class="mb-0">
+                        <strong>Numéro téléphone :</strong>
+                        —
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h2 class="h5 mb-3">Adresse de livraison</h2>
+
+            <p class="mb-1">
+                {{ order.shippingFirstName }} {{ order.shippingLastName }}
+            </p>
+            <p class="mb-1">{{ order.shippingStreet }}</p>
+            <p class="mb-1">{{ order.shippingPostalCode }} {{ order.shippingCity }}</p>
+            <p class="mb-0">{{ order.shippingCountry }}</p>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="h5 mb-3">Produits</h2>
+
+            {% if order.items is empty %}
+                <div class="alert alert-info mb-0">Aucun article dans cette commande.</div>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Produit</th>
+                                <th class="text-end">Prix unitaire</th>
+                                <th class="text-end">Quantité</th>
+                                <th class="text-end">Total ligne</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in order.items %}
+                            <tr>
+                                <td>{{ item.productName }}</td>
+                                <td class="text-end">
+                                    {{ (item.unitPriceCents / 100)|number_format(2, ',', ' ') }} €
+                                </td>
+                                <td class="text-end">{{ item.quantity }}</td>
+                                <td class="text-end">
+                                    {{ ((item.unitPriceCents * item.quantity) / 100)|number_format(2, ',', ' ') }} €
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -48,10 +48,10 @@ final class OrderSuccessBuilder
         );
 
         $statusLabel = match ($order->getStatus()) {
-            'pending' => 'Pending Payment',
-            'paid' => 'Paid',
-            'shipped' => 'Shipped',
-            'cancelled' => 'Cancelled',
+            'pending' => 'En attente de paiement',
+            'paid' => 'Payée',
+            'cancelled' => 'Annulée',
+            'shipped' => 'Expédiée',
             default => ucfirst($order->getStatus()),
         };
 
@@ -62,7 +62,6 @@ final class OrderSuccessBuilder
             'cancelled' => 'bg-danger text-white',
             default => 'bg-secondary text-white',
         };
-
 
         return new OrderSuccessViewModel(
             orderId: (int) $order->getId(),

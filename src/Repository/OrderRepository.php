@@ -43,7 +43,28 @@ class OrderRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function findOrdersForAdminList(): array
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.user', 'u')
+            ->addSelect('u')
+            ->orderBy('o.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 
+    public function findOneForAdminShow(int $id): ?Order
+    {
+        return $this->createQueryBuilder('o')
+            ->leftJoin('o.user', 'u')
+            ->addSelect('u')
+            ->leftJoin('o.items', 'i')
+            ->addSelect('i')
+            ->where('o.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 
     //    /**
     //     * @return Order[] Returns an array of Order objects
@@ -69,4 +90,6 @@ class OrderRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+
 }
