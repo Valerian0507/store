@@ -1,0 +1,22 @@
+{% extends 'admin/adminBase.html.twig' %}
+
+{% block title %}Catégories
+{% endblock %}
+
+{% block admin_content %}
+    <section class="container">
+        <div class="mb-2">
+    		<h1>Modifier la catégorie - {{ category.label }} </h1>
+
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            {{ form_row(form.label) }}
+
+            <button class="btn btn-primary">Mettre à jour</button>
+            <a class="btn btn-link" href="{{ path('admin_categories_index') }}">Retour</a>
+
+            {{ form_end(form) }}
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'admin/adminBase.html.twig' %}
+
+{% block title %}Catégories
+{% endblock %}
+
+{% block admin_content %}
+	<div class="container py-4">
+		<div class="mb-3" >
+			<h1 class="h2 fw-bold mb-1">Catégories</h1>
+
+		</div>
+		<div class="d-flex justify-content-between align-items-center mb-4">
+			<a class="btn btn-primary" href="{{ path('admin_categories_new') }}">Ajouter une catégorie</a>
+
+            <a href="{{ path('admin_dashboard') }}" class="btn btn-outline-secondary">
+                Retour au tableau de bord
+            </a>
+		</div>
+
+		{% if categories is empty %}
+			<div class="alert alert-info">
+				Aucune catégorie trouvée.
+			</div>
+		{% else %}
+			<div class="card shadow-sm">
+				<div class="card-body p-0">
+					<div class="table-responsive">
+						<table class="table table-striped align-middle mb-0">
+							<thead>
+								<tr>
+									<th>№</th>
+									<th>Label</th>
+									<th>Nombre de produits</th>
+									<th class="text-end">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for category in categories %}
+									<tr>
+										<td>{{ loop.index }}</td>
+										<td>{{ category.label }}</td>
+										<td>{{ category.products|length }}</td>
+										<td class="text-end">
+											<a class="btn btn-sm btn-outline-secondary" href="{{ path('admin_categories_edit', { id: category.id }) }}">Modifier</a>
+
+                                            <form method="post"
+                                                  action="{{ path('admin_categories_delete', {id: category.id}) }}"
+                                                  style="display:inline"
+                                                  onsubmit="return confirm('Supprimer cette catégorie ?')" >
+                                                  <input type="hidden" name="_token" value="{{ csrf_token('delete_category_' ~ category.id) }}">
+                                                  <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
+                                            </form>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+	</div>
+
+{% endblock %}

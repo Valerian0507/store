@@ -27,13 +27,13 @@ class ProductType extends AbstractType
             ->add('reference', TextType::class, [
                 'constraints' => [
                     new NotBlank(message: 'Champ obligatoire.'),
-                    new Length(max: 64, maxMessage: 'Максимум {{ limit }} символов.'),
+                    new Length(max: 64, maxMessage: 'Maximum {{ limit }} caractères.'),
                 ],
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'label',
-                'placeholder' => 'Выберите категорию',
+                'placeholder' => 'Choisissez une catégorie',
                 'required' => true,
                 'constraints' => [
                     new NotBlank(message: 'Champ obligatoire.'),
@@ -42,7 +42,7 @@ class ProductType extends AbstractType
             ->add('title', TextType::class, [
                 'constraints' => [
                     new NotBlank(message: 'Champ obligatoire.'),
-                    new Length(max: 128, maxMessage: 'Максимум {{ limit }} символов.'),
+                    new Length(max: 128, maxMessage: 'Maximum {{ limit }} caractères.'),
 
                 ]
             ])
@@ -52,25 +52,25 @@ class ProductType extends AbstractType
             ->add('volumeM3', NumberType::class, [
                 'required' => true,
                 'scale' => 3,
-                'invalid_message' => 'Введите число (например 1.25).',
+                'invalid_message' => 'Renseignez un nombre (ex. 1.25).',
                 'constraints' => [
-                    new NotBlank(message: 'Введите объем.'),
-                    new PositiveOrZero(message: 'Объем не может быть отрицательным.'),
+                    new NotBlank(message: 'Mettez le volume.'),
+                    new PositiveOrZero(message: 'Le volume ne peut pas être négatif.'),
                 ],
             ])
             ->add('weightKg', NumberType::class, [
                 'required' => true,
                 'scale' => 3,
-                'invalid_message' => 'Введите число (например 2.5).',
+                'invalid_message' => 'Renseignez un nombre (ex. 2.5).',
                 'constraints' => [
-                    new NotBlank(message: 'Введите вес.'),
-                    new PositiveOrZero(message: 'Вес не может быть отрицательным.'),
+                    new NotBlank(message: 'Mettez le poids.'),
+                    new PositiveOrZero(message: 'Le poids ne peut pas être négatif.'),
                 ],
             ])
             ->add('priceCents', IntegerType::class, [
                 'constraints' => [
-                    new NotBlank(message: 'Введите цену.'),
-                    new PositiveOrZero(message: 'Цена не может быть отрицательной.'),
+                    new NotBlank(message: 'Mettez le prix en centimes.'),
+                    new PositiveOrZero(message: 'Le prix ne peut pas être négatif.'),
                 ],
                 'help' => 'Price in cents (e.g. 1299 = 12.99)',
             ])

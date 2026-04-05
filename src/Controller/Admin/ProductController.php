@@ -36,13 +36,6 @@ class ProductController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile|null $imageFile */
-//            Код без удаления и замены картинки в папке
-//            $imageFile = $form->get('image')->getData();
-//
-//            if ($imageFile) {
-//                $newFilename = $fileUploader->upload($imageFile);
-//                $product->setImage($newFilename);
-//            }
 //            Код c удаления и заменой картинки в папке
             $imageFile = $form->get('image')->getData();
 
@@ -73,7 +66,7 @@ class ProductController extends AbstractController
 
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
-        
+
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -105,8 +98,8 @@ class ProductController extends AbstractController
         ]);
     }
 
-    
-    #[Route('/{id}/delete-image', name: 'delete_image', methods: ['POST'])]
+
+    #[Route('/{id}/delete-image', name: 'delete_image', methods: ['POST'], requirements: ['id' => '\d+'])]
         public function deleteImage(
             Product $product,
             Request $request,
@@ -116,7 +109,7 @@ class ProductController extends AbstractController
             $token = (string) $request->request->get('_token_delete_image');
 
             if (!$this->isCsrfTokenValid('delete_product_image_'.$product->getId(), $token)) {
-                $this->addFlash('error', 'Invalid CSRF token.');
+                $this->addFlash('danger', 'Jeton CSRF invalide.');
                 return $this->redirectToRoute('admin_products_edit', ['id' => $product->getId()]);
             }
 
@@ -145,7 +138,7 @@ class ProductController extends AbstractController
         $token = (string) $request->request->get('_token');
 
         if (!$this->isCsrfTokenValid('delete_product_'.$product->getId(), $token)) {
-            $this->addFlash('error', 'Invalid CSRF token.');
+            $this->addFlash('danger', 'Jeton CSRF invalide.');
             return $this->redirectToRoute('admin_products_index');
         }
 

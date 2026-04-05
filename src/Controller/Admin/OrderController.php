@@ -22,12 +22,41 @@ class OrderController extends AbstractController
     ];
 
     #[Route('', name: 'index', methods: ['GET'])]
-    public function index(OrderRepository $orderRepository): Response
+    public function index(OrderRepository $orderRepository, Request $request): Response
     {
-        $orders = $orderRepository->findOrdersForAdminList();
+        $selectedStatus = $request->query->get('status');
+        $selectedStatus = is_string($selectedStatus) ? trim($selectedStatus) : null;
+        $selectedStatus = $selectedStatus !== '' ? $selectedStatus : null;
+
+        if ($selectedStatus !== null && !array_key_exists($selectedStatus, self::STATUS_LABELS)) {
+            $selectedStatus = null;
+        }
+
+        $search = $request->query->get('search');
+        $search = is_string($search) ? trim($search) : null;
+        $search = $search !== '' ? $search : null;
+
+        $page = max(1, (int) $request->query->get('page', 1));
+        $limit = 20;
+        $offset = ($page - 1) * $limit;
+
+        $totalOrders = $orderRepository->countForAdminList($selectedStatus, $search);
+        $totalPages = max(1, (int) ceil($totalOrders / $limit));
+
+        if ($page > $totalPages) {
+            $page = $totalPages;
+            $offset = ($page - 1) * $limit;
+        }
+
+        $orders = $orderRepository->findOrdersForAdminList($selectedStatus, $search, $limit, $offset);
 
         return $this->render('admin/orders/index.html.twig', [
             'orders' => $orders,
+            'selectedStatus' => $selectedStatus,
+            'search' => $search,
+            'statusLabels' => self::STATUS_LABELS,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
         ]);
     }
 

@@ -43,15 +43,53 @@ class OrderRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findOrdersForAdminList(): array
-    {
-        return $this->createQueryBuilder('o')
+     public function findOrdersForAdminList(?string $status = null, ?string $search = null, int $limit = 20, int $offset = 0 ): array
+     {
+        $qb = $this->createQueryBuilder('o')
             ->leftJoin('o.user', 'u')
             ->addSelect('u')
             ->orderBy('o.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult();
+            ->addOrderBy('o.id', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
+
+        if ($status !== null) {
+            $qb
+                ->andWhere('o.status = :status')
+                ->setParameter('status', $status);
+        }
+
+        if ($search !== null) {
+            $qb
+                ->andWhere('o.reference LIKE :search OR u.email LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
+
+        return $qb->getQuery()->getResult();
     }
+
+     public function countForAdminList(?string $status = null, ?string $search = null): int
+    {
+        $qb = $this->createQueryBuilder('o')
+            ->leftJoin('o.user', 'u')
+            ->select('COUNT(o.id)');
+
+        if ($status !== null) {
+            $qb
+                ->andWhere('o.status = :status')
+                ->setParameter('status', $status);
+        }
+
+        if ($search !== null) {
+            $qb
+                ->andWhere('o.reference LIKE :search OR u.email LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+
 
     public function findOneForAdminShow(int $id): ?Order
     {
