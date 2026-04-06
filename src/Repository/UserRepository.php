@@ -19,6 +19,71 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         parent::__construct($registry, User::class);
     }
 
+    public function findAllUsers(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->orderBy('u.createdAt', 'DESC')
+            ->addOrderBy('u.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findUsersForAdminList(
+        ?string $search = null,
+        ?bool $verified = null,
+        int $limit = 2,
+        int $offset = 0
+    ): array {
+        $qb = $this->createQueryBuilder('u')
+            ->orderBy('u.createdAt', 'DESC')
+            ->addOrderBy('u.id', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
+
+        if ($search !== null) {
+            $qb
+                ->andWhere('u.email LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
+
+        if ($verified !== null) {
+            $qb
+                ->andWhere('u.isVerified = :verified')
+                ->setParameter('verified', $verified);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function countForAdminList(?string $search = null, ?bool $verified = null): int
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->select('COUNT(u.id)');
+
+        if ($search !== null) {
+            $qb
+                ->andWhere('u.email LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
+
+        if ($verified !== null) {
+            $qb
+                ->andWhere('u.isVerified = :verified')
+                ->setParameter('verified', $verified);
+        }
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function findOneForAdminShow(int $id): ?User
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
@@ -32,29 +97,26 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
-//
-//        /**
-//         * @return User[] Returns an array of User objects
-//         */
-//        public function findByExampleField($value): array
-//        {
-//            return $this->createQueryBuilder('u')
-//                ->andWhere('u.exampleField = :val')
-//                ->setParameter('val', $value)
-//                ->orderBy('u.id', 'ASC')
-//                ->setMaxResults(10)
-//                ->getQuery()
-//                ->getResult()
-//            ;
-//        }
-//
-//        public function findOneBySomeField($value): ?User
-//        {
-//            return $this->createQueryBuilder('u')
-//                ->andWhere('u.exampleField = :val')
-//                ->setParameter('val', $value)
-//                ->getQuery()
-//                ->getOneOrNullResult()
-//            ;
-//        }
 }
+
+
+// Если совсем просто, то разница такая
+// findAllUsers()
+
+// Дай всех пользователей
+
+// findUsersForAdminList(...)
+
+// Дай пользователей для админского списка с фильтрами и пагинацией
+
+// countForAdminList(...)
+
+// Скажи, сколько всего пользователей найдено для тех же фильтров
+
+// findOneForAdminShow($id)
+
+// Дай одного пользователя для detail/show страницы
+
+// upgradePassword(...)
+
+// Служебный security-метод Symfony

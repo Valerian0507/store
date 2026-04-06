@@ -1,0 +1,191 @@
+{% extends 'admin/adminBase.html.twig' %}
+
+{% block title %}Admin · Utilisateur{% endblock %}
+
+{% block admin_content %}
+    <section class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h2 fw-bold mb-1">Utilisateur</h1>
+                <p class="text-muted mb-0">{{ user.email }}</p>
+            </div>
+
+            <a href="{{ path('admin_users_index') }}" class="btn btn-outline-secondary">
+                Retour à la liste
+            </a>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-3">ID</dt>
+                    <dd class="col-sm-9">{{ user.id }}</dd>
+
+                    <dt class="col-sm-3">Adresse email</dt>
+                    <dd class="col-sm-9">{{ user.email }}</dd>
+
+                    <dt class="col-sm-3">Prénom</dt>
+                    <dd class="col-sm-9">{{ user.firstName ? user.firstName : '—' }}</dd>
+
+                    <dt class="col-sm-3">Nom</dt>
+                    <dd class="col-sm-9">{{ user.lastName ? user.lastName : '—' }}</dd>
+
+                    <dt class="col-sm-3">Nom complet</dt>
+                    <dd class="col-sm-9">{{ user.getFullName() ? user.getFullName() : '—' }}</dd>
+
+                    <dt class="col-sm-3">Vérifié</dt>
+                    <dd class="col-sm-9">
+                        {% if user.verified %}
+                            <span class="badge bg-success">Oui</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">Non</span>
+                        {% endif %}
+                    </dd>
+
+                    <dt class="col-sm-3">Rôle</dt>
+                    <dd class="col-sm-9">
+                        {% if 'ROLE_ADMIN' in user.roles %}
+                            Administrateur
+                        {% else %}
+                            Utilisateur
+                        {% endif %}
+                    </dd>
+
+                    <dt class="col-sm-3">Créé le</dt>
+                    <dd class="col-sm-9">{{ user.createdAt ? user.createdAt|date('d/m/Y H:i') : '—' }}</dd>
+
+                    <dt class="col-sm-3">Mis à jour</dt>
+                    <dd class="col-sm-9">{{ user.updatedAt ? user.updatedAt|date('d/m/Y H:i') : '—' }}</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="h5 fw-bold mb-3">Changer le rôle</h2>
+
+                <form method="post" action="{{ path('admin_users_update_role', { id: user.id }) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('update_user_role_' ~ user.id) }}">
+
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Rôle</label>
+                        <select id="role" name="role" class="form-select">
+                            <option value="ROLE_USER" {% if 'ROLE_ADMIN' not in user.roles %}selected{% endif %}>
+                                Utilisateur
+                            </option>
+                            <option value="ROLE_ADMIN" {% if 'ROLE_ADMIN' in user.roles %}selected{% endif %}>
+                                Administrateur
+                            </option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Mettre à jour le rôle
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="h5 fw-bold mb-3">Adresses</h2>
+
+                {% if addresses is empty %}
+                    <div class="alert alert-info mb-0">
+                        Aucune adresse pour cet utilisateur.
+                    </div>
+                {% else %}
+                    <div class="row g-3">
+                        {% for address in addresses %}
+                            <div class="col-12 col-lg-6">
+                                <div class="border rounded p-3 h-100">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <strong>Adresse #{{ loop.index }}</strong>
+
+                                        {% if address.isDefault %}
+                                            <span class="badge bg-primary">Par défaut</span>
+                                        {% endif %}
+                                    </div>
+
+                                    <div>
+                                        <div>{{ address.street }}</div>
+                                        <div>{{ address.postalCode }} {{ address.city }}</div>
+                                        <div>{{ address.country }}</div>
+                                    </div>
+
+                                    <div class="text-muted small mt-3">
+                                        Créée le {{ address.createdAt ? address.createdAt|date('d/m/Y H:i') : '—' }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="h5 fw-bold mb-0">Dernières commandes</h2>
+                </div>
+
+                {% if orders is empty %}
+                    <div class="alert alert-info mb-0">
+                        Aucune commande pour cet utilisateur.
+                    </div>
+                {% else %}
+                    <div class="table-responsive">
+                        <table class="table table-striped align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Référence</th>
+                                    <th>Date</th>
+                                    <th>Statut</th>
+                                    <th>Total</th>
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in orders %}
+                                    {% set statusLabel = {
+                                        'pending': 'En attente de paiement',
+                                        'paid': 'Payée',
+                                        'shipped': 'Expédiée',
+                                        'cancelled': 'Annulée'
+                                    }[order.status] ?? order.status|capitalize %}
+
+                                    {% set statusBadgeClass = {
+                                        'pending': 'bg-warning text-dark',
+                                        'paid': 'bg-success text-white',
+                                        'shipped': 'bg-primary text-white',
+                                        'cancelled': 'bg-danger text-white'
+                                    }[order.status] ?? 'bg-secondary text-white' %}
+
+                                    <tr>
+                                        <td>{{ order.reference }}</td>
+                                        <td>{{ order.createdAt ? order.createdAt|date('d/m/Y H:i') : '—' }}</td>
+                                        <td>
+                                            <span class="badge {{ statusBadgeClass }}">
+                                                {{ statusLabel }}
+                                            </span>
+                                        </td>
+                                        <td>{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</td>
+                                        <td class="text-end">
+                                            <a
+                                                href="{{ path('admin_orders_show', { id: order.id }) }}"
+                                                class="btn btn-sm btn-outline-primary"
+                                            >
+                                                Voir
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

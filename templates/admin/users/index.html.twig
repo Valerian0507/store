@@ -1,10 +1,127 @@
 {% extends 'admin/adminBase.html.twig' %}
 
-{% block title %}Admin · Users{% endblock %}
+{% block title %}Utilisateurs{% endblock %}
 
 {% block admin_content %}
-    <section class="container">
-        <h1>Users</h1>
-        <p>La liste des utilisateurs apparaîtra ici.</p>
+    <section class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h2 fw-bold mb-0">Utilisateurs</h1>
+
+            <a href="{{ path('admin_dashboard') }}" class="btn btn-outline-secondary">
+                Retour au tableau de bord
+            </a>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <form method="get" action="{{ path('admin_users_index') }}">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-12 col-md-6">
+                            <label for="q" class="form-label">Recherche par email</label>
+                            <input
+                                type="text"
+                                id="q"
+                                name="q"
+                                class="form-control"
+                                value="{{ search }}"
+                                placeholder="ex. client@email.com"
+                            >
+                        </div>
+
+                        <div class="col-12 col-md-3">
+                            <label for="verified" class="form-label">Vérifié</label>
+                            <select id="verified" name="verified" class="form-select">
+                                <option value="" {% if verifiedFilter == '' %}selected{% endif %}>Tous</option>
+                                <option value="yes" {% if verifiedFilter == 'yes' %}selected{% endif %}>Oui</option>
+                                <option value="no" {% if verifiedFilter == 'no' %}selected{% endif %}>Non</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12 col-md-3 d-flex gap-2 ">
+                            <button type="submit" class="btn btn-primary">
+                                Filtrer
+                            </button>
+
+                            <a href="{{ path('admin_users_index') }}" class="btn btn-outline-secondary">
+                                Réinitialiser
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% if users is empty %}
+            <div class="alert alert-info">
+                Aucun utilisateur trouvé.
+            </div>
+        {% else %}
+            <div class="card shadow-sm">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>№</th>
+                                    <th>Adresse email</th>
+                                    <th>Prénom / Nom</th>
+                                    <th>Vérifié</th>
+                                    <th>Rôle</th>
+                                    <th>Créé le</th>
+                                    <th>Mis à jour</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                    {% set displayRole = 'ROLE_ADMIN' in user.roles ? 'Administrateur' : 'Utilisateur' %}
+                                    <tr>
+                                        <td>{{ ((page - 1) * limit) + loop.index }}</td>
+                                        <td>{{ user.email }}</td>
+                                        <td>{{ user.getFullName() ? user.getFullName() : '—' }}</td>
+                                        <td>
+                                            {% if user.verified %}
+                                                <span class="badge bg-success">Oui</span>
+                                            {% else %}
+                                                <span class="badge bg-warning text-dark">Non</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ displayRole }}</td>
+                                        <td>{{ user.createdAt ? user.createdAt|date('d/m/Y H:i') : '—' }}</td>
+                                        <td>{{ user.updatedAt ? user.updatedAt|date('d/m/Y H:i') : '—' }}</td>
+                                        <td class="text-end">
+                                            <a href="{{ path('admin_users_show', { id: user.id }) }}" class="btn btn-sm btn-outline-primary">
+                                                Voir
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            {% if totalPages > 1 %}
+                <nav class="mt-4" aria-label="Pagination utilisateurs">
+                    <ul class="pagination mb-0">
+                        {% for p in 1..totalPages %}
+                            <li class="page-item {% if p == page %}active{% endif %}">
+                                <a
+                                    class="page-link"
+                                    href="{{ path('admin_users_index', {
+                                        page: p,
+                                        q: search,
+                                        verified: verifiedFilter
+                                    }) }}"
+                                >
+                                    {{ p }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            {% endif %}
+        {% endif %}
     </section>
 {% endblock %}

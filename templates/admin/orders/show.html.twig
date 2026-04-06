@@ -1,6 +1,6 @@
 {% extends 'admin/adminBase.html.twig' %}
 
-{% block title %}Commande {{ order.reference }}{% endblock %}
+{% block title %}Commande{% endblock %}
 
 {% block admin_content %}
 <div class="container">
@@ -33,7 +33,7 @@
                         <strong>Date de création :</strong>
                         {{ order.createdAt|date('d/m/Y H:i') }}
                     </p>
-                    
+
                     <p class="mb-2">
                         <strong>Dernière mise à jour :</strong>
                         {% if order.updatedAt %}
