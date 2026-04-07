@@ -97,11 +97,7 @@ final class ImportProductsCommand extends Command
             $product->setWeightKg((float) ($row['weight_kg'] ?? 0));
             $product->setPriceCents((int) round(((float) ($row['price_eur'] ?? 0)) * 100));
             $product->setImage($row['image'] ?? null);
-            
-
-            // $this->em->persist($product);
-            // $created++;
-        }
+            }
 
         $this->em->flush();
 
