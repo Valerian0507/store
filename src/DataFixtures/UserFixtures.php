@@ -18,7 +18,10 @@ class UserFixtures extends Fixture
         // USER ADMIN
         $admin = new User();
         $admin->setEmail('admin@store.com');
+        $admin->setFirstName('Demo');
+        $admin->setLastName('Admin');
         $admin->setRoles(['ROLE_ADMIN']);
+        $admin->setIsVerified(true);
         $admin->setPassword($this->passwordHasher->hashPassword($admin, 'password'));
 
         $manager->persist($admin);
@@ -26,7 +29,10 @@ class UserFixtures extends Fixture
         // USER CLASSIQUE
         $user = new User();
         $user->setEmail('user@store.com');
+        $user->setFirstName('Demo');
+        $user->setLastName('User');
         $user->setRoles(['ROLE_USER']);
+        $user->setIsVerified(true);
         $user->setPassword($this->passwordHasher->hashPassword($user, 'password'));
 
         $manager->persist($user);

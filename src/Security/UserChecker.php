@@ -6,6 +6,7 @@ use App\Entity\User;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusException;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+
 class UserChecker implements UserCheckerInterface
 {
     public function checkPreAuth(UserInterface $user): void
@@ -20,7 +21,6 @@ class UserChecker implements UserCheckerInterface
         }
 
         if(!$user->isVerified()){
-            // throw new CustomUserMessageAccountStatusException('Votre adresse email n\'est pas valide.');
             throw new CustomUserMessageAccountStatusException('error.email_not_verified');
         }
     }

@@ -123,6 +123,7 @@ class UserController extends AbstractController
         }
 
         $user->setRoles([$role]);
+        $user->setUpdatedAt(new \DateTimeImmutable());
         $em->flush();
 
         $this->addFlash('success', 'Le rôle de l’utilisateur a été mis à jour.');

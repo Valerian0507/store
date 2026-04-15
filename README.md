@@ -1,159 +1,104 @@
-# AquaWorld – Site web e-commerce Symfony
+# AquaWorld
 
-## Présentation
+Application e-commerce développée avec Symfony dans le cadre de la formation **Développeur Web et Web Mobile (TP DWWM)**.
 
-Ce projet est une application e-commerce développée dans le cadre de ma formation **Développeur Web et Web Mobile (TP DWWM)**.
+Le projet couvre un parcours complet de boutique en ligne avec catalogue public, panier, compte utilisateur, tunnel de commande et espace d'administration.
 
-L’objectif était de concevoir une application web complète avec une partie publique, un espace utilisateur et un espace d’administration, en appliquant une architecture claire ainsi que de bonnes pratiques de développement : sécurité, validation, gestion des rôles, protection CSRF, gestion de fichiers, séparation de la logique métier et utilisation d’une base de données relationnelle.
-
----
-
-## Fonctionnalités principales
+## Fonctionnalités
 
 ### Partie publique
 
-- affichage du catalogue produits
-- consultation de la fiche d’un produit
+- page d'accueil
+- catalogue produits avec recherche, tri, filtre par catégorie et pagination
+- fiche détail d'un produit
 - ajout au panier
 - gestion du panier
+- pages légales
 
-### Authentification / sécurité
+### Authentification et sécurité
 
 - inscription
 - connexion / déconnexion
-- vérification d’email
-- renvoi de l’email de confirmation
-- réinitialisation du mot de passe
-- blocage de la connexion si l’email n’est pas vérifié
+- vérification d'email
+- renvoi du lien de vérification
+- blocage de la connexion si le compte n'est pas vérifié
+- protection CSRF sur les actions sensibles
+- gestion des rôles `ROLE_USER` et `ROLE_ADMIN`
 
 ### Espace utilisateur
 
-- tableau de bord du profil
+- tableau de bord profil
 - consultation des commandes
-- détail d’une commande
-- gestion des adresses :
-  - liste
-  - création
-  - modification
-  - suppression
-  - contrôle de propriété
+- détail d'une commande
+- gestion des adresses
+- définition d'une adresse par défaut
 
-### Panier et commande
+### Checkout
 
 - panier en session pour les visiteurs
 - panier persistant en base pour les utilisateurs connectés
-- fusion du panier session vers le panier utilisateur après connexion
-- checkout
+- fusion du panier visiteur vers le panier utilisateur après connexion
+- récapitulatif de commande
 - création de commande
-- page de confirmation avec ViewModel
+- page de confirmation basée sur des ViewModels
 
 ### Administration
 
-- gestion des produits :
-
-  - liste
-  - création
-  - modification
-  - suppression
-  - upload d’image
-  - import initial du catalogue produits depuis un fichier JSON
-- gestion des commandes :
-
-  - liste
-  - détail
-  - mise à jour du statut
-  - recherche
-  - filtres
-  - pagination
-- gestion des catégories :
-
-  - liste
-  - création
-  - modification
-  - suppression
-- gestion des utilisateurs :
-
-  - liste
-  - détail
-  - commandes récentes
-  - mise à jour du rôle
-  - recherche / filtres / pagination
-  - bloc adresses
-
----
+- gestion des produits
+- upload et suppression d'image produit
+- import initial du catalogue depuis un fichier JSON
+- gestion des catégories
+- gestion des commandes avec recherche, filtres, pagination et mise à jour du statut
+- gestion des utilisateurs avec recherche, filtres, pagination, détail et changement de rôle
 
 ## Stack technique
 
-- **PHP 8.2+**
-- **Symfony 7.4**
-- **MySQL**
-- **Doctrine ORM**
-- **Twig**
-- **Docker**
-- **AssetMapper**
-- **Bootstrap**
-- sans Webpack Encore
-
----
+- PHP 8.2+
+- Symfony 7.4
+- Doctrine ORM
+- Doctrine Migrations
+- MySQL 8
+- Twig
+- AssetMapper
+- Bootstrap
+- Docker Compose
+- Mailpit
+- phpMyAdmin
 
 ## Architecture
 
-Le projet est structuré en trois zones principales :
+Le projet est organisé autour de trois zones principales :
 
-- **partie publique**
-- **espace profil utilisateur**
-- **espace administration**
+- partie publique
+- espace profil utilisateur
+- espace administration
 
-Architecture générale :
+Organisation générale :
 
-- **Controller -> Repository / Service -> Twig**
+- `Controller -> Repository / Service -> Twig`
 
 Choix techniques principaux :
 
-- séparation de la logique métier dans les services
-- utilisation de ViewModel pour certaines pages
-- gestion des rôles `ROLE_USER` / `ROLE_ADMIN`
-- protection CSRF sur les actions sensibles
-- contrôle de sécurité et de propriété sur les données utilisateur
-- vérification d’email avec `VerifyEmailBundle`
-- contrôle d’accès à la connexion avec un `UserChecker`
-- fusion du panier après connexion via un subscriber
-
----
-
-## Compétences mobilisées
-
-Ce projet m’a permis de mobiliser plusieurs compétences du TP DWWM :
-
-- développer une application web dynamique avec Symfony
-- concevoir et manipuler une base de données relationnelle
-- mettre en œuvre des fonctionnalités sécurisées
-- structurer une application selon une architecture claire
-- gérer des rôles utilisateurs et des accès
-- développer une interface utilisateur avec Twig et Bootstrap
-- administrer des contenus, des commandes et des utilisateurs
-
----
+- logique métier extraite dans des services
+- utilisation de ViewModels pour le checkout et la page de succès
+- contrôle de propriété sur les données utilisateur
+- `UserChecker` pour empêcher la connexion d'un compte non vérifié
+- subscriber de connexion pour fusionner le panier session et le panier persistant
 
 ## Prérequis
-
-Avant de lancer le projet, il faut disposer de :
 
 - PHP 8.2 ou supérieur
 - Composer
 - Docker et Docker Compose
-- MySQL
-- Symfony CLI (optionnel mais pratique)
-
----
+- Symfony CLI (optionnel, pour lancer le serveur de dev)
 
 ## Installation
 
 ### 1. Cloner le projet
 
 ```bash
-git clone <URL_DU_REPO>
-cd <NOM_DU_DOSSIER>
+git clone https://github.com/Valerian0507/store.git
+cd store
 ```
 
 ### 2. Installer les dépendances PHP
@@ -162,24 +107,41 @@ cd <NOM_DU_DOSSIER>
 composer install
 ```
 
-### 3. Configurer les variables d’environnement
-
-Créer un fichier `.env.local` et configurer notamment :
-
-```env
-DATABASE_URL="mysql://user:password@127.0.0.1:3306/nom_de_la_base?serverVersion=8.0"
-MAILER_DSN=null://null
-```
-
-Adapter les valeurs selon votre environnement local.
-
-### 4. Démarrer les services Docker
+### 3. Démarrer les services Docker
 
 ```bash
 docker compose up -d
 ```
 
-### 5. Créer la base de données
+Services fournis par `compose.yaml` :
+
+- MySQL sur `127.0.0.1:3307`
+- phpMyAdmin sur `http://127.0.0.1:8080`
+- Mailpit sur `http://127.0.0.1:8025`
+
+### 4. Configurer l'environnement local
+
+Créer un fichier `.env.local` avec une configuration adaptée a votre machine. Exemple :
+
+```env
+DATABASE_URL="mysql://store_user:mot_de_passe@127.0.0.1:3307/store_db?serverVersion=8.0&charset=utf8mb4"
+MAILER_DSN=smtp://localhost:1025
+APP_URL=http://127.0.0.1:8000
+```
+
+
+
+Les valeurs par defaut definies dans `compose.yaml` sont :
+
+```env
+utilisateur : `store_user`
+base de donnees : `store_db`
+port : `3307`
+```
+
+Si vous utilisez les valeurs par défaut du `docker compose`, adaptez simplement le mot de passe a votre configuration locale
+
+### 5. Créer la base de donnees
 
 ```bash
 php bin/console doctrine:database:create
@@ -191,92 +153,78 @@ php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
 ```
 
-### 7. Charger les données de démonstration
+### 7. Charger les fixtures utilisateur
 
 ```bash
 php bin/console doctrine:fixtures:load
 ```
 
-Les fixtures permettent de créer les comptes de démonstration, notamment les utilisateurs et l’administrateur.
+### 8. Importer le catalogue produits
 
-### 8. Importer les produits depuis le fichier JSON
-
-Le catalogue peut être initialisé à partir d’un fichier JSON situé par défaut dans : ***var/data/catalogue.json***
+Le projet fournit un importeur JSON via la commande suivante :
 
 ```bash
 php bin/console app:import-products
 ```
 
-Si besoin, un autre fichier peut être passé en argument :
+Par défaut, le fichier attendu est :
+
+```text
+var/data/catalogue.json
+```
+
+Il est aussi possible de fournir un autre fichier :
 
 ```bash
 php bin/console app:import-products chemin/vers/mon-fichier.json
 ```
 
----
+### 9. Lancer l'application
 
-## Base de données
-
-La base de données repose sur plusieurs entités principales :
-
-- User
-- Product
-- Category
-- Address
-- Order
-- OrderItem
-- Cart
-- CartItem
-
-Le schéma permet notamment :
-
-- la gestion des utilisateurs et de leurs rôles
-- la gestion du catalogue produits
-- la gestion des adresses utilisateur
-- la gestion des commandes et de leurs lignes
-- la persistance du panier utilisateur
-
-Le projet permet également le chargement initial de données produits à partir d’un fichier JSON, si cette fonctionnalité est utilisée pour alimenter le catalogue de démonstration.
-
----
-
-## Lancement du projet
-
-Selon votre configuration, vous pouvez lancer le projet avec Symfony CLI :
+Avec Symfony CLI :
 
 ```bash
 symfony server:start
 ```
 
-Puis accéder à l’application via :
+Application disponible ensuite sur :
 
-```bash
+```text
 http://127.0.0.1:8000
 ```
 
----
-
 ## Comptes de démonstration
 
-```md
-## Administrateur
+Après chargement des fixtures :
 
-- email : `admin@example.com`
+### Administrateur
+
+- email : `admin@store.com`
 - mot de passe : `password`
 
-## Utilisateur
+### Utilisateur
 
-- email : `user@example.com`
+- email : `user@store.com`
 - mot de passe : `password`
 
-> Adapter ces identifiants selon vos fixtures.
-```
+## Entités principales
 
----
+- `User`
+- `Product`
+- `Category`
+- `Address`
+- `Order`
+- `OrderItem`
+- `Cart`
+- `CartItem`
 
 ## Captures d'écran
 
-Voici quelques écrans représentatifs de l’application :
+### Page d'accueil
+
+![Page d'accueil 1](docs/screenshots/page-d'accueil1.png)
+
+![Page d'accueil 1](docs/screenshots/page-d'accueil2.png)
 
 ### Catalogue produits
 
@@ -294,6 +242,14 @@ Voici quelques écrans représentatifs de l’application :
 
 ![Checkout](docs/screenshots/checkout.png)
 
+### Connexion
+
+![Connexion](docs/screenshots/login.png)
+
+### Inscription
+
+![Inscription](docs/screenshots/register.png)
+
 ### Administration des produits
 
 ![Administration des produits](docs/screenshots/admin-products.png)
@@ -306,21 +262,12 @@ Voici quelques écrans représentatifs de l’application :
 
 ![Administration des utilisateurs](docs/screenshots/admin-users.png)
 
----
+## Limites actuelles
 
-## Axes d’amélioration
-
-Plusieurs évolutions peuvent être envisagées :
-
-- paiement en ligne réel
-- gestion de stock
-- tableau de bord de statistiques en administration
-- amélioration de l’accessibilité
-- tests automatisés
-- amélioration du design responsive
-- envoi d’emails transactionnels supplémentaires
-
----
+- pas de paiement en ligne réel
+- pas de gestion de stock au moment de la commande
+- pas de réinitialisation de mot de passe
+- pas encore de tests automatisés métier
 
 ## Auteur
 

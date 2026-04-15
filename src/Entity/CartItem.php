@@ -27,7 +27,7 @@ class CartItem
     private ?int $quantity = null;
 
     #[ORM\ManyToOne(inversedBy: 'cartItems')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Product $product = null;
 
     public function getId(): ?int
