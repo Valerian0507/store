@@ -6,14 +6,14 @@
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h1 class="h2 fw-bold mb-1">My Orders</h1>
+            <h1 class="h2 fw-bold mb-1">Mes Commandes</h1>
             <p class="text-muted mb-0">
                 Consultez vos commandes récentes et suivez leur statut.
             </p>
         </div>
 
         <a href="{{ path('app_profile_index') }}" class="btn btn-outline-secondary">
-            Back to Profile
+            Retour au tableau de bord
         </a>
     </div>
 
@@ -22,10 +22,10 @@
             <div class="card-body py-5 text-center">
                 <h2 class="h4 mb-3">No orders yet</h2>
                 <p class="text-muted mb-4">
-                    You have not placed any orders yet.
+                    Vous n'avez encore passé aucune commande.
                 </p>
                 <a href="{{ path('app_products_index') }}" class="btn btn-primary">
-                    Start shopping
+                    Commencer achat
                 </a>
             </div>
         </div>
@@ -50,7 +50,7 @@
                     <div class="card-body">
                         <div class="row g-3 align-items-center">
                             <div class="col-12 col-md-3">
-                                <div class="text-muted small mb-1">Reference</div>
+                                <div class="text-muted small mb-1">Référence</div>
                                 <div class="fw-semibold">
                                     {{ order.reference ?? ('#' ~ order.id) }}
                                 </div>
@@ -79,7 +79,7 @@
 
                             <div class="col-12 col-md-2 text-md-end">
                                 <a href="{{ path('app_profile_orders_show', { id: order.id }) }}" class="btn btn-outline-primary">
-                                    View details
+                                    Voir les détails
                                 </a>
                             </div>
                         </div>

@@ -64,7 +64,7 @@
 {% endblock %}
 
 {% block admin_content %}
-<div class="container">
+<div class="container py-4">
     {% set statusBadgeClasses = {
         'pending': 'bg-warning text-dark',
         'paid': 'bg-success text-white',
@@ -73,7 +73,7 @@
     } %}
 
     <div class="d-flex justify-content-between align-items-center mb-2 mt-4">
-        <h1 class="h2 fw-bold mb-1">Orders</h1>
+        <h1 class="h2 fw-bold mb-1">Commandes</h1>
 
         <a href="{{ path('admin_dashboard') }}" class="btn btn-outline-secondary">
             Retour au tableau de bord
@@ -83,7 +83,7 @@
     <div class="card shadow-sm mb-4">
         <div class="card-body">
             <form method="get" action="{{ path('admin_orders_index') }}" class="row g-3 align-items-end">
-                <div class="col-12 col-md-4 col-lg-3">
+                <div class="col-12 col-md-4 col-lg-2">
                     <label for="status" class="form-label">Statut</label>
                     <select name="status" id="status" class="form-select">
                         <option value="">Tous les statuts</option>
@@ -96,7 +96,7 @@
                     </select>
                 </div>
 
-                <div class="col-12 col-md-5 col-lg-4">
+                <div class="col-12 col-md">
                     <label for="search" class="form-label">Recherche</label>
                     <input
                         type="text"
@@ -108,7 +108,7 @@
                     >
                 </div>
 
-                <div class="col-12 col-md-auto">
+                <div class="col-12 col-md-auto d-flex gap-2">
                     <button type="submit" class="btn btn-primary">
                         Filtrer
                     </button>
@@ -155,7 +155,7 @@
                                     {{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €
                                 </td>
                                 <td class="text-end">
-                                    <a href="{{ path('admin_orders_show', { id: order.id }) }}" class="btn btn-sm btn-primary">
+                                    <a href="{{ path('admin_orders_show', { id: order.id }) }}" class="btn btn-sm btn-outline-primary">
                                         Voir
                                     </a>
                                 </td>

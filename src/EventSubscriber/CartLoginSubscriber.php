@@ -32,7 +32,7 @@ final class CartLoginSubscriber implements EventSubscriberInterface
         $this->cartManager->mergeSessionCartIntoUserCart($user);
     }
 
-    
+
 }
 
 

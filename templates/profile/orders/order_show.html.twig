@@ -7,7 +7,7 @@
 	<div class="container py-4">
 		<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
 			<div>
-				<h1 class="h2 fw-bold mb-1">Order Details</h1>
+				<h1 class="h2 fw-bold mb-1">Détails de la Commande</h1>
 				<p class="text-muted mb-0">
 					Date:
 					<span class="fw-semibold">{{ order.createdAt|date('d M Y') }}</span>
@@ -17,7 +17,7 @@
 			</div>
 
 			<a href="{{ path('app_profile_orders') }}" class="btn btn-outline-secondary">
-				Back to My Orders
+				Retour
 			</a>
 		</div>
 
@@ -27,9 +27,9 @@
 				<div class="card shadow-sm border-0">
 					<div class="card-body">
 						<div class="d-flex justify-content-between align-items-center mb-4">
-							<h2 class="h4 mb-0">Items</h2>
+							<h2 class="h4 mb-0">Articles</h2>
 							<span class="text-muted small">{{ order.items|length }}
-								item(s)</span>
+								article(s)</span>
 						</div>
 
 						<div class="d-flex flex-column gap-3">
@@ -51,7 +51,7 @@
 										<div class="col-12 col-sm-9 col-md-4">
 											<div class="fw-semibold mb-1">{{ item.productName }}</div>
 											<div class="text-muted small">
-												Snapshot from order
+												Instantané de la commande
 											</div>
 										</div>
 
@@ -61,13 +61,13 @@
 										</div>
 
 										<div class="col-4 col-md-2">
-											<div class="text-muted small mb-1">Unit price</div>
+											<div class="text-muted small mb-1">Prix unitaire</div>
 											<div>{{ (item.unitPriceCents / 100)|number_format(2, '.', ' ') }}
 												€</div>
 										</div>
 
 										<div class="col-4 col-md-2 text-md-end">
-											<div class="text-muted small mb-1">Line total</div>
+											<div class="text-muted small mb-1">Total</div>
 											<div class="fw-semibold">
 												{{ (item.lineTotalCents / 100)|number_format(2, '.', ' ') }}
 												€
@@ -84,16 +84,16 @@
 			<div class="col-12 col-lg-4">
 				<div class="card shadow-sm border-0 mb-4">
 					<div class="card-body">
-						<h2 class="h5 mb-3">Order Summary</h2>
+						<h2 class="h5 mb-3">Récapitulatif de la Commande</h2>
 
 						<div class="d-flex justify-content-between mb-2">
-							<span class="text-muted">Subtotal</span>
+							<span class="text-muted">Total</span>
 							<span>{{ (order.subtotalCents / 100)|number_format(2, '.', ' ') }}
 								€</span>
 						</div>
 
 						<div class="d-flex justify-content-between mb-3">
-							<span class="text-muted">Shipping</span>
+							<span class="text-muted">Frais de livraison</span>
 							<span>{{ (order.shippingCents / 100)|number_format(2, '.', ' ') }}
 								€</span>
 						</div>
@@ -112,7 +112,7 @@
 
 				<div class="card shadow-sm border-0">
 					<div class="card-body">
-						<h2 class="h5 mb-3">Shipping Address</h2>
+						<h2 class="h5 mb-3">Adresse de Livraison</h2>
 
 						<div class="fw-semibold">{{ order.shippingFullName }}</div>
 						<div>{{ order.shippingStreet }}</div>

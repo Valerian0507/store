@@ -1,10 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Order confirmed
-{% endblock %}
+{% block title %}Order confirmed{% endblock %}
 
 {% block body %}
-	<div class="container py-5">
+	<div class="container py-4">
 		<div class="mx-auto" style="max-width: 980px;">
 
 			<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
@@ -15,21 +14,19 @@
 							✓
 						</div>
 
-						<h1 class="fw-bold mb-3">Thank You! Your Order is Confirmed.</h1>
-						<p class="text-muted fs-5 mb-0">Your order has been successfully placed.</p>
+						<h1 class="fw-bold mb-3">Merci pour votre commande! Votre commande est confirmée.</h1>
+						<p class="text-muted fs-5 mb-0">Votre commande a été passée avec succès.</p>
 					</div>
-
-					<hr class="mb-4">
 
 					<div class="card rounded-4 border mb-4">
 						<div class="card-header bg-white fw-semibold fs-4 py-3">
-							Order Information
+							Informations de Commande
 						</div>
 
 						<div class="card-body p-4">
 							<div class="row gy-3 mb-4">
 								<div class="col-md-4">
-									<div class="text-muted mb-1">Order Number:</div>
+									<div class="text-muted mb-1">Numéro de Commande:</div>
 									<div class="fw-semibold">{{ order.reference }}</div>
 								</div>
 
@@ -40,7 +37,7 @@
                                 </div>
 
 								<div class="col-md-4">
-									<div class="text-muted mb-1">Status:</div>
+									<div class="text-muted mb-1">Statut:</div>
 									<span class="badge rounded-pill px-3 py-2 {{ order.statusBadgeClass }}">
 										{{ order.statusLabel }}
 									</span>
@@ -58,7 +55,7 @@
 							<hr>
 
 							<div>
-								<div class="fw-semibold mb-2">Shipping Address:</div>
+								<div class="fw-semibold mb-2">Adresse de Livraison:</div>
 								<div>{{ order.shippingFullName }}</div>
 								<div>{{ order.shippingStreet }}</div>
 								<div>{{ order.shippingCity }},
@@ -70,12 +67,12 @@
 
 					<div class="card rounded-4 border">
 						<div class="card-header bg-white fw-semibold fs-4 py-3">
-							Items in Your Order
+							Articles dans votre commande
 						</div>
 
 						<div class="card-body p-4">
 							{% if order.items is empty %}
-								<p class="text-muted mb-0">No items found.</p>
+								<p class="text-muted mb-0">Aucun article trouvé.</p>
 							{% else %}
 								{% for item in order.items %}
                                     <div class="py-3 {% if not loop.last %}border-bottom{% endif %}">
@@ -125,13 +122,13 @@
 								<div class="d-flex justify-content-end mt-4">
 									<div style="min-width: 270px;">
 										<div class="d-flex justify-content-between mb-2">
-											<span class="text-muted">Subtotal:</span>
+											<span class="text-muted">Sous-Total:</span>
 											<span class="fw-semibold">€
 												{{ (order.subtotalCents / 100)|number_format(2, '.', ' ') }}</span>
 										</div>
 
 										<div class="d-flex justify-content-between mb-3">
-											<span class="text-muted">Shipping:</span>
+											<span class="text-muted">Expédition:</span>
 											<span class="fw-semibold">€
 												{{ (order.shippingCents / 100)|number_format(2, '.', ' ') }}</span>
 										</div>
@@ -153,11 +150,11 @@
 
 				<div class="border-top bg-white px-4 py-4 px-md-5 d-flex flex-column flex-md-row justify-content-between gap-3">
 					<a href="{{ path('app_products_index') }}" class="btn btn-outline-secondary btn-lg px-4">
-						Continue Shopping
+						Continuer vos achats
 					</a>
 
 					<button type="button" class="btn btn-success btn-lg px-4" disabled>
-						View My Orders
+						    Voir Mes Commandes
 					</button>
 				</div>
 			</div>

@@ -16,7 +16,17 @@
             <div class="card-body">
                 <form method="get" action="{{ path('admin_users_index') }}">
                     <div class="row g-3 align-items-end">
-                        <div class="col-12 col-md-6">
+
+                        <div class="col-12 col-md-2">
+                            <label for="verified" class="form-label">Vérifié</label>
+                            <select id="verified" name="verified" class="form-select">
+                                <option value="" {% if verifiedFilter == '' %}selected{% endif %}>Tous</option>
+                                <option value="yes" {% if verifiedFilter == 'yes' %}selected{% endif %}>Oui</option>
+                                <option value="no" {% if verifiedFilter == 'no' %}selected{% endif %}>Non</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12 col-md">
                             <label for="q" class="form-label">Recherche par email</label>
                             <input
                                 type="text"
@@ -28,16 +38,7 @@
                             >
                         </div>
 
-                        <div class="col-12 col-md-3">
-                            <label for="verified" class="form-label">Vérifié</label>
-                            <select id="verified" name="verified" class="form-select">
-                                <option value="" {% if verifiedFilter == '' %}selected{% endif %}>Tous</option>
-                                <option value="yes" {% if verifiedFilter == 'yes' %}selected{% endif %}>Oui</option>
-                                <option value="no" {% if verifiedFilter == 'no' %}selected{% endif %}>Non</option>
-                            </select>
-                        </div>
-
-                        <div class="col-12 col-md-3 d-flex gap-2 ">
+                        <div class="col-12 col-md-auto d-flex gap-2 ">
                             <button type="submit" class="btn btn-primary">
                                 Filtrer
                             </button>

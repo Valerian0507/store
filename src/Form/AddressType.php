@@ -14,16 +14,16 @@ class AddressType extends AbstractType
     {
         $builder
             ->add('street', TextType::class, [
-                'label' => 'Street address',
+                'label' => 'Adresse postale',
             ])
             ->add('postalCode', TextType::class, [
-                'label' => 'Postal code',
+                'label' => 'Code postal',
             ])
             ->add('city', TextType::class, [
-                'label' => 'City',
+                'label' => 'Ville',
             ])
             ->add('country', TextType::class, [
-                'label' => 'Country',
+                'label' => 'Pays',
             ])
         ;
     }

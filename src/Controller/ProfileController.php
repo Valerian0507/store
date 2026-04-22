@@ -131,7 +131,7 @@ final class ProfileController extends AbstractController
         $address = $addressRepository->findOneByIdAndUser($id, $user);
 
         if ($address === null) {
-            throw $this->createNotFoundException('Adresse introuvable.');
+            throw $this->createNotFoundException('L\'adresse introuvable.');
         }
 
         $form = $this->createForm(AddressType::class, $address);
@@ -142,15 +142,15 @@ final class ProfileController extends AbstractController
 
             $entityManager->flush();
 
-            $this->addFlash('success', 'Address updated successfully.');
+            $this->addFlash('success', 'L\'adresse a été modifiée avec succès');
 
             return $this->redirectToRoute('app_profile_addresses');
         }
 
             return $this->render('profile/addresses/address_form.html.twig', [
             'form' => $form->createView(),
-            'pageTitle' => 'Edit Address',
-            'submitLabel' => 'Update address',
+            'pageTitle' => 'Modifier l\'adresse',
+            'submitLabel' => 'Mettre à jour',
         ]);
     }
 
@@ -169,7 +169,7 @@ final class ProfileController extends AbstractController
         $address = $addressRepository->findOneByIdAndUser($id, $user);
 
         if ($address === null) {
-            throw $this->createNotFoundException('Address not found.');
+            throw $this->createNotFoundException('Adresse introuvable.');
         }
 
         if (
@@ -190,7 +190,7 @@ final class ProfileController extends AbstractController
             $addressManager->assignNewDefaultAfterDeletion($user);
         }
 
-        $this->addFlash('success', 'Address deleted successfully.');
+        $this->addFlash('success', 'Adresse supprimée avec succès.');
 
         return $this->redirectToRoute('app_profile_addresses');
     }

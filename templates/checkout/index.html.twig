@@ -3,13 +3,30 @@
 {% block title %}Checkout
 {% endblock %}
 
+{% block stylesheets %}
+    <style>
+        .checkout-item-title{
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
 	<div class="container py-4">
-		<h1 class="mb-4">Checkout</h1>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+    		<h1 class="">Passer la commande</h1>
+            <a href="{{ path('app_cart_index') }}" class="btn btn-outline-secondary">
+				Retour
+			</a>
+        </div>
 
 		{% if errors is not empty %}
 			<div class="alert alert-danger" role="alert">
-				Please correct the highlighted fields.
+				Veuillez corriger les champs en surbrillance.
 			</div>
 		{% endif %}
 
@@ -22,17 +39,17 @@
 							<input type="hidden" name="_token" value="{{ csrf_token('checkout') }}">
 							{% set useManualAddress = selectedAddressId == 0 %}
 							{% if addresses is not empty %}
-								<div class="checkout-selected-address mb-4 {% if useManualAddress %}d-none{% endif %}" id="checkout-selected-address">
+								<div class="checkout-selected-address mb-3 {% if useManualAddress %}d-none{% endif %}" id="checkout-selected-address">
                                 	<div class="d-flex justify-content-between align-items-start gap-3">
 										<div>
 											<div class="fw-semibold mb-1">
-												Delivering to
+												Livraison à
 												<span id="checkout-current-fullname">
 													{% if currentAddress is not null and (currentAddress.user.firstName or currentAddress.user.lastName) %}
 														{{ currentAddress.user.firstName }}
 														{{ currentAddress.user.lastName }}
 													{% else %}
-														Account owner
+														Propriétaire du compte
 													{% endif %}
 												</span>
 											</div>
@@ -47,19 +64,18 @@
 											</div>
 
 											<div class="text-muted small mt-1 {% if currentAddress is null or not currentAddress.isDefault %}d-none{% endif %}" id="checkout-current-default-badge">
-												Default address
+												Adresse par défaut
 											</div>
 										</div>
 
 										<button type="button" class="checkout-change-link" id="checkout-change-address">
-											Change
+											Modifier
 										</button>
 									</div>
 								</div>
 
-								<div class="checkout-addresses-panel mb-4 d-none" id="checkout-addresses-panel">
-                                	<div class="border-top pt-3">
-										<h3 class="h5 mb-3">Delivery addresses ({{ addresses|length }})</h3>
+								<div class="checkout-addresses-panel mb-3 d-none" id="checkout-addresses-panel">
+										<h3 class="h5 mb-3">Adresses de livraison ({{ addresses|length }})</h3>
 
 										<div class="d-flex flex-column gap-3">
 											{% for address in addresses %}
@@ -74,7 +90,7 @@
 																{{ address.user.firstName }}
 																{{ address.user.lastName }}
 															{% else %}
-																Account owner
+																Propriétaire du compte
 															{% endif %}
 														</div>
 
@@ -87,12 +103,12 @@
 
 														<div class="mt-1 d-flex gap-2 flex-wrap">
 															<a href="{{ path('app_profile_addresses_edit', { id: address.id }) }}" class="small text-decoration-none">
-																Edit address
+																Modifier l'adresse
 															</a>
 														</div>
 
 														{% if address.isDefault %}
-															<div class="text-muted small mt-1">Default address</div>
+															<div class="text-muted small mt-1">Adresse par défaut</div>
 														{% endif %}
 													</div>
 												</label>
@@ -100,26 +116,25 @@
 
 											<div class="mt-3">
 												<button type="button" class="checkout-change-link" id="checkout-add-address">
-													Add a new address
+													Ajouter l'adresse
 												</button>
 
 												<input type="radio" name="selectedAddress" value="0" id="selectedAddressManual" class="d-none" {% if selectedAddressId == 0 %} checked {% endif %}>
 											</div>
 										</div>
-									</div>
 								</div>
 							{% endif %}
                             {% if addresses is not empty %}
                                 <div class="{% if not useManualAddress %}d-none{% endif %} mb-3" id="checkout-manual-actions">
                                     <button type="button" class="checkout-change-link" id="checkout-use-saved-addresses">
-                                        Use a saved address
+                                        Utiliser l'adresse enregistrée
                                     </button>
                                 </div>
                             {% endif %}
 
 							<div class="row g-3 {% if not useManualAddress %}d-none{% endif %}" id="checkout-manual-address-fields">
 								<div class="col-md-6">
-									<label for="firstName" class="form-label">First name</label>
+									<label for="firstName" class="form-label">Prénom</label>
 									<input id="firstName" type="text" name="firstName" class="js-manual-address-field form-control {{ errors.firstName is defined ? 'is-invalid' : '' }}" value="{{ shippingData.firstName|default('') }}" autocomplete="given-name" maxlength="100" required>
 									{% if errors.firstName is defined %}
 										<div class="invalid-feedback">
@@ -129,7 +144,7 @@
 								</div>
 
 								<div class="col-md-6">
-									<label for="lastName" class="form-label">Last name</label>
+									<label for="lastName" class="form-label">Nom</label>
 									<input id="lastName" type="text" name="lastName" class="js-manual-address-field form-control {{ errors.lastName is defined ? 'is-invalid' : '' }}" value="{{ shippingData.lastName|default('') }}" autocomplete="family-name" maxlength="100" required>
 									{% if errors.lastName is defined %}
 										<div class="invalid-feedback">
@@ -139,7 +154,7 @@
 								</div>
 
 								<div class="col-12">
-									<label for="street" class="form-label">Street</label>
+									<label for="street" class="form-label">Rue</label>
 									<input id="street" type="text" name="street" class="js-manual-address-field form-control {{ errors.street is defined ? 'is-invalid' : '' }}" value="{{ shippingData.street|default('') }}" autocomplete="address-line1" maxlength="255" required>
 									{% if errors.street is defined %}
 										<div class="invalid-feedback">
@@ -149,7 +164,7 @@
 								</div>
 
 								<div class="col-md-6">
-									<label for="city" class="form-label">City</label>
+									<label for="city" class="form-label">Ville</label>
 									<input id="city" type="text" name="city" class="js-manual-address-field form-control {{ errors.city is defined ? 'is-invalid' : '' }}" value="{{ shippingData.city|default('') }}" autocomplete="address-level2" maxlength="120" required>
 									{% if errors.city is defined %}
 										<div class="invalid-feedback">
@@ -159,7 +174,7 @@
 								</div>
 
 								<div class="col-md-3">
-									<label for="postalCode" class="form-label">Postal code</label>
+									<label for="postalCode" class="form-label">Code postal</label>
 									<input id="postalCode" type="text" name="postalCode" class="js-manual-address-field form-control {{ errors.postalCode is defined ? 'is-invalid' : '' }}" value="{{ shippingData.postalCode|default('') }}" autocomplete="postal-code" maxlength="20" required>
 									{% if errors.postalCode is defined %}
 										<div class="invalid-feedback">
@@ -169,7 +184,7 @@
 								</div>
 
 								<div class="col-md-3">
-									<label for="country" class="form-label">Country</label>
+									<label for="country" class="form-label">Pays</label>
 									<input id="country" type="text" name="country" class="js-manual-address-field form-control {{ errors.country is defined ? 'is-invalid' : '' }}" value="{{ shippingData.country|default('') }}" autocomplete="country-name" maxlength="120" required>
 									{% if errors.country is defined %}
 										<div class="invalid-feedback">
@@ -179,8 +194,8 @@
 								</div>
 							</div>
 
-							<button type="submit" class="btn btn-primary mt-4">
-								Place order
+							<button type="submit" class="btn btn-primary">
+								Passer la commande
 							</button>
 						</form>
 					</div>
@@ -200,26 +215,26 @@
 									<div class="d-flex gap-3 py-3 border-bottom">
 										<div style="width: 72px; flex: 0 0 72px;">
 											{% if item.image %}
-												<img src="{{ asset('uploads/products/' ~ item.image) }}" alt="{{ item.title }}" class="img-fluid rounded">
+												<img src="{{ asset('uploads/products/' ~ item.image) }}" alt="{{ item.title }}" class="img-fluid rounded" style="width: 72px; height: 72px; object-fit: contain;">
 											{% else %}
-												<img src="{{ asset('uploads/products/no-image.jpg') }}" alt="No image" class="img-fluid rounded">
+												<img src="{{ asset('uploads/products/no-image.jpg') }}" alt="No image" class="img-fluid rounded" style="width: 72px; height: 72px; object-fit: cover;">
 											{% endif %}
 										</div>
 
 										<div class="flex-grow-1">
-											<div class="fw-semibold">{{ item.title }}</div>
+											<div class="fw-semibold checkout-item-title">{{ item.title }}</div>
 											<div class="text-muted small">
 												Qty:
 												{{ item.quantity }}
 											</div>
 											<div class="text-muted small">
-												Unit price:
+												Prix unitaire:
 												{{ (item.unitPriceCents / 100)|number_format(2, '.', ' ') }}
 												€
 											</div>
 										</div>
 
-										<div class="text-end fw-semibold">
+										<div class="text-end fw-semibol flex-shrink-0 text-nowrap" style="width: 110px;">
 											{{ (item.subtotalCents / 100)|number_format(2, '.', ' ') }}
 											€
 										</div>
@@ -228,12 +243,12 @@
 							</div>
 
 							<div class="d-flex justify-content-between mb-2">
-								<span>Items</span>
+								<span>Articles</span>
 								<span>{{ summary.itemsCount }}</span>
 							</div>
 
 							<div class="d-flex justify-content-between mb-2">
-								<span>Subtotal</span>
+								<span>Sous-Total</span>
 								<span>{{ (summary.subtotalCents / 100)|number_format(2, '.', ' ') }}
 									€</span>
 							</div>

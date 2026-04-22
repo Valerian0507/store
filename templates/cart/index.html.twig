@@ -5,10 +5,6 @@
 
 {% block stylesheets %}
 	<style>
-		.cart-page {
-			padding: 2rem 0 3rem;
-		}
-
 		.cart-page__title {
 			margin-bottom: 1.5rem;
 			font-size: 2.4rem;
@@ -220,7 +216,8 @@
 			width: 100%;
 			max-width: 280px;
 			padding: 1.25rem;
-
+            text-align: end;
+            border-top: 1px solid #edf0f5;
 		}
 
 		.cart-summary__total {
@@ -251,15 +248,15 @@
 
 		@media(max-width: 991.98px) {
 			.cart-item {
-				grid-template-columns: 120px minmax(0, 1fr);
-			}
+                grid-template-columns: 100px minmax(0, 1fr) 110px;
+            }
 
-			.cart-item__aside {
-				grid-column: 1 / -1;
-				text-align: left;
-				padding-top: 0.5rem;
-				border-top: 1px solid #edf0f5;
-			}
+			.cart-item__title {
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
 		}
 
 		@media(max-width: 767.98px) {
@@ -306,7 +303,7 @@
 {% endblock %}
 
 {% block body %}
-	<section class="container cart-page">
+	<section class="container py-4">
 		<h1 class="cart-page__title">Panier</h1>
 
 		{% if items is empty %}
@@ -398,42 +395,41 @@
 		{% endif %}
 	</section>
 
-	<script>
-		function bindCartQtyControls() {
-const controls = document.querySelectorAll('.cart-item__qty-control');
+	 <script>
+			function bindCartQtyControls() {
+    	        const controls = document.querySelectorAll('.cart-item__qty-control');
 
-controls.forEach(function (control) {
-if (control.dataset.qtyBound === '1') {
-return;
-}
+    	        controls.forEach(function (control) {
+    	            if (control.dataset.qtyBound === '1') {  // Protection contre le double binding
+    	            return;
+    	            }
 
-control.dataset.qtyBound = '1';
+        	        control.dataset.qtyBound = '1';
 
-const input = control.querySelector('.cart-item__qty-input');
-const decreaseButton = control.querySelector('[data-qty-action="decrease"]');
-const increaseButton = control.querySelector('[data-qty-action="increase"]');
+        	        const input = control.querySelector('.cart-item__qty-input');
+        	        const decreaseButton = control.querySelector('[data-qty-action="decrease"]');
+        	        const increaseButton = control.querySelector('[data-qty-action="increase"]');
 
-if (! input || ! decreaseButton || ! increaseButton) {
-return;
-}
+        	        if (! input || ! decreaseButton || ! increaseButton) {
+        	            return;
+        	        }
 
-decreaseButton.addEventListener('click', function () {
-const currentValue = parseInt(input.value || '0', 10);
-const minValue = parseInt(input.min || '0', 10);
+        	        decreaseButton.addEventListener('click', function () {
+            	        const currentValue = parseInt(input.value || '0', 10);
+            	        const minValue = parseInt(input.min || '0', 10);
 
-if (currentValue > minValue) {
-input.value = currentValue - 1;
-}
-});
+            	        if (currentValue > minValue) {input.value = currentValue - 1;
+            	        }
+        	        });
 
-increaseButton.addEventListener('click', function () {
-const currentValue = parseInt(input.value || '0', 10);
-input.value = currentValue + 1;
-});
-});
-}
+        	        increaseButton.addEventListener('click', function () {
+            	        const currentValue = parseInt(input.value || '0', 10);
+            	        input.value = currentValue + 1;
+        	        });
+    	        });
+	        }
 
-document.addEventListener('DOMContentLoaded', bindCartQtyControls);
-document.addEventListener('turbo:load', bindCartQtyControls);
-	</script>
+	        document.addEventListener('DOMContentLoaded', bindCartQtyControls);
+	        document.addEventListener('turbo:load', bindCartQtyControls);
+		</script>
 {% endblock %}

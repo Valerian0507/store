@@ -121,7 +121,7 @@ Services fournis par `compose.yaml` :
 
 ### 4. Configurer l'environnement local
 
-Créer un fichier `.env.local` avec une configuration adaptée a votre machine. Exemple :
+Créer un fichier `.env.local` avec une configuration adaptée à votre machine. Exemple :
 
 ```env
 DATABASE_URL="mysql://store_user:mot_de_passe@127.0.0.1:3307/store_db?serverVersion=8.0&charset=utf8mb4"
@@ -129,19 +129,17 @@ MAILER_DSN=smtp://localhost:1025
 APP_URL=http://127.0.0.1:8000
 ```
 
+Les valeurs par défaut définies dans `compose.yaml` sont :
 
-
-Les valeurs par defaut definies dans `compose.yaml` sont :
-
-```env
+```md
 utilisateur : `store_user`
-base de donnees : `store_db`
+base de données: `store_db`
 port : `3307`
 ```
 
 Si vous utilisez les valeurs par défaut du `docker compose`, adaptez simplement le mot de passe a votre configuration locale
 
-### 5. Créer la base de donnees
+### 5. Créer la base de données
 
 ```bash
 php bin/console doctrine:database:create
@@ -224,7 +222,7 @@ Après chargement des fixtures :
 
 ![Page d'accueil 1](docs/screenshots/page-d'accueil1.png)
 
-![Page d'accueil 1](docs/screenshots/page-d'accueil2.png)
+![Page d'accueil 2](docs/screenshots/page-d'accueil2.png)
 
 ### Catalogue produits
 
