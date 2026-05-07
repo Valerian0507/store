@@ -1,8 +1,6 @@
+{# templates/cart/index.html.twig #}
 {% extends 'base.html.twig' %}
-
-{% block title %}Panier
-{% endblock %}
-
+{% block title %}Panier{% endblock %}
 {% block stylesheets %}
 	<style>
 		.cart-page__title {
@@ -300,6 +298,9 @@
 			}
 		}
 	</style>
+
+
+
 {% endblock %}
 
 {% block body %}
@@ -333,8 +334,7 @@
 
 							<p class="cart-item__price-line">
 								Prix unitaire :
-								{{ (item.unitPriceCents / 100)|number_format(2, ',', ' ') }}
-								€
+								{{ (item.unitPriceCents / 100)|number_format(2, ',', ' ') }}€
 							</p>
 
 							<p class="cart-item__qty-line">
@@ -343,22 +343,20 @@
 							</p>
 
 							<div class="cart-item__actions">
+                                {# Formulaire de mise à jour avec protection CSRF #}
 								<form method="post" action="{{ path('app_cart_update', { id: item.product.id }) }}" class="cart-item__update-form" data-turbo="false">
 									<div class="cart-item__qty-control">
 										<button type="button" class="cart-item__qty-btn" data-qty-action="decrease">−</button>
-
 										<input type="number" name="qty" value="{{ item.qty }}" min="0" class="cart-item__qty-input">
-
 										<button type="button" class="cart-item__qty-btn" data-qty-action="increase">+</button>
 									</div>
-
 									<input type="hidden" name="_token" value="{{ csrf_token('cart_update_' ~ item.product.id) }}">
-
 									<button type="submit" class="cart-item__button">
 										Mettre à jour
 									</button>
 								</form>
 
+                                {# Formulaire de suppression avec protection CSRF #}
 								<form method="post" action="{{ path('app_cart_remove', { id: item.product.id }) }}" class="cart-item__remove-form" data-turbo="false">
 									<input type="hidden" name="_token" value="{{ csrf_token('cart_remove_' ~ item.product.id) }}">
 									<button type="submit" class="cart-item__button--danger">
@@ -367,7 +365,6 @@
 								</form>
 							</div>
 						</div>
-
 						<aside class="cart-item__aside">
 							<p class="cart-item__unit-price">Prix</p>
 							<p class="cart-item__line-total">

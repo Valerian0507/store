@@ -38,13 +38,11 @@ class CartController extends AbstractController
 
         foreach ($rawCart as $productId => $qty) {
             $product = $productsById[$productId] ?? null;
-
             if (!$product) {
                 continue;
             }
 
             $unitPriceCents = $product->getPriceCents();
-
             if ($unitPriceCents === null) {
                 continue;
             }

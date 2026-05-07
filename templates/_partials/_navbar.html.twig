@@ -1,3 +1,5 @@
+
+{# templates/_partials/_navbar.html.twig #}
 {% set route = app.request.attributes.get('_route') %}
 
 <nav class="navbar navbar-expand-md navbar-light bg-light site-navbar">
@@ -6,32 +8,24 @@
             <img src="{{ asset('images/icons/logo4.png') }}" alt="Logo" class="logo">
         </a>
 
-        <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-        >
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse justify-content-between site-navbar__collapse" id="navbarNav">
+            {# Lien actif selon la route courante #}
             <ul class="navbar-nav site-navbar__nav">
                 <li class="nav-item">
                     <a class="nav-link {{ route == 'app_home' ? 'active' : '' }}" href="{{ path('app_home') }}">
                         Accueil
                     </a>
                 </li>
-
                 <li class="nav-item">
                     <a class="nav-link {{ route starts with 'app_products' ? 'active' : '' }}" href="{{ path('app_products_index') }}">
                         Produits
                     </a>
                 </li>
-
+                {# Navigation compte utilisateur #}
                 {% if is_granted('ROLE_ADMIN') %}
                     <li class="nav-item">
                         <a class="nav-link {{ route starts with 'admin_' ? 'active' : '' }}" href="{{ path('admin_dashboard') }}">

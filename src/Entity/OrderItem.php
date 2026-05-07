@@ -15,7 +15,7 @@ class OrderItem
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'items')]
-    #[ORM\JoinColumn(name: 'order_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')] // Вопросы на счет CASCADE уточнить нужно ли для этого проекта
+    #[ORM\JoinColumn(name: 'order_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')] // Вопросы на счет CASCADE уточнить нужно ли для этого проекта Можно использовать RESTRICT
     private ?Order $order = null;
 
     #[ORM\ManyToOne]

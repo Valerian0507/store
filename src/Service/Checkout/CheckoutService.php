@@ -16,38 +16,30 @@ final class CheckoutService
         private ProductRepository $productRepository,
         private CartManager $cartManager,
         private EntityManagerInterface $em
-        ){
+        ){}
 
-        }
-
+    // Génère une référence unique : ORD-20260419-9F2DF1F5
     private function generateOrderReference(): string
     {
         return 'ORD-' . (new \DateTimeImmutable())->format('Ymd') . '-' . strtoupper(bin2hex(random_bytes(4)));
     }
 
     /**
-     * @param array{
-     *     firstName: string,
-     *     lastName: string,
-     *     street: string,
-     *     city: string,
-     *     postalCode: string,
-     *     country: string
-     * } $shippingData
+     * Summary of createOrderFromCart
+     * @param User $user
+     * @param array $shippingData
+     * @throws LogicException
+     * @return Order
      */
     public function createOrderFromCart(User $user, array $shippingData): Order
     {
-
         $rawCart = $this->cartManager->getRaw();
-
         if($rawCart === []) {
             throw new LogicException("Impossible de créer une commande à partir d'un panier vide.");
             }
 
         $productIds = array_keys($rawCart);
-
         $products = $this->productRepository->findBy(['id' => $productIds]);
-
         $productsById = [];
 
         foreach ($products as $product) {
@@ -77,6 +69,7 @@ final class CheckoutService
                 throw new LogicException(sprintf("Prix introuvable pour le produit #%d.", $productId));
             }
 
+            // Snapshot : copie des données produit au moment de la commande
             $orderItem = OrderItem::fromProduct($product, $qty);
             $order->addItem($orderItem);
         }
@@ -85,9 +78,8 @@ final class CheckoutService
 
         $this->em->persist($order);
         $this->em->flush();
-        $this->cartManager->clear();
+        $this->cartManager->clear(); // Vide le panier après commande
 
         return $order;
     }
-
 }

@@ -43,7 +43,7 @@ class RegistrationController extends AbstractController
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 
-            // encode the plain password
+            // Hashage du mot de passe avant persistance
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
             $user->setRoles(['ROLE_USER']);
             $user->setIsVerified(false);
@@ -51,7 +51,7 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // generate a signed url and email it to the user
+            // générez une URL signée et envoyez-la par e-mail à l'utilisateur
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
                     ->from(new Address('no-reply@store.com', 'Store'))
@@ -60,7 +60,7 @@ class RegistrationController extends AbstractController
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
 
-            // do anything else you need here, like send an email
+            // faites tout ce dont vous avez besoin ici, comme envoyer un e-mail
             $this->addFlash('success', 'Compte créé. Vérifiez votre e-mail pour activer le compte.');
             return $this->redirectToRoute('app_login');
         }

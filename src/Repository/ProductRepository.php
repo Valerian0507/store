@@ -25,6 +25,7 @@ class ProductRepository extends ServiceEntityRepository
 //     * @return Product[] Returns an array of Product objects
 //     */
 
+    // Méthodes privées — chaque responsabilité est isolée
     private function createCatalogQueryBuilder(): QueryBuilder
     {
         return $this->createQueryBuilder('products');
@@ -47,20 +48,22 @@ class ProductRepository extends ServiceEntityRepository
         }
     }
 
-
-
     private function applySort(QueryBuilder $qb, string $sort): void
     {
         match ($sort) {
-            'price_asc'  => $qb->orderBy('products.priceCents', 'ASC')->addOrderBy('products.id', 'DESC'),
-            'price_desc' => $qb->orderBy('products.priceCents', 'DESC')->addOrderBy('products.id', 'DESC'),
-            'title_asc'  => $qb->orderBy('products.title', 'ASC')->addOrderBy('products.id', 'DESC'),
-            'title_desc' => $qb->orderBy('products.title', 'DESC')->addOrderBy('products.id', 'DESC'),
+            'price_asc'  => $qb->orderBy('products.priceCents', 'ASC')
+                               ->addOrderBy('products.id', 'DESC'),
+            'price_desc' => $qb->orderBy('products.priceCents', 'DESC')
+                               ->addOrderBy('products.id', 'DESC'),
+            'title_asc'  => $qb->orderBy('products.title', 'ASC')
+                               ->addOrderBy('products.id', 'DESC'),
+            'title_desc' => $qb->orderBy('products.title', 'DESC')
+                               ->addOrderBy('products.id', 'DESC'),
             default      => $qb->orderBy('products.id', 'DESC'),
         };
     }
 
-
+    // Méthode publique — composition claire des méthodes privées
     public function findForCatalog(
         int $page = 1,
         int $perPage = 20,
@@ -84,9 +87,6 @@ class ProductRepository extends ServiceEntityRepository
     }
 
 
-    /**
-     * Для страницы товара.
-     */
     public function findOneForCatalog(int $id): ?Product
     {
         return $this->createQueryBuilder('products')
@@ -112,8 +112,8 @@ class ProductRepository extends ServiceEntityRepository
     }
 
 
-//     1) Список категорий (для select)
-    
+    // 1) Список категорий (для select)
+
 
     // 2) Список товаров для каталога с опциональным фильтром
 
