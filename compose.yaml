@@ -4,10 +4,10 @@ services:
     image: mysql:8.0
     container_name: store-database
     environment:
-      MYSQL_DATABASE: store_db
-      MYSQL_USER: store_user
-      MYSQL_PASSWORD: REMOVED
-      MYSQL_ROOT_PASSWORD: REMOVED
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-store_db}
+      MYSQL_USER: ${MYSQL_USER:-store_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-!ChangeMe!}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-!ChangeMe!}
     ports:
       - "3307:3306"
     volumes:

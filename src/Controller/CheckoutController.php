@@ -78,12 +78,8 @@ final class CheckoutController extends AbstractController
 
     // Сбор данных для заказа и отправка, проверка CSRF, получение юзера, создание заказа, редирект
     #[Route('', name: 'submit', methods: ['POST'])]
-    public function submit(
-        Request $request,
-        CheckoutService $checkoutService,
-        CheckoutSummaryBuilder $checkoutSummaryBuilder,
-        AddressRepository $addressRepository
-    ): Response {
+    public function submit(Request $request, CheckoutService $checkoutService, CheckoutSummaryBuilder $checkoutSummaryBuilder, AddressRepository $addressRepository ): Response
+    {
         $user = $this->getUser();
 
         if (!$user instanceof User) {
