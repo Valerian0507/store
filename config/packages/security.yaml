@@ -41,6 +41,13 @@ security:
                 password_parameter: password
                 default_target_path: app_home
 
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800        # 1 semaine
+                secure: true             # HTTPS uniquement dans production -> если есть проблемы при тесте временно поставить false
+                httponly: true
+                samesite: lax
+
     # Note: Only the *first* matching rule is applied
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }

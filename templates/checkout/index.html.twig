@@ -11,6 +11,45 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+        .checkout-address-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.9rem;
+            padding: 0.25rem 0;
+            cursor: pointer;
+        }
+
+        .checkout-address-option__radio {
+            padding-top: 0.2rem;
+        }
+
+        .checkout-address-option__content {
+            color: #0f1111;
+            line-height: 1.45;
+        }
+
+        .checkout-selected-address {
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eaeded;
+        }
+
+        .checkout-change-link {
+            background: none;
+            border: 0;
+            padding: 0;
+            color: #2162a1;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .checkout-change-link:hover {
+            color: #c7511f;
+            text-decoration: underline;
+        }
+
+        .checkout-addresses-panel {
+            padding-top: 0.5rem;
+        }
     </style>
 {% endblock %}
 

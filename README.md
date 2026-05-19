@@ -265,7 +265,7 @@ Après chargement des fixtures :
 - pas de paiement en ligne réel
 - pas de gestion de stock au moment de la commande
 - pas de réinitialisation de mot de passe
-- pas encore de tests automatisés métier
+- pas encore de tests automatisés
 
 ## Auteur
 

@@ -172,12 +172,12 @@
 
             <form method="post">
                 <div class="auth-form__group">
-                    <label for="username" class="auth-form__label">E-mail</label>
+                    <label for="email" class="auth-form__label">E-mail</label>
                     <input
                         type="email"
                         value="{{ last_username }}"
                         name="email"
-                        id="username"
+                        id="email"
                         class="auth-form__input"
                         autocomplete="email"
                         required
@@ -208,7 +208,9 @@
                     </label>
 
                     {# Если у тебя есть route для reset password, потом можно раскомментировать #}
-                    {# <a href="{{ path('app_forgot_password_request') }}" class="auth-form__link">Mot de passe oublié ?</a> #}
+                    {# <p>
+                        <a href="{{ path('app_forgot_password_request') }}" class="auth-form__link">Mot de passe oublié ?</a>
+                    </p> #}
                 </div>
 
                 <button class="auth-form__submit" type="submit">

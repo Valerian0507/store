@@ -1,0 +1,236 @@
+.product-show__back {
+    display: inline-block;
+    margin-bottom: 1.25rem;
+    color: #304880;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.product-show__back:hover {
+    text-decoration: underline;
+}
+
+.product-show__layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    gap: 2rem;
+    align-items: start;
+}
+
+.product-show__media {
+    border: 1px solid #e6e8ee;
+    border-radius: 1.25rem;
+    background: #fff;
+    overflow: hidden;
+    box-shadow: 0 10px 28px rgba(12, 28, 58, 0.06);
+}
+
+.product-show__image-wrap {
+    height: 412px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+}
+
+.product-show__image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.product-show__panel {
+    border: 1px solid #e6e8ee;
+    border-radius: 1.25rem;
+    background: #f5f1eb;
+    padding: 1.5rem;
+    box-shadow: 0 10px 28px rgba(12, 28, 58, 0.06);
+}
+
+.product-show__title {
+    margin: 0 0 0.75rem;
+    font-size: 2.25rem;
+    line-height: 1.1;
+    font-weight: 700;
+    color: #10204a;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.product-show__ref {
+    margin: 0 0 1rem;
+    color: #667085;
+    font-size: 0.95rem;
+}
+
+.product-show__status {
+    margin-bottom: 0.35rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.product-show__status--ok {
+    color: #2f9e44;
+}
+
+.product-show__status--out {
+    color: #c92a2a;
+}
+
+.product-show__delivery {
+    margin: 0 0 1.25rem;
+    color: #5b6477;
+}
+
+.product-show__price {
+    margin: 0 0 0.25rem;
+    font-size: 2.3rem;
+    line-height: 1;
+    font-weight: 700;
+    color: #0d1b3d;
+}
+
+.product-show__meta {
+    margin: 0 0 1.5rem;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.55rem;
+    color: #4b5565;
+}
+
+.product-show__meta strong {
+    color: #10204a;
+}
+
+.product-show__buy-box {
+    padding-top: 1.25rem;
+    border-top: 1px solid #ddd6ce;
+}
+
+.product-show__form {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 0.75rem;
+    align-items: stretch;
+}
+
+.product-show__qty {
+    width: 100%;
+    height: 52px;
+    padding: 0 0.85rem;
+    border: 1px solid #cfd4dc;
+    border-radius: 0.85rem;
+    background: #fff;
+    font-size: 1rem;
+}
+
+.product-show__submit {
+    min-height: 52px;
+    padding: 0 1.2rem;
+    border: 1px solid #10204a;
+    border-radius: 999px;
+    background: #10204a;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        transform 0.1s ease;
+}
+
+.product-show__submit:hover {
+    background: #18306d;
+    border-color: #18306d;
+}
+
+.product-show__submit:active {
+    transform: translateY(1px);
+}
+
+.product-show__details {
+    margin-top: 2rem;
+    border: 1px solid #e6e8ee;
+    border-radius: 1.25rem;
+    background: #fff;
+    padding: 1.5rem;
+    box-shadow: 0 10px 28px rgba(12, 28, 58, 0.05);
+}
+
+.product-show__section + .product-show__section {
+    margin-top: 1.75rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid #edf0f5;
+}
+
+.product-show__section-title {
+    margin: 0 0 0.9rem;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #10204a;
+}
+
+.product-show__description {
+    margin: 0;
+    line-height: 1.7;
+    color: #4b5565;
+}
+
+.product-show__features {
+    margin: 0;
+    padding-left: 1.2rem;
+    color: #4b5565;
+    line-height: 1.7;
+}
+
+@media (max-width: 991.98px) {
+    .product-show__layout {
+        grid-template-columns: 1fr;
+    }
+
+    .product-show__image-wrap {
+        height: 430px;
+    }
+
+    .product-show__title {
+        font-size: 1.9rem;
+    }
+
+    .product-show__price {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .product-show {
+        padding: 1.5rem 0 2rem;
+    }
+
+    .product-show__image-wrap {
+        height: 320px;
+        padding: 1rem;
+    }
+
+    .product-show__panel,
+    .product-show__details {
+        padding: 1.1rem;
+    }
+
+    .product-show__title {
+        font-size: 1.55rem;
+    }
+
+    .product-show__price {
+        font-size: 1.7rem;
+    }
+
+    .product-show__form {
+        grid-template-columns: 1fr;
+    }
+}
