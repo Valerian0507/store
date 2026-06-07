@@ -26,7 +26,7 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-            - '../src/Service/FileUploader.php'   # ✅ важно
+            - '../src/Service/FileUploader.php'  
 
     App\Service\FileUploader:
         arguments:

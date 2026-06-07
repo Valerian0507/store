@@ -85,7 +85,10 @@ class OrderController extends AbstractController
             throw $this->createNotFoundException('Commande introuvable.');
         }
 
-        if (!$this->isCsrfTokenValid('admin_order_status_' . $order->getId(), (string) $request->request->get('_token'))) {
+        if (!$this->isCsrfTokenValid('admin_order_status_' . $order->getId(),
+            (string) $request->request->get('_token')
+            )
+        ) {
             $this->addFlash('danger', 'Jeton CSRF invalide.');
 
             return $this->redirectToRoute('admin_orders_show', [

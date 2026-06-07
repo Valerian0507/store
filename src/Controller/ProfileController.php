@@ -210,7 +210,12 @@ final class ProfileController extends AbstractController
             throw $this->createNotFoundException('Adresse introuvable.');
         }
 
-        if (!$this->isCsrfTokenValid('set_default_address_' . $address->getId(), (string) $request->request->get('_token'))) {
+        if (
+            !$this->isCsrfTokenValid(
+                'set_default_address_' . $address->getId(),
+                (string) $request->request->get('_token')
+            )
+        ) {
             throw $this->createAccessDeniedException('Invalid CSRF token.');
         }
 

@@ -39,7 +39,7 @@ class UserController extends AbstractController
             $limit,
             $offset
         );
-
+ 
         $totalUsers = $userRepository->countForAdminList(
             $search !== '' ? $search : null,
             $verified

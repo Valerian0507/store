@@ -2,7 +2,7 @@
 {% extends 'base.html.twig' %}
 {% block title %}Panier{% endblock %}
 {% block stylesheets %}
-	<style>
+<style>
 		.cart-page__title {
 			margin-bottom: 1.5rem;
 			font-size: 2.4rem;
@@ -387,7 +387,6 @@
 				</div>
 			</div>
 		{% endif %}
-	</section>
 
 	 <script>
 			function bindCartQtyControls() {
@@ -427,3 +426,4 @@
 	        document.addEventListener('turbo:load', bindCartQtyControls);
 		</script>
 {% endblock %}
+

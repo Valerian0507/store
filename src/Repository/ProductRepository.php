@@ -64,6 +64,9 @@ class ProductRepository extends ServiceEntityRepository
     }
 
     // Méthode publique — composition claire des méthodes privées
+
+
+    
     public function findForCatalog(
         int $page = 1,
         int $perPage = 20,

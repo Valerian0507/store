@@ -46,6 +46,7 @@ final class CartManager
         $user = $this->security->getUser();
 
         if(!$user instanceof User) {
+            // Visiteur — stockage en session via CartStorage
             $cart = $this->cartStorage->get();
             $cart[$productId] = ($cart[$productId] ?? 0) + $qty;
 
@@ -238,10 +239,6 @@ final class CartManager
         if(empty($sessionCart)) {
             return;
         }
-        // либо
-        //     if ($sessionCart === []) {
-        //     return;
-        // }
 
         $cart = $this->getOrCreateCart($user);
 
@@ -277,7 +274,7 @@ final class CartManager
 
     }
 
-    // Этот метод проверяет существует ли у пользователя уже есть корзина или её надо создать
+    // Этот метод проверяет существует ли у пользователя корзина или её надо создать
     private function getOrCreateCart(User $user): Cart
     {
         $cart = $this->cartRepository->findOneBy(['user' => $user]);

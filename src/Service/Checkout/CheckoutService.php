@@ -51,6 +51,7 @@ final class CheckoutService
         $order->setStatus('pending');
         $order->setReference($this->generateOrderReference());
 
+        // Données d'expédition copiées dans la commande
         $order->setShippingFirstName($shippingData['firstName']);
         $order->setShippingLastName($shippingData['lastName']);
         $order->setShippingStreet($shippingData['street']);
@@ -77,7 +78,7 @@ final class CheckoutService
         $order->recalcTotal();
 
         $this->em->persist($order);
-        $this->em->flush();
+        $this->em->flush(); // Tout en une seule transaction
         $this->cartManager->clear(); // Vide le panier après commande
 
         return $order;

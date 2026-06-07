@@ -26,7 +26,7 @@ class EmailVerifier
             $verifyEmailRouteName,
             (string) $user->getId(),
             (string) $user->getEmail(),
-            ['id' => $user->getId()] // Permet la validation pour un utilisateur non connecté
+            ['id' => $user->getId()] // Permet la validation pour un utilisateur non
         );
 
         $context = $email->getContext();
