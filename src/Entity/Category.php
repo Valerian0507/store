@@ -22,6 +22,7 @@ class Category
     #[ORM\Column(length: 120, unique: true)]
     private string $label;
 
+    /** @var Collection<int, Product> */
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Product::class)]
     private Collection $products;
 

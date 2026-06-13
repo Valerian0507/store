@@ -19,6 +19,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         parent::__construct($registry, User::class);
     }
 
+    /** @return User[] */
     public function findAllUsers(): array
     {
         return $this->createQueryBuilder('u')
@@ -28,6 +29,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getResult();
     }
 
+    /** @return User[] */
     public function findUsersForAdminList(
         ?string $search = null,
         ?bool $verified = null,

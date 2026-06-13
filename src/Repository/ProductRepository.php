@@ -19,12 +19,6 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-    /**
-     * For the catalog: a list of products with predictable sorting.
-     *
-     * @return Product[] Returns an array of Product objects
-     */
-
     // Méthodes privées — chaque responsabilité est isolée
     private function createCatalogQueryBuilder(): QueryBuilder
     {
@@ -63,7 +57,7 @@ class ProductRepository extends ServiceEntityRepository
         };
     }
 
-    // Méthode publique — composition claire des méthodes privées
+    /** @return Product[] */
     public function findForCatalog(
         int $page = 1,
         int $perPage = 20,

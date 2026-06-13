@@ -39,6 +39,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Length(max: 120, maxMessage: 'Le nom ne peut pas dépasser {{ limit }} caractères.')]
     private ?string $lastName = null;
 
+/** @var list<string> */
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
@@ -48,9 +49,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $isVerified = false;
 
+    /** @var Collection<int, Address> */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Address::class, orphanRemoval: true)]
     private Collection $addresses;
 
+    /** @var Collection<int, Order> */
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
     private Collection $orders;
 
@@ -216,11 +219,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /** @return Collection<int, Address> */
     public function getAddresses(): Collection
     {
         return $this->addresses;
     }
 
+    /** @return Collection<int, Order> */
     public function getOrders(): Collection
     {
         return $this->orders;

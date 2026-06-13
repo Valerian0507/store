@@ -18,6 +18,7 @@ class OrderRepository extends ServiceEntityRepository
     }
 
     // searches for all user's orders
+    /** @return Order[] */
     public function findUserOrdersForProfile(User $user): array
     {
         return $this->createQueryBuilder('orders')
@@ -43,6 +44,7 @@ class OrderRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    	/** @return Order[] */
      public function findOrdersForAdminList(?string $status = null, ?string $search = null, int $limit = 20, int $offset = 0 ): array
      {
         $qb = $this->createQueryBuilder('o')
@@ -104,6 +106,7 @@ class OrderRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    	/** @return Order[] */
     public function findRecentOrdersForUserForAdminShow(User $user, int $limit = 5): array
     {
         return $this->createQueryBuilder('o')

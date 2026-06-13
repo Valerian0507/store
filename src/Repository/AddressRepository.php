@@ -12,16 +12,20 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class AddressRepository extends ServiceEntityRepository
 {
+    private const FILTER_BY_USER = 'address.user = :user';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Address::class);
     }
 
+
     // searches for all user addresses
+    /** @return Address[] */
     public function findUserAddressesForProfile(User $user): array
     {
         return $this->createQueryBuilder('address')
-            ->andWhere('address.user = :user')
+            ->andWhere(self::FILTER_BY_USER)
             ->setParameter('user', $user)
             ->orderBy('address.createdAt', 'DESC')
             ->addOrderBy('address.id', 'DESC')
@@ -35,7 +39,7 @@ class AddressRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('address')
             ->andWhere('address.id = :id')
             ->setParameter('id', $id)
-            ->andWhere('address.user = :user')
+            ->andWhere(self::FILTER_BY_USER)
             ->setParameter('user', $user)
             ->getQuery()
             ->getOneOrNullResult();
@@ -44,7 +48,7 @@ class AddressRepository extends ServiceEntityRepository
     public function findDefaultAddressForUser(User $user): ?Address
     {
         return $this->createQueryBuilder('address')
-            ->andWhere('address.user = :user')
+            ->andWhere(self::FILTER_BY_USER)
             ->setParameter('user', $user)
             ->andWhere('address.isDefault = :isDefault')
             ->setParameter('isDefault', true)
