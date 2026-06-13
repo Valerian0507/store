@@ -44,7 +44,7 @@ security:
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800        # 1 semaine
-                secure: true             # HTTPS uniquement dans production -> если есть проблемы при тесте временно поставить false
+                secure: true             # HTTPS uniquement dans production
                 httponly: true
                 samesite: lax
 
