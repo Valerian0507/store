@@ -57,7 +57,7 @@ final class ImportProductsCommand extends Command
                 continue;
             }
 
-            // Добавление в базу данных продуктов и обновление уже созданных если есть новые данные
+
             $product = $repo->findOneBy(['reference' => $row['reference']]);
 
             if (!$product) {
@@ -67,12 +67,12 @@ final class ImportProductsCommand extends Command
                 $created++;
             }
 
-            // ---- ВОТ СЮДА ВСТАВЛЯЕМ ----
+
             $label = trim((string) ($row['category'] ?? ''));
             $label = mb_strtolower($label);
 
             if ($label === '') {
-                // у тебя JoinColumn(nullable=false), значит category НЕ может быть null
+
                 $output->writeln('<error>Category is missing for reference: '.$row['reference'].'</error>');
                 continue;
             }
@@ -90,7 +90,7 @@ final class ImportProductsCommand extends Command
             }
 
             $product->setCategory($categoryCache[$label]);
-            // ---- ДО СЮДА ----
+
             $product->setTitle($row['title'] ?? '');
             $product->setDescription($row['description'] ?? null);
             $product->setVolumeM3((float) ($row['volume_m3'] ?? 0));

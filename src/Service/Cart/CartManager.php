@@ -29,12 +29,11 @@ final class CartManager
      * - clear
      * - mergeSessionCartIntoUserCart
      * CartLoginSubscriber
-     * - слушает LoginSuccessEvent
-     * - вызывает CartManager
+     * - listening to LoginSuccessEvent
+     * - calls CartManager
      */
 
     /**
-     * Добавить товар в корзину или увеличить количество.
      * @param int $productId
      * @param int $qty
      * @return void
@@ -113,14 +112,11 @@ final class CartManager
         }
 
         return $raw;
-
-        // вернуть $storage->get()
     }
 
 
 
     /**
-     * заменить количество
      * @param int $productId
      * @param int $qty
      * @return void
@@ -166,8 +162,6 @@ final class CartManager
 
         $cart->setUpdatedAt(new \DateTimeImmutable());
         $this->em->flush();
-        //если qty <= 0 → удалить товар
-        // иначе поставить новое количество
 
     }
 
@@ -200,10 +194,6 @@ final class CartManager
 
         $cart->setUpdatedAt(new \DateTimeImmutable());
         $this->em->flush();
-
-
-
-        // удалить товар по id
     }
 
 
@@ -229,7 +219,6 @@ final class CartManager
 
         $cart->setUpdatedAt(new \DateTimeImmutable());
         $this->em->flush();
-        // просто вызвать $storage->clear()
     }
 
     public function mergeSessionCartIntoUserCart(User $user): void
@@ -274,7 +263,6 @@ final class CartManager
 
     }
 
-    // Этот метод проверяет существует ли у пользователя корзина или её надо создать
     private function getOrCreateCart(User $user): Cart
     {
         $cart = $this->cartRepository->findOneBy(['user' => $user]);
@@ -291,7 +279,6 @@ final class CartManager
         return $cart;
     }
 
-    // Этот метод проверят есть ли уже в этой корзине строка для данного товара
     private function findCartItemByProductId(Cart $cart, int $productId): ?CartItem
     {
         foreach ($cart->getCartItems() as $item) {

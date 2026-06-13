@@ -17,7 +17,7 @@ class AddressRepository extends ServiceEntityRepository
         parent::__construct($registry, Address::class);
     }
 
-    // ищет все адреса пользователя
+    // searches for all user addresses
     public function findUserAddressesForProfile(User $user): array
     {
         return $this->createQueryBuilder('address')
@@ -29,7 +29,7 @@ class AddressRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    // ищет один адрес по id
+    // searches for one address by id
     public function findOneByIdAndUser(int $id, User $user): ?Address
     {
         return $this->createQueryBuilder('address')

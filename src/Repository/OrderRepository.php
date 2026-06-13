@@ -17,7 +17,7 @@ class OrderRepository extends ServiceEntityRepository
         parent::__construct($registry, Order::class);
     }
 
-    // ищет все заказы пользователя
+    // searches for all user's orders
     public function findUserOrdersForProfile(User $user): array
     {
         return $this->createQueryBuilder('orders')
@@ -29,7 +29,7 @@ class OrderRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    // ищет один заказ по конкретному id
+    // searches for one order by a specific id
     public function findOneForSuccessPage(int $orderId, User $user): ?Order
     {
         return $this->createQueryBuilder('orders')
@@ -115,31 +115,4 @@ class OrderRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
-    //    /**
-    //     * @return Order[] Returns an array of Order objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('o')
-    //            ->andWhere('o.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('o.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Order
-    //    {
-    //        return $this->createQueryBuilder('o')
-    //            ->andWhere('o.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
-
-
 }

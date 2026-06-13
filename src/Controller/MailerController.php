@@ -6,7 +6,6 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 
 class MailerController extends AbstractController
@@ -17,10 +16,10 @@ class MailerController extends AbstractController
         $username = 'John Doe';
 
         $email = (new TemplatedEmail())
-            ->from('admin@store.com') // expéditeur du email
-            ->to('client@store.com') // destinataire du email
-            ->subject('Confirmation de création de votre compte Store !') // sujet du email
-            ->htmlTemplate('email/new_mail.html.twig') // contenu du email
+            ->from('admin@store.com')
+            ->to('client@store.com')
+            ->subject('Confirmation de création de votre compte Store !')
+            ->htmlTemplate('email/new_mail.html.twig')
             ->context([
                 'username' => $username
             ]);
@@ -47,10 +46,10 @@ class MailerController extends AbstractController
         ];
 
         $email = (new TemplatedEmail())
-            ->from('commande@store.com') // expéditeur du email
-            ->to('client@store.com') // destinataire du email
-            ->subject('Confirmation de votre commande Store !') // sujet du email
-            ->htmlTemplate('email/order_confirmation.html.twig') // contenu du email
+            ->from('commande@store.com')
+            ->to('client@store.com')
+            ->subject('Confirmation de votre commande Store !')
+            ->htmlTemplate('email/order_confirmation.html.twig')
             ->context([
                 'username' => $username,
                 'order' => $order,

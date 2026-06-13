@@ -19,11 +19,11 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-//    /**
-//     * Для каталога: список товаров с предсказуемой сортировкой.
-//     *
-//     * @return Product[] Returns an array of Product objects
-//     */
+    /**
+     * For the catalog: a list of products with predictable sorting.
+     *
+     * @return Product[] Returns an array of Product objects
+     */
 
     // Méthodes privées — chaque responsabilité est isolée
     private function createCatalogQueryBuilder(): QueryBuilder
@@ -64,9 +64,6 @@ class ProductRepository extends ServiceEntityRepository
     }
 
     // Méthode publique — composition claire des méthodes privées
-
-
-    
     public function findForCatalog(
         int $page = 1,
         int $perPage = 20,
@@ -101,7 +98,7 @@ class ProductRepository extends ServiceEntityRepository
 
     /**
      * @return int
-     * Запрос, который возвращает общее количество товаров.
+     * A request that returns the total number of items.
      */
     public function countForCatalog(?int $categoryId = null, ?string $q = null): int
     {
@@ -113,22 +110,4 @@ class ProductRepository extends ServiceEntityRepository
 
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
-
-
-    // 1) Список категорий (для select)
-
-
-    // 2) Список товаров для каталога с опциональным фильтром
-
-    // public function findByCategoryLabel(string $label): array
-    // {
-    //     return $this->createQueryBuilder('p')
-    //         ->innerJoin('p.category', 'c')
-    //         ->andWhere('c.label = :label')
-    //         ->setParameter('label', $label)
-    //         ->orderBy('p.id', 'DESC')
-    //         ->getQuery()
-    //         ->getResult();
-    // }
-
 }

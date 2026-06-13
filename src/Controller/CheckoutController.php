@@ -76,8 +76,7 @@ final class CheckoutController extends AbstractController
         ]);
     }
 
-    // Сбор данных для заказа и отправка, проверка CSRF, получение юзера, создание заказа, редирект
-    #[Route('', name: 'submit', methods: ['POST'])]
+    // Order data collection and shipping, CSRF verification, user receipt, order creation, redirect    #[Route('', name: 'submit', methods: ['POST'])]
     public function submit(Request $request, CheckoutService $checkoutService, CheckoutSummaryBuilder $checkoutSummaryBuilder, AddressRepository $addressRepository ): Response
     {
         $user = $this->getUser();

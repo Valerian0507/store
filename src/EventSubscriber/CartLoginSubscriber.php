@@ -32,9 +32,3 @@ final class CartLoginSubscriber implements EventSubscriberInterface
         $this->cartManager->mergeSessionCartIntoUserCart($user);
     }
 }
-
-
-// Что делает subscriber
-
-// Он слушает событие успешного логина.
-// Как только вход прошёл успешно, вызывает merge корзины.

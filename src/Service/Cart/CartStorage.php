@@ -33,10 +33,6 @@ class CartStorage
             }
         }
         return $cart;
-        // 1. взять из session
-        // 2. проверить что это массив
-        // 3. очистить
-        // 4. вернуть
     }
 
     /** @param array<int, int> $cart */
@@ -59,15 +55,12 @@ class CartStorage
         }
 
         $this->getSession()->set(self::CART_KEY, $cleanCart);
-
-        // 1. очистить
-        // 2. сохранить в session
     }
 
     public function clear(): void
     {
         $this->getSession()->remove(self::CART_KEY);
-        // удалить ключ cart из session
+        // remove the cart key from the session
     }
 
     private function getSession(): SessionInterface

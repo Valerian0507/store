@@ -76,7 +76,7 @@ class ProductType extends AbstractType
             ])
             ->add('image', FileType::class, [
                 'label' => 'Image du produit',
-                'mapped' => false,   // !!! КЛЮЧЕВОЕ
+                'mapped' => false,
                 'required' => false,
                 'constraints' => [
                     new File(
@@ -90,23 +90,6 @@ class ProductType extends AbstractType
                     )
                 ],
             ]);
-//            для того что бы просто вводить текст не загружать именно файл, оставить пока не настрою код с загрузкой фото
-//            ->add('image', TextType::class, [
-//                'required' => true,
-//                'constraints' => [
-//                    new NotBlank(message: 'Введите номер/имя картинки (например: 1.jpg).'),
-//                    new Length(
-//                        max: 255,
-//                        maxMessage: 'Имя файла слишком длинное (макс. {{ limit }} символов).'
-//                    ),
-//                    // опционально: запрет пробелов и странных символов
-//                    new Regex(
-//                        pattern: '/^[A-Za-z0-9._-]+$/',
-//                        message: 'Только латиница/цифры и символы . _ - (без пробелов).'
-//                    ),
-//                ],
-//                'help' => 'Например: 1.jpg или product_12.png (файл должен быть в public/images/products/).',
-//            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

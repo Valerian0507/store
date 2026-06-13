@@ -36,7 +36,6 @@ class ProductController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile|null $imageFile */
-//            Код c удаления и заменой картинки в папке
             $imageFile = $form->get('image')->getData();
 
             if ($imageFile) {
@@ -62,7 +61,7 @@ class ProductController extends AbstractController
     #[Route('/{id}/edit', name: 'edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(Product $product, Request $request, EntityManagerInterface $em, FileUploader $fileUploader): Response
     {
-        $oldImage = $product->getImage(); // запоминаем до обработки формы
+        $oldImage = $product->getImage();
 
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
@@ -72,13 +71,12 @@ class ProductController extends AbstractController
 
             /** @var UploadedFile|null $imageFile */
             $imageFile = $form->get('image')->getData();
-            // $removeImage = $form->has('removeImage') ? (bool) $form->get('removeImage')->getData() : false;
+
 
             if ($imageFile) {
                 $newFilename = $fileUploader->upload($imageFile, $product->getReference());
                 $product->setImage($newFilename);
 
-                // удаляем старый файл только если реально загрузили новый
                 if ($oldImage) {
                     $oldPath = $fileUploader->getTargetDirectory() . DIRECTORY_SEPARATOR . $oldImage;
                     if (is_file($oldPath)) {
@@ -142,13 +140,11 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('admin_products_index');
         }
 
-        // удаляем файл только после валидного CSRF
+
         $image = $product->getImage();
         if ($image) {
             $path = $fileUploader->getTargetDirectory() . DIRECTORY_SEPARATOR . $image;
-            // if (is_file($path)) {
-            //     @unlink($path);
-            // }
+
             if (is_file($path) && is_writable($path)) {
                unlink($path);
             }
