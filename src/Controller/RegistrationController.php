@@ -135,7 +135,7 @@ class RegistrationController extends AbstractController
     {
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
             'app_verify_email',
-            $user->getId(),
+            (string) $user->getId(),
             $user->getEmail(),
             ['id' => $user->getId()] // Permet la validation pour un utilisateur non connecté
         );

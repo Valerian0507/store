@@ -73,7 +73,7 @@ class CartController extends AbstractController
         $token = (string) $request->getPayload()->get('_token', '');
 
         if (!$this->isCsrfTokenValid('cart_add_' . $id, $token)) {
-            $this->addFlash('error', 'Jeton CSRF invalide.');
+            $this->addFlash('error', 'Invalid CSRF token.');
 
             return $this->redirectToRoute('app_cart_index');
         }
@@ -92,7 +92,7 @@ class CartController extends AbstractController
         $token = (string) $request->getPayload()->get('_token', '');
 
         if (!$this->isCsrfTokenValid('cart_update_' . $id, $token)) {
-            $this->addFlash('error', 'Jeton CSRF invalide.');
+            $this->addFlash('error', 'Invalid CSRF token.');
 
             return $this->redirectToRoute('app_cart_index');
         }
@@ -112,7 +112,7 @@ class CartController extends AbstractController
         $token = (string) $request->getPayload()->get('_token', '');
 
         if (!$this->isCsrfTokenValid('cart_remove_' . $id, $token)) {
-            $this->addFlash('error', 'Jeton CSRF invalide.');
+            $this->addFlash('error', 'Invalid CSRF token.');
 
             return $this->redirectToRoute('app_cart_index');
         }

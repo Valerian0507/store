@@ -73,7 +73,7 @@ final class CategoryController extends AbstractController
         $token = (string) $request->request->get('_token');
 
         if (!$this->isCsrfTokenValid('delete_category_'.$category->getId(), $token)) {
-            $this->addFlash('danger', 'Jeton CSRF invalide.');
+            $this->addFlash('danger', 'Invalid CSRF token.');
             return $this->redirectToRoute('admin_categories_index');
         }
 

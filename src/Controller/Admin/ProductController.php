@@ -107,7 +107,7 @@ class ProductController extends AbstractController
             $token = (string) $request->request->get('_token_delete_image');
 
             if (!$this->isCsrfTokenValid('delete_product_image_'.$product->getId(), $token)) {
-                $this->addFlash('danger', 'Jeton CSRF invalide.');
+                $this->addFlash('danger', 'Invalid CSRF token.');
                 return $this->redirectToRoute('admin_products_edit', ['id' => $product->getId()]);
             }
 
@@ -136,7 +136,7 @@ class ProductController extends AbstractController
         $token = (string) $request->request->get('_token');
 
         if (!$this->isCsrfTokenValid('delete_product_'.$product->getId(), $token)) {
-            $this->addFlash('danger', 'Jeton CSRF invalide.');
+            $this->addFlash('danger', 'Invalid CSRF token.');
             return $this->redirectToRoute('admin_products_index');
         }
 

@@ -89,7 +89,7 @@ class OrderController extends AbstractController
             (string) $request->request->get('_token')
             )
         ) {
-            $this->addFlash('danger', 'Jeton CSRF invalide.');
+            $this->addFlash('danger', 'Invalid CSRF token.');
 
             return $this->redirectToRoute('admin_orders_show', [
                 'id' => $order->getId(),

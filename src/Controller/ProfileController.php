@@ -36,7 +36,7 @@ final class ProfileController extends AbstractController
         $user = $this->getUser();
 
         if(!$user instanceof User) {
-            throw $this->createAccessDeniedException("Utilisateur n'est pas connecté.");
+            throw $this->createAccessDeniedException("User is not authenticated.");
         }
 
         $orders = $orderRepository->findUserOrdersForProfile($user);
@@ -52,7 +52,7 @@ final class ProfileController extends AbstractController
         $user = $this->getUser();
 
         if(!$user instanceof User) {
-            throw $this->createAccessDeniedException("Utilisateur n'est pas connecté.");
+            throw $this->createAccessDeniedException("User is not authenticated.");
         }
 
         $orderViewModel = $orderSuccessBuilder->buildForUser($id, $user);
@@ -169,7 +169,7 @@ final class ProfileController extends AbstractController
         $address = $addressRepository->findOneByIdAndUser($id, $user);
 
         if ($address === null) {
-            throw $this->createNotFoundException('Adresse introuvable.');
+            throw $this->createNotFoundException('Address not found.');
         }
 
         if (
@@ -207,7 +207,7 @@ final class ProfileController extends AbstractController
         $address = $addressRepository->findOneByIdAndUser($id, $user);
 
         if($address === null) {
-            throw $this->createNotFoundException('Adresse introuvable.');
+            throw $this->createNotFoundException('Address not found.');
         }
 
         if (

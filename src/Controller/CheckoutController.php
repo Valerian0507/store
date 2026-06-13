@@ -83,7 +83,7 @@ final class CheckoutController extends AbstractController
         $user = $this->getUser();
 
         if (!$user instanceof User) {
-            throw $this->createAccessDeniedException("Utilisateur n'est pas connecté.");
+            throw $this->createAccessDeniedException("User is not authenticated.");
         }
 
         $token = (string) $request->request->get('_token', '');
@@ -101,7 +101,7 @@ final class CheckoutController extends AbstractController
             $address = $addressRepository->findOneByIdAndUser($selectedAddressId, $user);
 
             if ($address === null) {
-                throw $this->createNotFoundException('Adresse introuvable.');
+                throw $this->createNotFoundException('Address not found.');
             }
 
             $currentAddress = $address;
@@ -109,10 +109,10 @@ final class CheckoutController extends AbstractController
             $shippingData = [
                 'firstName' => $user->getFirstName() ?? '',
                 'lastName' => $user->getLastName() ?? '',
-                'street' => $address->getStreet() ?? '',
-                'city' => $address->getCity() ?? '',
-                'postalCode' => $address->getPostalCode() ?? '',
-                'country' => $address->getCountry() ?? '',
+                'street' => $address->getStreet(),
+                'city' => $address->getCity(),
+                'postalCode' => $address->getPostalCode(),
+                'country' => $address->getCountry(),
             ];
         } else {
             $shippingData = [
@@ -190,32 +190,32 @@ final class CheckoutController extends AbstractController
             'country',
         ] as $field) {
             if ($shippingData[$field] === '') {
-                $errors[$field] = 'This field is required.';
+                $errors[$field] = 'Ce champ est obligatoire.';
             }
         }
 
         if ($shippingData['firstName'] !== '' && mb_strlen($shippingData['firstName']) > 100) {
-            $errors['firstName'] = 'First name is too long.';
+            $errors['firstName'] = 	'Le prénom est trop long.';
         }
 
         if ($shippingData['lastName'] !== '' && mb_strlen($shippingData['lastName']) > 100) {
-            $errors['lastName'] = 'Last name is too long.';
+            $errors['lastName'] = 'Le nom est trop long.';
         }
 
         if ($shippingData['street'] !== '' && mb_strlen($shippingData['street']) > 255) {
-            $errors['street'] = 'Street is too long.';
+            $errors['street'] = 'L\'adresse est trop longue.';
         }
 
         if ($shippingData['city'] !== '' && mb_strlen($shippingData['city']) > 120) {
-            $errors['city'] = 'City is too long.';
+            $errors['city'] = 'Le nom de la ville est trop long.';
         }
 
         if ($shippingData['postalCode'] !== '' && mb_strlen($shippingData['postalCode']) > 20) {
-            $errors['postalCode'] = 'Postal code is too long.';
+            $errors['postalCode'] = 'Le code postal est trop long.';
         }
 
         if ($shippingData['country'] !== '' && mb_strlen($shippingData['country']) > 120) {
-            $errors['country'] = 'Country is too long.';
+            $errors['country'] = 'Le nom du pays est trop long.';
         }
 
         return $errors;

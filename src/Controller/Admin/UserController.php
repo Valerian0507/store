@@ -39,7 +39,7 @@ class UserController extends AbstractController
             $limit,
             $offset
         );
- 
+
         $totalUsers = $userRepository->countForAdminList(
             $search !== '' ? $search : null,
             $verified
@@ -94,7 +94,7 @@ class UserController extends AbstractController
                 (string) $request->request->get('_token')
             )
         ) {
-            $this->addFlash('danger', 'Jeton CSRF invalide.');
+            $this->addFlash('danger', 'Invalid CSRF token.');
 
             return $this->redirectToRoute('admin_users_show', [
                 'id' => $user->getId(),
