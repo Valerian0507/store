@@ -229,7 +229,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    // Что бы отвязать от пользователя заказ (Рассмотреть эту часть)
     public function removeOrder(Order $order): static
     {
         $this->orders->removeElement($order);

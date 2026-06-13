@@ -15,7 +15,7 @@ class OrderItem
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'items')]
-    #[ORM\JoinColumn(name: 'order_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')] // Вопросы на счет CASCADE уточнить нужно ли для этого проекта Можно использовать RESTRICT
+    #[ORM\JoinColumn(name: 'order_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private ?Order $order = null;
 
     #[ORM\ManyToOne]
@@ -114,12 +114,9 @@ class OrderItem
     {
         $item = new self();
         $item->setProduct($product);
-        // У тебя title nullable, поэтому подстрахуемся
         $item->setProductName($product->getTitle() ?? 'Product');
-        // getPriceCents() у тебя возвращает ?int → делаем безопасно
         $item->setUnitPriceCents($product->getPriceCents() ?? 0);
         $item->setQuantity($qty);
-        // Для сохранения картинки если даже продукт удалили
         $item->setProductImage($product->getImage());
 
         return $item;

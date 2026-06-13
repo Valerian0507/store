@@ -171,7 +171,6 @@ class Product
     {
         return number_format($this->priceCents / 100, 2, '.', '');
     }
-//    {{ products.priceEur }} € Для прописи в Twig отображения цены
 
     public function getStock(): ?int
     {
