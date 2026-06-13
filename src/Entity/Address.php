@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\AddressRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
 #[ORM\Table(name: 'addresses')]
@@ -18,19 +19,24 @@ class Address
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private ?User $user = null;
 
-    // #[ORM\Column(length: 50)]
-    // private string $label;
-
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: 'Le pays est obligatoire.')]
+    #[Assert\Length(max: 50, maxMessage: 'Le pays ne peut pas dépasser {{ limit }} caractères.')]
     private string $country;
 
     #[ORM\Column(length: 120)]
+    #[Assert\NotBlank(message: 'La ville est obligatoire.')]
+    #[Assert\Length(max: 120, maxMessage: 'La ville ne peut pas dépasser {{ limit }} caractères.')]
     private string $city;
 
     #[ORM\Column(length: 120)]
+    #[Assert\NotBlank(message: 'L\'adresse est obligatoire.')]
+    #[Assert\Length(max: 120, maxMessage: 'L\'adresse ne peut pas dépasser {{ limit }} caractères.')]
     private string $street;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: 'Le code postal est obligatoire.')]
+    #[Assert\Length(max: 50, maxMessage: 'Le code postal ne peut pas dépasser {{ limit }} caractères.')]
     private string $postalCode;
 
     #[ORM\Column(options: ['default' => false])]

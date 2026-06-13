@@ -8,11 +8,12 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Category;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\Table(name: 'products')]
-#[UniqueEntity(fields: ['reference'], message: 'This reference already exists.')]
+#[UniqueEntity(fields: ['reference'], message: 'Cette référence existe déjà.')]
 class Product
 {
     #[ORM\Id]
@@ -21,31 +22,41 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(length: 255, unique: true)]
+    #[Assert\NotBlank(message: 'La référence est obligatoire.')]
+    #[Assert\Length(max: 255, maxMessage: 'La référence ne peut pas dépasser {{ limit }} caractères.')]
     private ?string $reference = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false, onDelete: 'RESTRICT')]
+    #[Assert\NotNull(message: 'La catégorie est obligatoire.')]
     private ?Category $category = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le titre est obligatoire.')]
+    #[Assert\Length(max: 255, maxMessage: 'Le titre ne peut pas dépasser {{ limit }} caractères.')]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\PositiveOrZero(message: 'Le volume ne peut pas être négatif.')]
     private ?float $volumeM3 = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\PositiveOrZero(message: 'Le poids ne peut pas être négatif.')]
     private ?float $weightKg = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Le prix est obligatoire.')]
+    #[Assert\PositiveOrZero(message: 'Le prix ne peut pas être négatif.')]
     private ?int $priceCents = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
     #[ORM\Column(options: ['default' => 0])]
+    #[Assert\PositiveOrZero(message: 'Le stock ne peut pas être négatif.')]
     private int $stock = 0;
 
     #[ORM\Column]

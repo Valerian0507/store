@@ -6,7 +6,8 @@
 <div class="container py-4">
     <h1>Créer un produit</h1>
 
-    {{ form_start(form) }}
+    {# {{ form_start(form) }} #}
+    {{ form_start(form, { attr: { novalidate: 'novalidate' } }) }}
     {{ form_errors(form) }}
 
     {{ form_row(form.reference) }}
