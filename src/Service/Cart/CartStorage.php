@@ -65,12 +65,6 @@ class CartStorage
 
     private function getSession(): SessionInterface
     {
-        $session = $this->requestStack->getSession();
-
-        if(!$session) {
-            throw new LogicException("Session n'est pas disponible");
-            }
-
-        return $session;
+        return $this->requestStack->getSession();
     }
 }

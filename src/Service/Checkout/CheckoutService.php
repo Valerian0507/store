@@ -27,7 +27,7 @@ final class CheckoutService
     /**
      * Summary of createOrderFromCart
      * @param User $user
-     * @param array $shippingData
+     * @param array<string, string> $shippingData
      * @throws LogicException
      * @return Order
      */
