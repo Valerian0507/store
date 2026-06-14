@@ -56,21 +56,6 @@
                 </div>
                     <p class="product-show__delivery">Livraison gratuit</p>
 
-                {# <ul class="product-show__meta">
-                    <li>
-                        <strong>Catégorie :</strong>
-                        {{ product.category ? product.category.label : '—' }}
-                    </li>
-                    <li>
-                        <strong>Volume (m³) :</strong>
-                        {{ product.volumeM3 is not null ? product.volumeM3 : '—' }}
-                    </li>
-                    <li>
-                        <strong>Poids (kg) :</strong>
-                        {{ product.weightKg is not null ? product.weightKg : '—' }}
-                    </li>
-                </ul> #}
-
                 <div class="product-show__buy-box">
                     <form method="post" action="{{ path('app_cart_add', { id: product.id }) }}" class="product-show__form">
                         <input
@@ -79,14 +64,12 @@
                             value="1"
                             min="1"
                             class="product-show__qty"
-                            {% if product.stock < 1 %}disabled{% endif %}
                         >
                         <input type="hidden" name="_token" value="{{ csrf_token('cart_add_' ~ product.id) }}">
 
                         <button
                             type="submit"
                             class="product-show__submit"
-                            {% if product.stock < 1 %}disabled{% endif %}
                         >
                             Ajouter au panier
                         </button>

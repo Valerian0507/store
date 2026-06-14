@@ -74,6 +74,13 @@ class ProductType extends AbstractType
                 ],
                 'help' => 'Price in cents (e.g. 1299 = 12.99)',
             ])
+            ->add('stock', IntegerType::class, [
+                'label' => 'Stock',
+                'constraints' => [
+                    new PositiveOrZero(message: 'Le stock ne peut pas être négatif.'),
+                ],
+            ])
+
             ->add('image', FileType::class, [
                 'label' => 'Image du produit',
                 'mapped' => false,

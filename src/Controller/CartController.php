@@ -67,7 +67,7 @@ class CartController extends AbstractController
 
     #[Route('/add/{id}', name: 'add', methods: ['POST'], requirements: ['id' => '\d+'])]
 
-    public function add(int $id, Request $request, CartManager $cartManager): Response
+    public function add(int $id, Request $request, CartManager $cartManager, ProductRepository $productRepository): Response
     {
         $qty = max(1, (int) $request->getPayload()->get('qty', 1));
         $token = (string) $request->getPayload()->get('_token', '');
@@ -76,6 +76,18 @@ class CartController extends AbstractController
             $this->addFlash('error', 'Invalid CSRF token.');
 
             return $this->redirectToRoute('app_cart_index');
+        }
+
+        $product = $productRepository->find($id);
+
+        if ($product === null) {
+            $this->addFlash('danger', 'Produit introuvable.');
+            return $this->redirectToRoute('app_cart_index');
+        }
+
+        if ($product->getStock() < 1) {
+            $this->addFlash('warning', 'Ce produit est en rupture de stock.');
+            return $this->redirectToRoute('app_products_index');
         }
 
         $cartManager->add($id, $qty);
