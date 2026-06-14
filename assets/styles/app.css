@@ -9,7 +9,6 @@
     display: block;
 }
 
-
 body {
     background-color: white;
 }
@@ -49,6 +48,25 @@ body {
 
 .navbar-collapse{
     font-weight: 500;
+}
+
+.flash-container {
+    position: fixed;
+    top: 4rem;
+    right: 1rem;
+    z-index: 1080;
+    width: calc(100% - 2rem);
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    pointer-events: none;
+}
+
+.flash-container .alert {
+    margin: 0;
+    pointer-events: auto;
+    box-shadow: 0 8px 24px rgba(12, 28, 58, 0.15);
 }
 
 @media (max-width: 991.98px) {
