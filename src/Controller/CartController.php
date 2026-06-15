@@ -90,6 +90,16 @@ class CartController extends AbstractController
             return $this->redirectToRoute('app_products_index');
         }
 
+        $alreadyInCart = $cartManager->getRaw()[$id] ?? 0;
+        if ($alreadyInCart + $qty > $product->getStock()) {
+            $this->addFlash('warning', sprintf(
+                'Stock insuffisant : il ne reste que %d en stock.',
+                $product->getStock()
+            ));
+
+            return $this->redirectToRoute('app_products_index');
+        }
+
         $cartManager->add($id, $qty);
 
         $this->addFlash('success', 'Produit ajouté au panier.');
