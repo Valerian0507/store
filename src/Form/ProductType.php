@@ -75,9 +75,11 @@ class ProductType extends AbstractType
                 'help' => 'Price in cents (e.g. 1299 = 12.99)',
             ])
             ->add('stock', IntegerType::class, [
-                'label' => 'Stock',
+                'label' => 'Quantité à ajouter au stock',
+                'mapped' => false,
+                'required' => false,
                 'constraints' => [
-                    new PositiveOrZero(message: 'Le stock ne peut pas être négatif.'),
+                    new PositiveOrZero(message: 'La quantité ne peut pas être négative.'),
                 ],
             ])
 

@@ -16,6 +16,8 @@
     {{ form_row(form.volumeM3) }}
     {{ form_row(form.weightKg) }}
     {{ form_row(form.priceCents) }}
+
+    <p class="mb-2"><strong>Stock actuel :</strong> {{ product.stock }}</p>
     {{ form_row(form.stock) }}
 
     {% if product.image %}

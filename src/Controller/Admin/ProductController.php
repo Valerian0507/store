@@ -43,6 +43,11 @@ class ProductController extends AbstractController
                 $product->setImage($newFilename);
             }
 
+            $addStock = (int) $form->get('stock')->getData();
+            if ($addStock > 0) {
+                $product->setStock($product->getStock() + $addStock);
+            }
+
 
 
             $em->persist($product);
@@ -85,10 +90,15 @@ class ProductController extends AbstractController
                 }
             }
 
-                $em->flush();
+            $addStock = (int) $form->get('stock')->getData();
+            if ($addStock > 0) {
+                $product->setStock($product->getStock() + $addStock);
+            }
 
-                $this->addFlash('success', 'Produit mis à jour.');
-                return $this->redirectToRoute('admin_products_index');
+            $em->flush();
+
+            $this->addFlash('success', 'Produit mis à jour.');
+            return $this->redirectToRoute('admin_products_index');
         }
         return $this->render('admin/products/edit.html.twig', [
             'product' => $product,
