@@ -249,7 +249,8 @@
 		.paginated .dots {
 			padding: 0 6px;
 			color: #9ca3af;
-			user-select: none;
+			-webkit-user-select: none;
+            user-select: none;
 		}
 
         /* Tablet */
