@@ -5,6 +5,7 @@ namespace App\Service\Checkout;
 use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Entity\User;
+use App\Exception\InsufficientStockException;
 use App\Repository\ProductRepository;
 use App\Service\Cart\CartManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,6 +30,7 @@ final class CheckoutService
      * @param User $user
      * @param array<string, string> $shippingData
      * @throws LogicException
+     * @throws InsufficientStockException
      * @return Order
      */
     public function createOrderFromCart(User $user, array $shippingData): Order
@@ -70,9 +72,15 @@ final class CheckoutService
                 throw new LogicException(sprintf("Prix introuvable pour le produit #%d.", $productId));
             }
 
+            if($product->getStock() < $qty){
+                throw new InsufficientStockException(sprintf('Stock insuffisant pour "%s".', $product->getTitle()));
+            }
+
             // Snapshot : copie des données produit au moment de la commande
             $orderItem = OrderItem::fromProduct($product, $qty);
             $order->addItem($orderItem);
+
+            $product->setStock($product->getStock() - $qty);
         }
 
         $order->recalcTotal();

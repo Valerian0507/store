@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Address;
 use App\Entity\User;
+use App\Exception\InsufficientStockException;
 use App\Repository\AddressRepository;
 use App\Repository\OrderRepository;
 use App\Service\Checkout\CheckoutService;
@@ -140,12 +141,15 @@ final class CheckoutController extends AbstractController
 
         try {
             $order = $checkoutService->createOrderFromCart($user, $shippingData);
+        } catch (InsufficientStockException $e) {
+            $this->addFlash('error', $e->getMessage());
+
+            return $this->redirectToRoute('app_cart_index');
         } catch (LogicException $e) {
             $this->addFlash('error', 'Votre panier est vide.');
 
             return $this->redirectToRoute('app_cart_index');
         }
-
         return $this->redirectToRoute('app_checkout_success', [
             'id' => $order->getId(),
         ]);
