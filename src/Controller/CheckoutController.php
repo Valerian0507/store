@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Address;
 use App\Entity\User;
 use App\Exception\InsufficientStockException;
 use App\Repository\AddressRepository;
@@ -10,12 +9,15 @@ use App\Repository\OrderRepository;
 use App\Service\Checkout\CheckoutService;
 use App\Service\Checkout\CheckoutSummaryBuilder;
 use App\Service\Checkout\OrderSuccessBuilder;
+use App\Service\Payment\StripeCheckoutService;
 use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[Route('/checkout', name: 'app_checkout_')]
 #[IsGranted('ROLE_USER')]
@@ -150,7 +152,7 @@ final class CheckoutController extends AbstractController
 
             return $this->redirectToRoute('app_cart_index');
         }
-        return $this->redirectToRoute('app_checkout_success', [
+        return $this->redirectToRoute('app_checkout_pay', [
             'id' => $order->getId(),
         ]);
     }
@@ -180,7 +182,6 @@ final class CheckoutController extends AbstractController
     *
     * @return array<string, string>
     */
-
     private function validateShippingData(array $shippingData): array
     {
         $errors = [];
@@ -225,6 +226,60 @@ final class CheckoutController extends AbstractController
         return $errors;
     }
 
+    #[Route('/pay/{id}', name: 'pay', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function pay(OrderRepository $orderRepository, int $id, StripeCheckoutService $stripe): Response
+    {
+        $user = $this->getUser();
+
+        if(!$user instanceof User) {
+            throw $this->createAccessDeniedException('User is not authenticated.');
+        }
+
+        $order = $orderRepository->findOneBy(['id' => $id, 'user' => $user]);
+        if ($order === null) {
+            throw $this->createNotFoundException('Order not found.');
+        }
+
+        if ($order->getStatus() !== 'pending') {
+            return $this->redirectToRoute('app_checkout_success', ['id' => $order->getId()]);
+        }
+
+        $successUrl = $this->generateUrl('app_checkout_confirm', ['id' => $order->getId()], UrlGeneratorInterface::ABSOLUTE_URL)
+            . '?session_id={CHECKOUT_SESSION_ID}';
+        $cancelUrl = $this->generateUrl('app_cart_index', [], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        $session = $stripe->createStripeCheckoutSesion($order, $successUrl, $cancelUrl);
+
+        return $this->redirect((string) $session->url);
+    }
+
+    #[Route('/confirm/{id}', name: 'confirm', methods: ['GET'], requirements: ['id' => '\d+'])]
+    public function confirm(int $id, Request $request, OrderRepository $orderRepository, StripeCheckoutService $stripe, EntityManagerInterface $em): Response
+    {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException('User is not authenticated.');
+        }
+
+        $order = $orderRepository->findOneBy(['id' => $id, 'user' => $user]);
+        if ($order === null) {
+            throw $this->createNotFoundException('Order not found.');
+        }
+
+        $sessionId = (string) $request->query->get('session_id', '');
+
+        if ($order->getStatus() === 'pending' && $sessionId !== '') {
+            $session = $stripe->retrieveCheckoutSession($sessionId);
+
+            if ($session->payment_status === 'paid') {
+                $order->setStatus('paid');
+                $em->flush();
+                $this->addFlash('success', 'Paiement effectué avec succès.');
+            }
+        }
+
+        return $this->redirectToRoute('app_checkout_success', ['id' => $order->getId()]);
+    }
 
 
 }

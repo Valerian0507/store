@@ -26,11 +26,14 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-            - '../src/Service/FileUploader.php'  
+            - '../src/Service/FileUploader.php'
 
     App\Service\FileUploader:
         arguments:
             $targetDirectory: '%product_images_directory%'
 
+    App\Service\Payment\StripeCheckoutService:
+        arguments:
+            $stripeApiKey: '%env(STRIPE_SECRET_KEY)%'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

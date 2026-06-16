@@ -226,10 +226,4 @@ final class ProfileController extends AbstractController
         return $this->redirectToRoute('app_profile_addresses');
     }
 
-
-    #[Route('/payment-methods', name: 'payment_methods', methods: ['GET'])]
-    public function paymentMethods(): Response
-    {
-        return $this->render('profile/payment_methods.html.twig');
-    }
 }
