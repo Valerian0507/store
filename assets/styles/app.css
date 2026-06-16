@@ -36,14 +36,14 @@ body {
 }
 
 .site-navbar__account .navbar-nav {
-  flex-direction: row;
-  gap: 0.35rem;
+    flex-direction: row;
+    gap: 0.35rem;
 }
 
 .site-navbar__account .nav-link,
 .site-navbar__account .btn.nav-link {
-  padding-left: 0.4rem;
-  padding-right: 0.4rem;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
 }
 
 .navbar-collapse{
@@ -181,4 +181,37 @@ body {
         display: flex;
         align-items: center;
     }
+}
+
+.footer__links,
+.footer__social {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer__links li {
+    margin-bottom: 0.4rem;
+}
+
+.footer__links a {
+    color: #667085;
+    text-decoration: none;
+}
+.footer__links a:hover {
+    color: #304880;
+    text-decoration: underline;
+}
+
+.footer__social {
+    display: flex;
+    gap: 1rem;
+    font-size: 1.3rem;
+}
+.footer__social a {
+    color: #304880;        /* ← цвет иконок меняешь тут */
+    text-decoration: none;
+}
+.footer__social a:hover {
+    color: #18306d;
 }

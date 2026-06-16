@@ -1,38 +1,80 @@
-{% block stylesheets %}
-
-<style>
-    .contact_me{
-        display: flex;
-        flex-direction: row;
-        gap: 10px;
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .contact_me a{
-        text-decoration: none;
-    }
-
-</style>
-
-{% endblock %}
-
 {# Footer #}
-<footer class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container">
-    <div class="collapse navbar-collapse justify-content" >
+<footer class="footer bg-light border-top mt-5">
+	<div class="container py-4">
+		<div class="row gy-4">
 
-      <a href="{{ path('app_mentions_legales') }}">Mentions légales</a>
-      <a href="{{ path('app_cgv') }}">CGV</a>
+			<div class="col-6 col-md-3">
+				<h6 class="fw-bold mb-3">Aide</h6>
+				<ul class="footer__links">
+					<li>
+						<a href="#">Contact</a>
+					</li>
+					<li>
+						<a href="#">FAQ</a>
+					</li>
+					<li>
+						<a href="#">À propos</a>
+					</li>
+				</ul>
+			</div>
 
-    </div>
-    <div>
-        <ul class="contact_me">
-            <li><a href="https://www.linkedin.com/feed/" ><i class="fa-brands fa-linkedin icon-primary"></i></a></li>
-            <li><a href="https://github.com/Valerian0507"><i class="fa-brands fa-github icon-primary"></i></a></li>
-            <li><a href="mailto:alex.shaginyan0507@gmail.com"><i class="fa-brands fa-google icon-primary"></i></a></li>
-        </ul>
-    </div>
-  </div>
+			<div class="col-6 col-md-3">
+				<h6 class="fw-bold mb-3">Informations légales</h6>
+				<ul class="footer__links">
+					<li>
+						<a href="{{ path('app_mentions_legales') }}">Mentions légales</a>
+					</li>
+					<li>
+						<a href="{{ path('app_cgv') }}">CGV</a>
+					</li>
+					<li>
+						<a href="#">Politique de confidentialité</a>
+					</li>
+					<li>
+						<a href="#`">Conditions d'utilisation</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="col-6 col-md-3">
+				<h6 class="fw-bold mb-3">Achats</h6>
+				<ul class="footer__links">
+					<li>
+						<a href="#">Politique de remboursement</a>
+					</li>
+					<li>
+						<a href="#">Politique d'expédition</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="col-6 col-md-3">
+				<h6 class="fw-bold mb-3">Suivez-nous</h6>
+				<ul class="footer__social">
+					<li>
+						<a href="https://www.linkedin.com/..." aria-label="LinkedIn">
+							<i class="fa-brands fa-linkedin"></i>
+						</a>
+					</li>
+					<li>
+						<a href="https://github.com/Valerian0507" aria-label="GitHub">
+							<i class="fa-brands fa-github"></i>
+						</a>
+					</li>
+					<li>
+						<a href="mailto:alex.shaginyan0507@gmail.com" aria-label="E-mail">
+							<i class="fa-solid fa-envelope"></i>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+
+		<hr class="my-3">
+
+		<p class="text-center text-muted mb-0">©
+			{{ "now"|date("Y") }}
+			AquaWorld</p>
+	</div>
 </footer>
