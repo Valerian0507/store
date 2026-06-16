@@ -17,12 +17,14 @@ Le projet couvre un parcours complet de boutique en ligne avec catalogue public,
 
 ### Authentification et sécurité
 
-- inscription
+- inscription (avec prénom et nom)
 - connexion / déconnexion
 - vérification d'email
 - renvoi du lien de vérification
+- réinitialisation du mot de passe (mot de passe oublié)
 - blocage de la connexion si le compte n'est pas vérifié
 - protection CSRF sur les actions sensibles
+- validation des données côté serveur (contraintes `Assert` sur les entités)
 - gestion des rôles `ROLE_USER` et `ROLE_ADMIN`
 
 ### Espace utilisateur
@@ -38,13 +40,17 @@ Le projet couvre un parcours complet de boutique en ligne avec catalogue public,
 - panier en session pour les visiteurs
 - panier persistant en base pour les utilisateurs connectés
 - fusion du panier visiteur vers le panier utilisateur après connexion
+- contrôle du stock à l'ajout au panier et à la validation de la commande
 - récapitulatif de commande
-- création de commande
+- création de commande et décrémentation du stock
+- paiement en ligne via Stripe Checkout (mode test)
+- mise à jour du statut de commande (`pending` → `paid`) après paiement
 - page de confirmation basée sur des ViewModels
 
 ### Administration
 
 - gestion des produits
+- gestion du stock (réapprovisionnement : ajout au stock existant)
 - upload et suppression d'image produit
 - import initial du catalogue depuis un fichier JSON
 - gestion des catégories
@@ -60,7 +66,11 @@ Le projet couvre un parcours complet de boutique en ligne avec catalogue public,
 - MySQL 8
 - Twig
 - AssetMapper
+- Stimulus (Symfony UX)
 - Bootstrap
+- Stripe (paiement en ligne, mode test)
+- PHPUnit (tests automatisés)
+- PHPStan (analyse statique, niveau 6)
 - Docker Compose
 - Mailpit
 - phpMyAdmin
@@ -84,6 +94,9 @@ Choix techniques principaux :
 - contrôle de propriété sur les données utilisateur
 - `UserChecker` pour empêcher la connexion d'un compte non vérifié
 - subscriber de connexion pour fusionner le panier session et le panier persistant
+- intégration du paiement dans un service dédié (`StripeCheckoutService`)
+- exception métier dédiée (`InsufficientStockException`) pour le contrôle du stock
+- contrôleur Stimulus pour la sélection d'adresse au checkout
 
 ## Prérequis
 
@@ -127,7 +140,10 @@ Créer un fichier `.env.local` avec une configuration adaptée à votre machine.
 DATABASE_URL="mysql://store_user:mot_de_passe@127.0.0.1:3307/store_db?serverVersion=8.0&charset=utf8mb4"
 MAILER_DSN=smtp://localhost:1025
 APP_URL=http://127.0.0.1:8000
+STRIPE_SECRET_KEY=sk_test_votre_cle_secrete_stripe
 ```
+
+> La clé Stripe de test se récupère gratuitement sur le tableau de bord Stripe (mode Test) : <https://dashboard.stripe.com/test/apikeys>. Ne jamais committer la vraie clé : elle doit rester uniquement dans `.env.local`.
 
 Les valeurs par défaut définies dans `compose.yaml` sont :
 
@@ -205,6 +221,33 @@ Après chargement des fixtures :
 - email : `user@store.com`
 - mot de passe : `password`
 
+## Tests et qualité du code
+
+### Tests automatisés (PHPUnit)
+
+Le projet contient des tests unitaires (entités) et fonctionnels (contrôle d'accès).
+
+Les tests utilisent une base dédiée `store_db_test`. Préparation :
+
+```bash
+php bin/console --env=test doctrine:database:create
+php bin/console --env=test doctrine:migrations:migrate -n
+```
+
+Lancement de la suite :
+
+```bash
+php bin/phpunit
+```
+
+### Analyse statique (PHPStan)
+
+Le code passe **PHPStan au niveau 6** sans erreur :
+
+```bash
+php -d memory_limit=512M vendor/bin/phpstan analyse
+```
+
 ## Entités principales
 
 - `User`
@@ -262,10 +305,9 @@ Après chargement des fixtures :
 
 ## Limites actuelles
 
-- pas de paiement en ligne réel
-- pas de gestion de stock au moment de la commande
-- pas de réinitialisation de mot de passe
-- pas encore de tests automatisés
+- paiement Stripe en mode test uniquement (pas de mode production)
+- confirmation du paiement via l'URL de retour (pas encore de webhook Stripe)
+- pas de gestion des frais de livraison
 
 ## Auteur
 
