@@ -28,5 +28,11 @@ class HomeController extends AbstractController
         return $this->render('home/cgv.html.twig');
     }
 
+    #[Route('politique_confidentialite', name:'app_politique_confidentialite')]
+    public function politiqueConfidentialite(): Response
+    {
+        return $this->render('home/politique_confidentialite.html.twig');
+    }
+
 
 }

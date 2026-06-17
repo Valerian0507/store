@@ -28,7 +28,7 @@
 						<a href="{{ path('app_cgv') }}">CGV</a>
 					</li>
 					<li>
-						<a href="#">Politique de confidentialité</a>
+						<a href="{{ path('app_politique_confidentialite') }}">Politique de confidentialité</a>
 					</li>
 					<li>
 						<a href="#`">Conditions d'utilisation</a>
@@ -73,8 +73,13 @@
 
 		<hr class="my-3">
 
-		<p class="text-center text-muted mb-0">©
-			{{ "now"|date("Y") }}
-			AquaWorld</p>
+		<p class="text-center text-muted mb-0">
+        © {{ "now"|date("Y") }} AquaWorld
+        </p>
+
+        <p class="text-center text-muted small mb-0">
+            Projet réalisé à des fins pédagogiques (formation TP DWWM).
+            Aucune vente réelle — les produits présentés ne sont pas commercialisés.
+        </p>
 	</div>
 </footer>
