@@ -28,6 +28,9 @@ class ResetPasswordControllerTest extends WebTestCase
 
         $this->userRepository = $container->get(UserRepository::class);
 
+        // Nettoie les demandes de réinitialisation (clé étrangère vers user)
+        $this->em->createQuery('DELETE FROM App\Entity\ResetPasswordRequest')->execute();
+
         foreach ($this->userRepository->findAll() as $user) {
             $this->em->remove($user);
         }
@@ -49,10 +52,10 @@ class ResetPasswordControllerTest extends WebTestCase
         $this->client->request('GET', '/reset-password');
 
         self::assertResponseIsSuccessful();
-        self::assertPageTitleContains('Reset your password');
+        self::assertPageTitleContains('Mot de passe oublié');
 
         // Submit the reset password form and test email message is queued / sent
-        $this->client->submitForm('Send password reset email', [
+        $this->client->submitForm('Envoyer le lien', [
             'reset_password_request_form[email]' => 'me@example.com',
         ]);
 
@@ -61,22 +64,22 @@ class ResetPasswordControllerTest extends WebTestCase
         // self::assertQueuedEmailCount(1);
         self::assertEmailCount(1);
 
-        self::assertCount(1, $messages = $this->getMailerMessages());
+        $messages = $this->getMailerMessages();
 
         self::assertEmailAddressContains($messages[0], 'from', 'no-reply@store.com');
         self::assertEmailAddressContains($messages[0], 'to', 'me@example.com');
-        self::assertEmailTextBodyContains($messages[0], 'This link will expire in 1 hour.');
+        self::assertEmailHtmlBodyContains($messages[0], 'Pour réinitialiser votre mot de passe');
 
         self::assertResponseRedirects('/reset-password/check-email');
 
         // Test check email landing page shows correct "expires at" time
         $crawler = $this->client->followRedirect();
 
-        self::assertPageTitleContains('Password Reset Email Sent');
-        self::assertStringContainsString('This link will expire in 1 hour', $crawler->html());
+        self::assertPageTitleContains('E-mail envoyé');
+        self::assertStringContainsString('Ce lien expirera', $crawler->html());
 
         // Test the link sent in the email is valid
-        $email = $messages[0]->toString();
+        $email = quoted_printable_decode($messages[0]->toString());
         preg_match('#(/reset-password/reset/[a-zA-Z0-9]+)#', $email, $resetLink);
 
         $this->client->request('GET', $resetLink[1]);
@@ -86,9 +89,9 @@ class ResetPasswordControllerTest extends WebTestCase
         $this->client->followRedirect();
 
         // Test we can set a new password
-        $this->client->submitForm('Reset password', [
-            'change_password_form[plainPassword][first]' => 'newStrongPassword',
-            'change_password_form[plainPassword][second]' => 'newStrongPassword',
+        $this->client->submitForm('Réinitialiser', [
+            'change_password_form[plainPassword][first]' => 'Zt7&qLm9!xVr2Wp',
+            'change_password_form[plainPassword][second]' => 'Zt7&qLm9!xVr2Wp',
         ]);
 
         self::assertResponseRedirects('/login');
@@ -99,6 +102,6 @@ class ResetPasswordControllerTest extends WebTestCase
 
         /** @var UserPasswordHasherInterface $passwordHasher */
         $passwordHasher = static::getContainer()->get(UserPasswordHasherInterface::class);
-        self::assertTrue($passwordHasher->isPasswordValid($user, 'newStrongPassword'));
+        self::assertTrue($passwordHasher->isPasswordValid($user, 'Zt7&qLm9!xVr2Wp'));
     }
 }
