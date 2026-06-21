@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gérer mon profil{% endblock %}
+
+{% block body %}
+    <div class="container py-4">
+        <div class="mx-auto" style="max-width: 520px;">
+            <h1 class="h4 mb-3">Gérer mon profil</h1>
+
+            {# Section 1 — informations personnelles #}
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-header bg-white fw-semibold py-2">Mes informations</div>
+                <div class="card-body p-4">
+                    {{ form_start(profileForm, { attr: { 'data-turbo': 'false' } }) }}
+                        {{ form_row(profileForm.firstName) }}
+                        {{ form_row(profileForm.lastName) }}
+
+                        <button type="submit" class="btn btn-primary mt-2">Enregistrer</button>
+                    {{ form_end(profileForm) }}
+                </div>
+            </div>
+
+            {# Section 2 — mot de passe #}
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white fw-semibold py-2">Mot de passe</div>
+                <div class="card-body p-4">
+                    {{ form_start(passwordForm, { attr: { 'data-turbo': 'false' } }) }}
+                        {{ form_row(passwordForm.currentPassword) }}
+                        {{ form_row(passwordForm.plainPassword.first) }}
+                        {{ form_row(passwordForm.plainPassword.second) }}
+
+                        <button type="submit" class="btn btn-primary mt-2">Mettre à jour le mot de passe</button>
+                    {{ form_end(passwordForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

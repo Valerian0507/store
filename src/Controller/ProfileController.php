@@ -13,8 +13,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use App\Form\ProfileType;
+use App\Form\ChangePasswordType;
 
 #[Route('/profile', name: 'app_profile_')]
 #[IsGranted('ROLE_USER')]
@@ -224,6 +227,47 @@ final class ProfileController extends AbstractController
         $this->addFlash('success', 'Adresse par défaut mise à jour avec succès.');
 
         return $this->redirectToRoute('app_profile_addresses');
+    }
+
+    #[Route('/edit', name: 'edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException("Utilisateur introuvable.");
+        }
+
+        $profileForm = $this->createForm(ProfileType::class, $user);
+        $passwordForm = $this->createForm(ChangePasswordType::class);
+
+        $profileForm->handleRequest($request);
+        $passwordForm->handleRequest($request);
+
+        // Форма имени/фамилии
+        if ($profileForm->isSubmitted() && $profileForm->isValid()) {
+            $user->setUpdatedAt(new \DateTimeImmutable());
+            $entityManager->flush();
+            $this->addFlash('success', 'Vos informations ont été mises à jour.');
+
+            return $this->redirectToRoute('app_profile_edit');
+        }
+
+        // Форма пароля
+        if ($passwordForm->isSubmitted() && $passwordForm->isValid()) {
+            $newPassword = (string) $passwordForm->get('plainPassword')->getData();
+            $user->setPassword($passwordHasher->hashPassword($user, $newPassword));
+            $user->setUpdatedAt(new \DateTimeImmutable());
+            $entityManager->flush();
+            $this->addFlash('success', 'Mot de passe mis à jour.');
+
+            return $this->redirectToRoute('app_profile_edit');
+        }
+
+        return $this->render('profile/edit.html.twig', [
+            'profileForm' => $profileForm->createView(),
+            'passwordForm' => $passwordForm->createView(),
+        ]);
     }
 
 }
