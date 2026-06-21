@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Erreur {{ status_code }}</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: system-ui, sans-serif;
+            color: grey;
+            background: #fff;
+        }
+        .error {
+            text-align: center;
+        }
+        .error__code {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .error__label {
+            font-size: 0.8rem;
+            color: grey;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="error">
+        <div class="error__code">{{ status_code }}</div>
+        <div class="error__label">Erreur</div>
+    </div>
+</body>
+</html>
