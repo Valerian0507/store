@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}My Orders{% endblock %}
+{% block title %}Mes commandes{% endblock %}
 
 {% block body %}
 <div class="container py-4">
@@ -20,7 +20,7 @@
     {% if orders is empty %}
         <div class="card shadow-sm border-0">
             <div class="card-body py-5 text-center">
-                <h2 class="h4 mb-3">No orders yet</h2>
+                <h2 class="h4 mb-3">Aucune commande pour le moment</h2>
                 <p class="text-muted mb-4">
                     Vous n'avez encore passé aucune commande.
                 </p>
@@ -77,10 +77,15 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 col-md-2 text-md-end">
-                                <a href="{{ path('app_profile_orders_show', { id: order.id }) }}" class="btn btn-outline-primary">
+                            <div class="col-12 col-md-2 text-md-end d-flex flex-column gap-2 align-items-md-end">
+                                <a href="{{ path('app_profile_orders_show', { id: order.id }) }}" class="btn btn-outline-primary btn-sm">
                                     Voir les détails
                                 </a>
+                                {% if order.status == 'pending' %}
+                                    <a href="{{ path('app_checkout_pay', { id: order.id }) }}" class="btn btn-success btn-sm" data-turbo="false">
+                                        Finaliser le paiement
+                                    </a>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

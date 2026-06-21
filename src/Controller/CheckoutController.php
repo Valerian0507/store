@@ -248,7 +248,7 @@ final class CheckoutController extends AbstractController
             . '?session_id={CHECKOUT_SESSION_ID}';
         $cancelUrl = $this->generateUrl('app_cart_index', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        $session = $stripe->createStripeCheckoutSesion($order, $successUrl, $cancelUrl);
+        $session = $stripe->createStripeCheckoutSession($order, $successUrl, $cancelUrl);
 
         return $this->redirect((string) $session->url);
     }

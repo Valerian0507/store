@@ -17,7 +17,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Form\ProfileType;
-use App\Form\ChangePasswordType;
+use App\Form\ProfileChangePasswordType;
 
 #[Route('/profile', name: 'app_profile_')]
 #[IsGranted('ROLE_USER')]
@@ -239,7 +239,7 @@ final class ProfileController extends AbstractController
         }
 
         $profileForm = $this->createForm(ProfileType::class, $user);
-        $passwordForm = $this->createForm(ChangePasswordType::class);
+        $passwordForm = $this->createForm(ProfileChangePasswordType::class);
 
         $profileForm->handleRequest($request);
         $passwordForm->handleRequest($request);
@@ -264,7 +264,7 @@ final class ProfileController extends AbstractController
             return $this->redirectToRoute('app_profile_edit');
         }
 
-        return $this->render('profile/edit.html.twig', [
+        return $this->render('profile/profile_information/edit.html.twig', [
             'profileForm' => $profileForm->createView(),
             'passwordForm' => $passwordForm->createView(),
         ]);

@@ -1,144 +1,114 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Order confirmed{% endblock %}
+{% block title %}Commande confirmée{% endblock %}
 
 {% block body %}
 	<div class="container py-4">
-		<div class="mx-auto" style="max-width: 980px;">
+		<div class="mx-auto" style="max-width: 720px;">
 
 			<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-				<div class="card-body p-4 p-md-5">
+				<div class="card-body p-3 p-md-4">
 
-					<div class="text-center mb-5">
-						<div class="mx-auto mb-4 d-flex align-items-center justify-content-center rounded-circle bg-success text-white" style="width: 120px; height: 120px; font-size: 56px;">
+					<div class="text-center mb-4">
+						<div class="mx-auto mb-3 d-flex align-items-center justify-content-center rounded-circle bg-success text-white" style="width: 64px; height: 64px; font-size: 30px;">
 							✓
 						</div>
 
-						<h1 class="fw-bold mb-3">Merci pour votre commande! Votre commande est confirmée.</h1>
-						<p class="text-muted fs-5 mb-0">Votre commande a été passée avec succès.</p>
+						<h1 class="h4 fw-bold mb-2">Merci pour votre commande !</h1>
+						<p class="text-muted mb-0">Votre commande a été passée avec succès.</p>
 					</div>
 
-					<div class="card rounded-4 border mb-4">
-						<div class="card-header bg-white fw-semibold fs-4 py-3">
-							Informations de Commande
+					<div class="card rounded-4 border mb-3">
+						<div class="card-header bg-white fw-semibold py-2">
+							Informations de commande
 						</div>
 
-						<div class="card-body p-4">
-							<div class="row gy-3 mb-4">
-								<div class="col-md-4">
-									<div class="text-muted mb-1">Numéro de Commande:</div>
+						<div class="card-body p-3">
+							<div class="row gy-3 mb-3">
+								<div class="col-6 col-md-3">
+									<div class="text-muted small mb-1">Numéro :</div>
 									<div class="fw-semibold">{{ order.reference }}</div>
 								</div>
 
-                                <div class="col-md-4">
-                                    <div class="text-muted mb-1">Order Date:</div>
-                                    <div class="fw-semibold">{{ order.createdAt|date('d/m/Y') }}</div>
-                                    <div class="text-muted small">{{ order.createdAt|date('H:i') }}</div>
-                                </div>
+								<div class="col-6 col-md-3">
+									<div class="text-muted small mb-1">Date :</div>
+									<div class="fw-semibold">{{ order.createdAt|date('d/m/Y') }}</div>
+									<div class="text-muted small">{{ order.createdAt|date('H:i') }}</div>
+								</div>
 
-								<div class="col-md-4">
-									<div class="text-muted mb-1">Statut:</div>
-									<span class="badge rounded-pill px-3 py-2 {{ order.statusBadgeClass }}">
+								<div class="col-6 col-md-3">
+									<div class="text-muted small mb-1">Statut :</div>
+									<span class="badge rounded-pill px-2 py-1 {{ order.statusBadgeClass }}">
 										{{ order.statusLabel }}
 									</span>
 								</div>
 
-								<div class="col-md-4">
-									<div class="text-muted mb-1">Total:</div>
-									<div class="fw-semibold">
-										€
-										{{ (order.totalCents / 100)|number_format(2, '.', ' ') }}
-									</div>
+								<div class="col-6 col-md-3">
+									<div class="text-muted small mb-1">Total :</div>
+									<div class="fw-semibold">€ {{ (order.totalCents / 100)|number_format(2, '.', ' ') }}</div>
 								</div>
 							</div>
 
 							<hr>
 
 							<div>
-								<div class="fw-semibold mb-2">Adresse de Livraison:</div>
+								<div class="fw-semibold mb-1">Adresse de livraison :</div>
 								<div>{{ order.shippingFullName }}</div>
 								<div>{{ order.shippingStreet }}</div>
-								<div>{{ order.shippingCity }},
-									{{ order.shippingPostalCode }},
-									{{ order.shippingCountry }}</div>
+								<div>{{ order.shippingCity }}, {{ order.shippingPostalCode }}, {{ order.shippingCountry }}</div>
 							</div>
 						</div>
 					</div>
 
 					<div class="card rounded-4 border">
-						<div class="card-header bg-white fw-semibold fs-4 py-3">
-							Articles dans votre commande
+						<div class="card-header bg-white fw-semibold py-2">
+							Articles
 						</div>
 
-						<div class="card-body p-4">
+						<div class="card-body p-3">
 							{% if order.items is empty %}
 								<p class="text-muted mb-0">Aucun article trouvé.</p>
 							{% else %}
 								{% for item in order.items %}
-                                    <div class="py-3 {% if not loop.last %}border-bottom{% endif %}">
-                                        <div
-                                            class="d-grid align-items-start gap-3"
-                                            style="grid-template-columns: minmax(0, 1fr) 90px 120px;"
-                                        >
-                                            <div class="d-flex gap-3" style="min-width: 0;">
-                                                <div
-                                                    class="rounded-3 border bg-light d-flex align-items-center justify-content-center overflow-hidden flex-shrink-0"
-                                                    style="width: 110px; height: 110px;"
-                                                >
-                                                    {% if item.imagePath %}
-                                                        <img
-                                                            src="{{ asset('uploads/products/' ~ item.imagePath) }}"
-                                                            alt="{{ item.productName }}"
-                                                            class="img-fluid"
-                                                            style="max-height: 100%; object-fit: cover;"
-                                                        >
-                                                    {% else %}
-                                                        <span class="text-muted small">No image</span>
-                                                    {% endif %}
-                                                </div>
+									<div class="py-2 {% if not loop.last %}border-bottom{% endif %}">
+										<div class="d-flex align-items-center gap-3">
+											<div class="rounded-3 border bg-light d-flex align-items-center justify-content-center overflow-hidden flex-shrink-0" style="width: 64px; height: 64px;">
+												{% if item.imagePath %}
+													<img src="{{ asset('uploads/products/' ~ item.imagePath) }}" alt="{{ item.productName }}" style="width: 100%; height: 100%; object-fit: cover;">
+												{% else %}
+													<span class="text-muted small">—</span>
+												{% endif %}
+											</div>
 
-                                                <div style="min-width: 0;">
-                                                    <div class="fw-semibold fs-5 mb-2" style="word-break: break-word;">
-                                                        {{ item.productName }}
-                                                    </div>
+											<div class="flex-grow-1" style="min-width: 0;">
+												<div class="fw-semibold" style="word-break: break-word;">{{ item.productName }}</div>
+												<div class="text-muted small">€ {{ (item.unitPriceCents / 100)|number_format(2, '.', ' ') }} × {{ item.quantity }}</div>
+											</div>
 
-                                                    <div class="text-muted">
-                                                        € {{ (item.unitPriceCents / 100)|number_format(2, '.', ' ') }}
-                                                    </div>
-                                                </div>
-                                            </div>
+											<div class="fw-semibold text-end">
+												€ {{ (item.lineTotalCents / 100)|number_format(2, '.', ' ') }}
+											</div>
+										</div>
+									</div>
+								{% endfor %}
 
-                                            <div class="text-center pt-1">
-                                                <div class="text-muted">Qty: {{ item.quantity }}</div>
-                                            </div>
+								<div class="d-flex justify-content-end mt-3">
+									<div style="min-width: 240px;">
+										<div class="d-flex justify-content-between mb-1">
+											<span class="text-muted">Sous-total :</span>
+											<span class="fw-semibold">€ {{ (order.subtotalCents / 100)|number_format(2, '.', ' ') }}</span>
+										</div>
 
-                                            <div class="fw-semibold text-end pt-1">
-                                                € {{ (item.lineTotalCents / 100)|number_format(2, '.', ' ') }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-
-								<div class="d-flex justify-content-end mt-4">
-									<div style="min-width: 270px;">
 										<div class="d-flex justify-content-between mb-2">
-											<span class="text-muted">Sous-Total:</span>
-											<span class="fw-semibold">€
-												{{ (order.subtotalCents / 100)|number_format(2, '.', ' ') }}</span>
+											<span class="text-muted">Expédition :</span>
+											<span class="fw-semibold">€ {{ (order.shippingCents / 100)|number_format(2, '.', ' ') }}</span>
 										</div>
 
-										<div class="d-flex justify-content-between mb-3">
-											<span class="text-muted">Expédition:</span>
-											<span class="fw-semibold">€
-												{{ (order.shippingCents / 100)|number_format(2, '.', ' ') }}</span>
-										</div>
+										<hr class="my-2">
 
-										<hr>
-
-										<div class="d-flex justify-content-between fs-4 fw-bold">
-											<span>Total:</span>
-											<span>€
-												{{ (order.totalCents / 100)|number_format(2, '.', ' ') }}</span>
+										<div class="d-flex justify-content-between fs-5 fw-bold">
+											<span>Total :</span>
+											<span>€ {{ (order.totalCents / 100)|number_format(2, '.', ' ') }}</span>
 										</div>
 									</div>
 								</div>
@@ -148,14 +118,14 @@
 
 				</div>
 
-				<div class="border-top bg-white px-4 py-4 px-md-5 d-flex flex-column flex-md-row justify-content-between gap-3">
-					<a href="{{ path('app_products_index') }}" class="btn btn-outline-secondary btn-lg px-4">
+				<div class="border-top bg-white px-3 py-3 px-md-4 d-flex flex-column flex-sm-row justify-content-between gap-2">
+					<a href="{{ path('app_products_index') }}" class="btn btn-outline-secondary px-4">
 						Continuer vos achats
 					</a>
 
-                    <a href="{{ path('app_profile_orders') }}" class="btn btn-outline-primary btn-lg px-4">
-					    Voir Mes Commandes
-                    </a>
+					<a href="{{ path('app_profile_orders') }}" class="btn btn-outline-primary px-4">
+						Voir mes commandes
+					</a>
 				</div>
 			</div>
 		</div>

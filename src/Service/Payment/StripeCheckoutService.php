@@ -13,9 +13,10 @@ final class StripeCheckoutService
     public function __construct(string $stripeApiKey)
     {
         $this->stripeClient = new StripeClient($stripeApiKey);
+
     }
 
-    public function createStripeCheckoutSesion(Order $order, string $successUrl, string $cancelUrl): Session
+    public function createStripeCheckoutSession(Order $order, string $successUrl, string $cancelUrl): Session
     {
         return $this->stripeClient->checkout->sessions->create([
             'mode' => 'payment',
@@ -30,6 +31,7 @@ final class StripeCheckoutService
             'success_url' => $successUrl,
             'cancel_url' => $cancelUrl,
             'metadata' => ['order_id' => (string) $order->getId()],
+            'locale' => 'fr',
         ]);
     }
 
