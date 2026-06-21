@@ -33,6 +33,8 @@ final class ProfileController extends AbstractController
         ]);
     }
 
+    // Orders
+
     #[Route('/orders', name: 'orders', methods: ['GET'])]
     public function orders(OrderRepository $orderRepository): Response
     {
@@ -69,8 +71,47 @@ final class ProfileController extends AbstractController
         ]);
     }
 
+    #[Route('/orders/{id}/cancel', name: 'orders_cancel', methods: ['POST'], requirements: ['id' => '\d+'])]
+    public function cancelOrder(int $id, Request $request, OrderRepository $orderRepository, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException("Utilisateur introuvable.");
+        }
+
+        $order = $orderRepository->findOneBy(['id' => $id, 'user' => $user]);
+
+        if ($order === null) {
+            throw $this->createNotFoundException('Commande introuvable.');
+        }
+
+        if (!$this->isCsrfTokenValid('cancel_order_' . $order->getId(), (string) $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
+        }
+
+        // On n'annule que les commandes en attente de paiement
+        if ($order->getStatus() === 'pending') {
+            // Remet les quantités dans le stock
+            foreach ($order->getItems() as $item) {
+                $product = $item->getProduct();
+                if ($product !== null) {
+                    $product->setStock($product->getStock() + $item->getQuantity());
+                }
+            }
+
+            $order->setStatus('cancelled');
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Commande annulée, le stock a été remis à jour.');
+        }
+
+        return $this->redirectToRoute('app_profile_orders');
+    }
 
 
+
+// Addresses
 
     #[Route('/addresses', name: 'addresses', methods: ['GET'])]
     public function addresses(AddressRepository $addressRepository): Response
@@ -229,6 +270,8 @@ final class ProfileController extends AbstractController
         return $this->redirectToRoute('app_profile_addresses');
     }
 
+    // Profile Information and Password
+
     #[Route('/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
     {
@@ -244,7 +287,6 @@ final class ProfileController extends AbstractController
         $profileForm->handleRequest($request);
         $passwordForm->handleRequest($request);
 
-        // Форма имени/фамилии
         if ($profileForm->isSubmitted() && $profileForm->isValid()) {
             $user->setUpdatedAt(new \DateTimeImmutable());
             $entityManager->flush();
@@ -253,7 +295,6 @@ final class ProfileController extends AbstractController
             return $this->redirectToRoute('app_profile_edit');
         }
 
-        // Форма пароля
         if ($passwordForm->isSubmitted() && $passwordForm->isValid()) {
             $newPassword = (string) $passwordForm->get('plainPassword')->getData();
             $user->setPassword($passwordHasher->hashPassword($user, $newPassword));

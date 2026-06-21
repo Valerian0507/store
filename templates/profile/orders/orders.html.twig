@@ -85,6 +85,10 @@
                                     <a href="{{ path('app_checkout_pay', { id: order.id }) }}" class="btn btn-success btn-sm" data-turbo="false">
                                         Finaliser le paiement
                                     </a>
+                                    <form method="post" action="{{ path('app_profile_orders_cancel', { id: order.id }) }}" data-turbo="false" onsubmit="return confirm('Annuler cette commande ?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('cancel_order_' ~ order.id) }}">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm w-100">Annuler</button>
+                                    </form>
                                 {% endif %}
                             </div>
                         </div>
