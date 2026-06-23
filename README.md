@@ -143,7 +143,7 @@ APP_URL=http://127.0.0.1:8000
 STRIPE_SECRET_KEY=sk_test_votre_cle_secrete_stripe
 ```
 
-> La clé Stripe de test se récupère gratuitement sur le tableau de bord Stripe (mode Test) : <https://dashboard.stripe.com/test/apikeys>. Ne jamais committer la vraie clé : elle doit rester uniquement dans `.env.local`.
+> La clé Stripe de test se récupère gratuitement sur le tableau de bord Stripe (mode Test) : [https://dashboard.stripe.com/test/apikeys](https://dashboard.stripe.com/test/apikeys). Ne jamais committer la vraie clé : elle doit rester uniquement dans `.env.local`.
 
 Les valeurs par défaut définies dans `compose.yaml` sont :
 

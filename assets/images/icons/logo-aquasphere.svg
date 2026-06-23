@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="210" height="48" viewBox="0 0 210 48" fill="none">
+  <g transform="translate(2 0)">
+    <circle cx="24" cy="24" r="21" fill="none" stroke="#1d4ed8" stroke-width="2.4"></circle>
+    <path d="M5 27c5.5 0 5.5-3.7 11-3.7s5.5 3.7 11 3.7 5.5-3.7 11-3.7 5.3 3.7 5.3 3.7" fill="none" stroke="#38bdf8" stroke-width="2.4" stroke-linecap="round"></path>
+    <path d="M9 34.5c4.6 0 4.6-2.8 9.2-2.8s4.6 2.8 9.2 2.8 4.6-2.8 9.2-2.8" fill="none" stroke="#38bdf8" stroke-width="2.4" stroke-linecap="round" opacity="0.55"></path>
+  </g>
+  <text x="56" y="31" font-family="&#39;Outfit&#39;, system-ui, sans-serif" font-size="23" fill="#0a2540"><tspan font-weight="600">Aqua</tspan><tspan font-weight="300">Sphère</tspan></text>
+</svg>

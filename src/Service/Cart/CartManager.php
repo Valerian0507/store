@@ -28,7 +28,7 @@ final class CartManager
      * - remove
      * - clear
      * - mergeSessionCartIntoUserCart
-     * CartLoginSubscriber
+     * - CartLoginSubscriber
      * - listening to LoginSuccessEvent
      * - calls CartManager
      */

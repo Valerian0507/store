@@ -4,7 +4,10 @@
 <nav class="navbar navbar-expand-md navbar-light bg-light site-navbar">
     <div class="container">
         <a class="navbar-brand site-navbar__brand" href="{{ path('app_home') }}">
-            <img src="{{ asset('images/icons/logo4.png') }}" alt="Logo" class="logo">
+            {# Logo complet : au-dessus de 768px #}
+            <img src="{{ asset('images/icons/logo-aquasphere.svg') }}" alt="AquaSphere" class="logo">
+            {# Icone seule : 768px et moins #}
+            <img src="{{ asset('images/icons/logo-aquasphere-icon.svg') }}" alt="AquaSphere" class="logo-icon">
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
