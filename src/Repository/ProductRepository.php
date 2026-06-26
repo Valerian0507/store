@@ -27,7 +27,7 @@ class ProductRepository extends ServiceEntityRepository
 
     private function applyCategoryFilter(QueryBuilder $qb, ?int $categoryId): void
     {
-         if ($categoryId !== null) {
+        if ($categoryId !== null) {
             $qb->andWhere('products.category = :category')
                 ->setParameter('category', $categoryId);
         }
@@ -40,6 +40,11 @@ class ProductRepository extends ServiceEntityRepository
                 ->andWhere('LOWER(products.title) LIKE LOWER(:q)')
                 ->setParameter('q', '%' . $q . '%');
         }
+    }
+
+    private function applyPriceFilter(QueryBuilder $qb): void
+    {
+        $qb->andWhere('products.priceCents > 0');
     }
 
     private function applySort(QueryBuilder $qb, string $sort): void
@@ -74,6 +79,7 @@ class ProductRepository extends ServiceEntityRepository
             ->setMaxResults($perPage);
 
         $this->applyCategoryFilter($qb, $category);
+        $this->applyPriceFilter($qb);
         $this->applySearch($qb, $q);
         $this->applySort($qb, $sort);
 
@@ -100,6 +106,7 @@ class ProductRepository extends ServiceEntityRepository
             ->select('COUNT(products.id)');
 
         $this->applyCategoryFilter($qb, $categoryId);
+        $this->applyPriceFilter($qb);
         $this->applySearch($qb, $q);
 
         return (int) $qb->getQuery()->getSingleScalarResult();

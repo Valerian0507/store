@@ -64,14 +64,18 @@ final class CheckoutService
         foreach ($rawCart as $productId => $qty) {
             $product = $productsById[$productId] ?? null;
 
+            // 3 vérifications
+            // Vérification 1 : le produit existe-t-il ?
             if(!$product) {
                 throw new LogicException(sprintf("Produit introuvable pour l'id %d.", $productId));
             }
 
-            if($product->getPriceCents() === null) {
+            // Vérification 2 : le prix est-il défini ?
+            if($product->getPriceCents() === null || $product->getPriceCents() <= 0) {
                 throw new LogicException(sprintf("Prix introuvable pour le produit #%d.", $productId));
             }
 
+            // Vérification 3 : le stock est-il suffisant ?
             if($product->getStock() < $qty){
                 throw new InsufficientStockException(sprintf('Stock insuffisant pour "%s".', $product->getTitle()));
             }
@@ -80,7 +84,7 @@ final class CheckoutService
             $orderItem = OrderItem::fromProduct($product, $qty);
             $order->addItem($orderItem);
 
-            $product->setStock($product->getStock() - $qty);
+            $product->setStock($product->getStock() - $qty); // Décrémente le stock du produit
         }
 
         $order->recalcTotal();

@@ -388,12 +388,12 @@
 			</div>
 		{% endif %}
 
-	 <script>
+	    <script>
 			function bindCartQtyControls() {
     	        const controls = document.querySelectorAll('.cart-item__qty-control');
 
     	        controls.forEach(function (control) {
-    	            if (control.dataset.qtyBound === '1') {  // Protection contre le double binding
+    	            if (control.dataset.qtyBound === '1') {
     	            return;
     	            }
 

@@ -150,16 +150,6 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('admin_products_index');
         }
 
-
-        $image = $product->getImage();
-        if ($image) {
-            $path = $fileUploader->getTargetDirectory() . DIRECTORY_SEPARATOR . $image;
-
-            if (is_file($path) && is_writable($path)) {
-               unlink($path);
-            }
-        }
-
         $em->remove($product);
         $em->flush();
 

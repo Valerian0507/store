@@ -43,7 +43,7 @@ class CartController extends AbstractController
             }
 
             $unitPriceCents = $product->getPriceCents();
-            if ($unitPriceCents === null) {
+            if ($unitPriceCents === null || $unitPriceCents <= 0) {
                 continue;
             }
 
@@ -97,6 +97,11 @@ class CartController extends AbstractController
                 $product->getStock()
             ));
 
+            return $this->redirectToRoute('app_products_index');
+        }
+
+        if ($product->getPriceCents() === null || $product->getPriceCents() <= 0) {
+            $this->addFlash('warning', 'Ce produit n\'est pas disponible à la vente.');
             return $this->redirectToRoute('app_products_index');
         }
 
