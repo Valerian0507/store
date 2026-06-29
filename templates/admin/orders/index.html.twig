@@ -144,7 +144,7 @@
                         {% for order in orders %}
                             <tr>
                                 <td class="fw-semibold">{{ order.reference }}</td>
-                                <td>{{ order.user ? order.user.email : '—' }}</td>
+                                <td>{{ order.user ? order.user.email : '-' }}</td>
                                 <td>{{ order.createdAt|date('d/m/Y H:i') }}</td>
                                 <td>
                                     <span class="badge {{ statusBadgeClasses[order.status] ?? 'bg-secondary text-white' }}">

@@ -45,7 +45,7 @@ final class CartManager
         $user = $this->security->getUser();
 
         if(!$user instanceof User) {
-            // Visiteur — stockage en session via CartStorage
+            // Visiteur - stockage en session via CartStorage
             $cart = $this->cartStorage->get();
             $cart[$productId] = ($cart[$productId] ?? 0) + $qty;
 
@@ -58,6 +58,10 @@ final class CartManager
 
         if(!$product) {
             throw new \LogicException("Produit n'est pas trouvé");
+        }
+
+        if ($product->getPriceCents() === null || $product->getPriceCents() <= 0) {
+            throw new \LogicException('Produit sans prix, ne peut pas être ajouté au panier.');
         }
 
         $cart = $this->getOrCreateCart($user);
@@ -90,7 +94,7 @@ final class CartManager
         $user = $this->security->getUser();
 
         if(!$user instanceof User) {
-            return $this->cartStorage->get();
+            return $this->getCleanSessionCart();
         }
 
         $cart = $this->cartRepository->findOneBy(['user' => $user]);
@@ -100,18 +104,51 @@ final class CartManager
         }
 
         $raw = [];
+        $removed = false;
 
-        foreach ($cart->getCartItems() as $item) {
+        foreach ($cart->getCartItems()->toArray() as $item) {
             $product = $item->getProduct();
 
-            if ($product === null || $product->getId() === null) {
+            if ($product === null || $product->getId() === null || $product->getPriceCents() === null || $product->getPriceCents() <= 0) {
+                $cart->removeCartItem($item);
+                $this->em->remove($item);
+                $removed = true;
                 continue;
             }
 
             $raw[$product->getId()] = $item->getQuantity();
         }
 
+        if ($removed) {
+            $cart->setUpdatedAt(new \DateTimeImmutable());
+            $this->em->flush();
+        }
+
         return $raw;
+    }
+
+    private function getCleanSessionCart(): array
+    {
+        $cart = $this->cartStorage->get();
+        $cleanCart = [];
+        $changed = false;
+
+        foreach ($cart as $productId => $qty) {
+            $product = $this->productRepository->find((int) $productId);
+
+            if (!$product || $product->getPriceCents() === null || $product->getPriceCents() <= 0) {
+                $changed = true;
+                continue;
+            }
+
+            $cleanCart[(int) $productId] = (int) $qty;
+        }
+
+        if ($changed) {
+            $this->cartStorage->save($cleanCart);
+        }
+
+        return $cleanCart;
     }
 
 

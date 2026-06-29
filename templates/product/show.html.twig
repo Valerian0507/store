@@ -91,10 +91,10 @@
             <section class="product-show__section">
                 <h2 class="product-show__section-title">Caractéristiques</h2>
                 <ul class="product-show__features">
-                    <li>Catégorie : {{ product.category ? product.category.label : '—' }}</li>
+                    <li>Catégorie : {{ product.category ? product.category.label : '-' }}</li>
                     <li>Référence : {{ product.reference }}</li>
-                    <li>Volume (m³) : {{ product.volumeM3 is not null ? product.volumeM3 : '—' }}</li>
-                    <li>Poids (kg) : {{ product.weightKg is not null ? product.weightKg : '—' }}</li>
+                    <li>Volume (m³) : {{ product.volumeM3 is not null ? product.volumeM3 : '-' }}</li>
+                    <li>Poids (kg) : {{ product.weightKg is not null ? product.weightKg : '-' }}</li>
                 </ul>
             </section>
         </div>

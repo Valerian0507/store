@@ -45,8 +45,8 @@ class OrderRepository extends ServiceEntityRepository
     }
 
     	/** @return Order[] */
-     public function findOrdersForAdminList(?string $status = null, ?string $search = null, int $limit = 20, int $offset = 0 ): array
-     {
+    public function findOrdersForAdminList(?string $status = null, ?string $search = null, int $limit = 20, int $offset = 0 ): array
+    {
         $qb = $this->createQueryBuilder('o')
             ->leftJoin('o.user', 'u')
             ->addSelect('u')

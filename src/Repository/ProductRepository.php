@@ -19,7 +19,7 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-    // Méthodes privées — chaque responsabilité est isolée
+    // Méthodes privées - chaque responsabilité est isolée
     private function createCatalogQueryBuilder(): QueryBuilder
     {
         return $this->createQueryBuilder('products');

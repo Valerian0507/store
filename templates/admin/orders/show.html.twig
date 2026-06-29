@@ -39,7 +39,7 @@
                         {% if order.updatedAt %}
                             {{ order.updatedAt|date('d/m/Y H:i') }}
                         {% else %}
-                            —
+                            <p>No image</p>
                         {% endif %}
                     </p>
 
@@ -85,12 +85,12 @@
 
                     <p class="mb-2">
                         <strong>Email :</strong>
-                        {{ order.user ? order.user.email : '—' }}
+                        {{ order.user ? order.user.email : '-' }}
                     </p>
 
                     <p class="mb-0">
                         <strong>Numéro téléphone :</strong>
-                        —
+                        -
                     </p>
                 </div>
             </div>

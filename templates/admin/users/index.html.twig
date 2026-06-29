@@ -79,7 +79,7 @@
                                     <tr>
                                         <td>{{ ((page - 1) * limit) + loop.index }}</td>
                                         <td>{{ user.email }}</td>
-                                        <td>{{ user.getFullName() ? user.getFullName() : '—' }}</td>
+                                        <td>{{ user.getFullName() ? user.getFullName() : '-' }}</td>
                                         <td>
                                             {% if user.verified %}
                                                 <span class="badge bg-success">Oui</span>
@@ -88,8 +88,8 @@
                                             {% endif %}
                                         </td>
                                         <td>{{ displayRole }}</td>
-                                        <td>{{ user.createdAt ? user.createdAt|date('d/m/Y H:i') : '—' }}</td>
-                                        <td>{{ user.updatedAt ? user.updatedAt|date('d/m/Y H:i') : '—' }}</td>
+                                        <td>{{ user.createdAt ? user.createdAt|date('d/m/Y H:i') : '-' }}</td>
+                                        <td>{{ user.updatedAt ? user.updatedAt|date('d/m/Y H:i') : '-' }}</td>
                                         <td class="text-end">
                                             <a href="{{ path('admin_users_show', { id: user.id }) }}" class="btn btn-sm btn-outline-primary">
                                                 Voir

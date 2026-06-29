@@ -25,13 +25,13 @@
                     <dd class="col-sm-9">{{ user.email }}</dd>
 
                     <dt class="col-sm-3">Prénom</dt>
-                    <dd class="col-sm-9">{{ user.firstName ? user.firstName : '—' }}</dd>
+                    <dd class="col-sm-9">{{ user.firstName ? user.firstName : '-' }}</dd>
 
                     <dt class="col-sm-3">Nom</dt>
-                    <dd class="col-sm-9">{{ user.lastName ? user.lastName : '—' }}</dd>
+                    <dd class="col-sm-9">{{ user.lastName ? user.lastName : '-' }}</dd>
 
                     <dt class="col-sm-3">Nom complet</dt>
-                    <dd class="col-sm-9">{{ user.getFullName() ? user.getFullName() : '—' }}</dd>
+                    <dd class="col-sm-9">{{ user.getFullName() ? user.getFullName() : '-' }}</dd>
 
                     <dt class="col-sm-3">Vérifié</dt>
                     <dd class="col-sm-9">
@@ -52,10 +52,10 @@
                     </dd>
 
                     <dt class="col-sm-3">Créé le</dt>
-                    <dd class="col-sm-9">{{ user.createdAt ? user.createdAt|date('d/m/Y H:i') : '—' }}</dd>
+                    <dd class="col-sm-9">{{ user.createdAt ? user.createdAt|date('d/m/Y H:i') : '-' }}</dd>
 
                     <dt class="col-sm-3">Mis à jour</dt>
-                    <dd class="col-sm-9">{{ user.updatedAt ? user.updatedAt|date('d/m/Y H:i') : '—' }}</dd>
+                    <dd class="col-sm-9">{{ user.updatedAt ? user.updatedAt|date('d/m/Y H:i') : '-' }}</dd>
                 </dl>
             </div>
         </div>
@@ -114,7 +114,7 @@
                                     </div>
 
                                     <div class="text-muted small mt-3">
-                                        Créée le {{ address.createdAt ? address.createdAt|date('d/m/Y H:i') : '—' }}
+                                        Créée le {{ address.createdAt ? address.createdAt|date('d/m/Y H:i') : '-' }}
                                     </div>
                                 </div>
                             </div>
@@ -164,7 +164,7 @@
 
                                     <tr>
                                         <td>{{ order.reference }}</td>
-                                        <td>{{ order.createdAt ? order.createdAt|date('d/m/Y H:i') : '—' }}</td>
+                                        <td>{{ order.createdAt ? order.createdAt|date('d/m/Y H:i') : '-' }}</td>
                                         <td>
                                             <span class="badge {{ statusBadgeClass }}">
                                                 {{ statusLabel }}
