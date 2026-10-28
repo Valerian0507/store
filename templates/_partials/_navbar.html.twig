@@ -48,8 +48,12 @@
                 </a>
             {% endif %}
 
-            <a class="site-header__icon {{ route starts with 'app_cart_' ? 'is-active' : '' }}" href="{{ path('app_cart_index') }}" title="Panier" aria-label="Panier">
+            {# Badge mis à jour sans rechargement par cart_add_controller.js #}
+            {% set cartCount = cart_count() %}
+            <a class="site-header__icon site-header__cart {{ route starts with 'app_cart_' ? 'is-active' : '' }}" href="{{ path('app_cart_index') }}" title="Panier"
+               aria-label="{{ cartCount > 0 ? 'Panier (' ~ cartCount ~ ' article' ~ (cartCount > 1 ? 's' : '') ~ ')' : 'Panier' }}" data-cart-link>
                 <i class="fa-solid fa-bag-shopping"></i>
+                <span class="site-header__badge" data-cart-count aria-hidden="true" {{ cartCount == 0 ? 'hidden' }}>{{ cartCount > 99 ? '99+' : cartCount }}</span>
             </a>
 
             {# Connexion / déconnexion toujours en dernier : l'icône indique l'action, pas l'état #}

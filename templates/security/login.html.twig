@@ -1,88 +1,56 @@
-{% extends 'base.html.twig' %}
+{% extends 'security/_auth_layout.html.twig' %}
 
-{% block title %}Connexion{% endblock %}
+{% block title %}Connexion - AquaSphère{% endblock %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('styles/pages/auth.css') }}">
-{% endblock %}
+{% block auth_content %}
+    <p class="aq-kicker">Votre espace AquaSphère</p>
+    <h1 class="auth__title">Heureux de vous revoir.</h1>
+    <p class="auth__subtitle">Connectez-vous pour retrouver votre compte.</p>
 
-{% block body %}
-    <section class="container auth-page">
-        <div class="auth-card">
-            {% for message in app.flashes('success') %}
-                <div class="alert alert-success">{{ message }}</div>
-            {% endfor %}
-
-            {% for message in app.flashes('error') %}
-                <div class="alert alert-danger">{{ message }}</div>
-            {% endfor %}
-
-            {% if error %}
-                <div class="alert alert-danger">
-                    {{ error.messageKey|trans(error.messageData, 'security') }}
-
-                    {% if error.messageKey == 'error.email_not_verified' %}
-                        <div class="mt-2">
-                            <a href="{{ path('app_resend_verify_email') }}" class="auth-form__link">
-                                Renvoyer l’email de vérification
-                            </a>
-                        </div>
-                    {% endif %}
-                </div>
-            {% endif %}
-
-            <h1 class="auth-card__title">Connectez-vous</h1>
-            <p class="auth-card__subtitle">Accédez à votre compte pour continuer.</p>
-
-            <form method="post">
-                <div class="auth-form__group">
-                    <label for="email" class="auth-form__label">E-mail</label>
-                    <input
-                        type="email"
-                        value="{{ last_username }}"
-                        name="email"
-                        id="email"
-                        class="auth-form__input"
-                        autocomplete="email"
-                        required
-                        autofocus
-                        placeholder="Votre e-mail"
-                    >
-                </div>
-
-                <div class="auth-form__group">
-                    <label for="password" class="auth-form__label">Mot de passe</label>
-                    <input
-                        type="password"
-                        name="password"
-                        id="password"
-                        class="auth-form__input"
-                        autocomplete="current-password"
-                        required
-                        placeholder="Votre mot de passe"
-                    >
-                </div>
-
-                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-                <div class="auth-form__row">
-                    <label for="_remember_me" class="auth-form__remember">
-                        <input type="checkbox" name="_remember_me" id="_remember_me">
-                        <span>Se souvenir de moi</span>
-                    </label>
-                    <p class="mb-0">
-                        <a href="{{ path('app_forgot_password_request') }}" class="auth-form__link">Mot de passe oublié ?</a>
-                    </p>
-                </div>
-
-                <button class="auth-form__submit" type="submit">
-                    Connexion
-                </button>
-            </form>
-            <p class="auth-form__footer">
-                Vous n’avez pas de compte ?
-                <a href="{{ path('app_register') }}" class="auth-form__link">Inscrivez-vous</a>
-            </p>
+    {% if error %}
+        <div class="auth__error" role="alert">
+            <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+            <div>
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+                {% if error.messageKey == 'error.email_not_verified' %}
+                    <a href="{{ path('app_resend_verify_email') }}">Renvoyer l’e-mail de vérification</a>
+                {% endif %}
+            </div>
         </div>
-    </section>
+    {% endif %}
+
+    <form method="post" class="auth-form">
+        <div class="auth-field">
+            <label for="email" class="auth-field__label">E-mail</label>
+            <input type="email" value="{{ last_username }}" name="email" id="email" class="auth-field__input"
+                   autocomplete="email" required autofocus placeholder="votre@email.com">
+        </div>
+
+        <div class="auth-field">
+            <label for="password" class="auth-field__label">Mot de passe</label>
+            <div class="auth-field__password" data-controller="password-toggle">
+                <input type="password" name="password" id="password" class="auth-field__input"
+                       autocomplete="current-password" required placeholder="Votre mot de passe" data-password-toggle-target="input">
+                {% include 'security/_password_toggle.html.twig' %}
+            </div>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+        <div class="auth-form__row">
+            <label class="auth-check">
+                <input type="checkbox" name="_remember_me" class="auth-check__input">
+                <span>Se souvenir de moi</span>
+            </label>
+            <a href="{{ path('app_forgot_password_request') }}" class="auth__link">Mot de passe oublié ?</a>
+        </div>
+
+        <button class="aq-btn aq-btn--primary aq-btn--block auth-form__submit" type="submit">
+            Connexion <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
+    </form>
+
+    <p class="auth__switch">
+        Pas encore de compte ? <a href="{{ path('app_register') }}" class="auth__link">Créer un compte</a>
+    </p>
 {% endblock %}

@@ -1,0 +1,26 @@
+{# Mise en page commune des pages de compte (connexion, inscription, mot de passe oublié…) :
+   photo + devise à gauche, formulaire à droite. Blocs : auth_image, auth_tagline, auth_content #}
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/pages/auth.css') }}">
+{% endblock %}
+
+{% block body %}
+    <section class="aq-container auth">
+        <div class="auth__card">
+            <div class="auth__visual">
+                <img class="auth__image" src="{% block auth_image %}{{ asset('images/login/login-pool-garden.webp') }}{% endblock %}"
+                     alt="" width="1122" height="1402">
+                <div class="auth__brand" aria-hidden="true">
+                    {% include '_partials/_logo.html.twig' with {variant: 'light'} %}
+                </div>
+                <p class="auth__tagline">{% block auth_tagline %}Les beaux jours<br>se préparent ici.{% endblock %}</p>
+            </div>
+
+            <div class="auth__content">
+                {% block auth_content %}{% endblock %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -88,6 +88,7 @@ class ProductController extends AbstractController
 
         return $this->render('product/show.html.twig', [
             'product' => $product,
+            'suggestions' => $products->findComplements($product),
         ]);
     }
 }

@@ -83,20 +83,21 @@ class NewsletterController extends AbstractController
         $user = $this->getUser();
         $subscriber = $subscribers->findOneByEmail($user->getEmail());
 
-        if ($request->request->get('action') === 'unsubscribe') {
-            if ($subscriber !== null) {
-                $em->remove($subscriber);
-                $em->flush();
-            }
+        // Interrupteur "Je souhaite recevoir la newsletter" : coché = inscrit, décoché = désinscrit
+        $wantsNewsletter = $request->request->getBoolean('newsletter');
+
+        if ($wantsNewsletter && $subscriber === null) {
+            $this->createSubscriber($user->getEmail(), $em, $mailer, $logger);
+            $this->addFlash('success', 'Vous êtes inscrit(e) à la newsletter.');
+        } elseif (!$wantsNewsletter && $subscriber !== null) {
+            $em->remove($subscriber);
+            $em->flush();
             $this->addFlash('success', 'Vous êtes désinscrit(e) de la newsletter.');
         } else {
-            if ($subscriber === null) {
-                $this->createSubscriber($user->getEmail(), $em, $mailer, $logger);
-            }
-            $this->addFlash('success', 'Vous êtes inscrit(e) à la newsletter.');
+            $this->addFlash('success', 'Vos préférences sont enregistrées.');
         }
 
-        return $this->redirectToRoute('app_profile_index');
+        return $this->redirect($this->generateUrl('app_profile_index') . '#newsletter');
     }
 
     #[Route('/desinscription/{token}', name: 'unsubscribe', methods: ['GET', 'POST'], requirements: ['token' => '[a-f0-9]{64}'])]

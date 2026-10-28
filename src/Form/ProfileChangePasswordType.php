@@ -8,7 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
-use Symfony\Component\Validator\Constraints\Length;
+use App\Validator\StrongPassword;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ProfileChangePasswordType extends AbstractType
@@ -30,10 +30,11 @@ class ProfileChangePasswordType extends AbstractType
                 'first_options' => [
                     'label' => 'Nouveau mot de passe',
                     'attr' => ['autocomplete' => 'new-password'],
+                    // Même règle qu'à l'inscription (App\Validator\StrongPassword)
                     'constraints' => [
-                        new NotBlank(message: 'Veuillez saisir un nouveau mot de passe.'),
-                        new Length(min: 8, max: 4096, minMessage: 'Au moins {{ limit }} caractères.'),
+                        new StrongPassword(),
                     ],
+                    'help' => 'Au moins 8 caractères, dont une majuscule, un chiffre et un caractère spécial.',
                 ],
                 'second_options' => [
                     'label' => 'Confirmer le nouveau mot de passe',

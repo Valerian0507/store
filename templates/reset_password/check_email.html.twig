@@ -1,23 +1,20 @@
-{% extends 'base.html.twig' %}
+{% extends 'security/_auth_layout.html.twig' %}
 
-{% block title %}E-mail envoyé{% endblock %}
+{% block title %}E-mail envoyé - AquaSphère{% endblock %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('styles/pages/auth.css') }}">
-{% endblock %}
+{% block auth_content %}
+    <p class="aq-kicker">Mot de passe oublié</p>
+    <h1 class="auth__title">Vérifiez votre boîte mail.</h1>
+    <p class="auth__subtitle">
+        Si un compte correspond à cette adresse, un e-mail contenant un lien de réinitialisation vient d'être envoyé.
+        Ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+    </p>
 
-{% block body %}
-    <section class="container auth-page">
-        <div class="auth-card">
-            <h1 class="auth-card__title">Vérifiez votre boîte mail</h1>
-            <p class="auth-card__subtitle">
-                Si un compte correspond à cette adresse, un e-mail contenant un lien de réinitialisation vient d'être envoyé.
-                Ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
-            </p>
-            <p class="auth-form__footer">
-                Vous n'avez rien reçu ? Vérifiez vos spams ou
-                <a href="{{ path('app_forgot_password_request') }}" class="auth-form__link">réessayez</a>.
-            </p>
-        </div>
-    </section>
+    <a href="{{ path('app_login') }}" class="aq-btn aq-btn--primary aq-btn--block auth-form__submit">
+        Retour à la connexion <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+    </a>
+
+    <p class="auth__switch">
+        Vous n'avez rien reçu ? Vérifiez vos spams ou <a href="{{ path('app_forgot_password_request') }}" class="auth__link">réessayez</a>.
+    </p>
 {% endblock %}

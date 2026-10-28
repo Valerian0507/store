@@ -1,53 +1,73 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Produits{% endblock %}
+{% set selectedCategory = categories|filter(c => c.id == category)|first %}
+{% set pageTitle = selectedCategory ? selectedCategory.label|capitalize : 'Tous les produits' %}
+
+{% block title %}{{ pageTitle }} - AquaSphère{% endblock %}
 
 {% block stylesheets %}
 	<link rel="stylesheet" href="{{ asset('styles/pages/product-index.css') }}">
 {% endblock %}
 
 {% block body %}
-	<section class="container py-4">
-		<h1 class="products-page__title">Catalogue des produits</h1>
+	<section class="aq-container catalog">
+		<header class="catalog__head">
+			<h1 class="catalog__title">{{ pageTitle }}</h1>
+			<p class="catalog__count">
+				{{ total }} résultat{{ total > 1 ? 's' }}
+				{% if q %}pour « <strong>{{ q }}</strong> »{% endif %}
+			</p>
 
-        {% set selectedCategory = categories|filter(c => c.id == category)|first %}
-        {% if selectedCategory %}
-            {% if selectedCategory.label|lower == 'piscines' %}
-                <p><a class="aq-link-arrow" href="{{ path('app_tools_volume') }}">Besoin de connaître le volume ? Ouvrir le calculateur</a></p>
-            {% elseif selectedCategory.label|lower in ['spa', 'entretien'] %}
-                <p><a class="aq-link-arrow" href="{{ path('app_tools_water') }}">Comprendre mes mesures d’eau</a></p>
-            {% endif %}
-        {% endif %}
+			{# Outil utile selon la catégorie (PoolToolsController) #}
+			{% if selectedCategory %}
+				{% if selectedCategory.label|lower == 'piscines' %}
+					<a class="aq-link-arrow catalog__tool" href="{{ path('app_tools_volume') }}">
+						Besoin de connaître le volume ? Ouvrir le calculateur <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+					</a>
+				{% elseif selectedCategory.label|lower in ['spa', 'entretien'] %}
+					<a class="aq-link-arrow catalog__tool" href="{{ path('app_tools_water') }}">
+						Comprendre mes mesures d’eau <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+					</a>
+				{% endif %}
+			{% endif %}
+		</header>
 
-		<form method="get" class="products-page__filters">
-			<label class="products-page__field">
-				<span class="products-page__label">Catégorie</span>
-				<select name="category" class="products-page__select" onchange="this.form.submit()">
-					<option value="">Toutes</option>{% for c in categories %}
-						<option value="{{ c.id }}" {{ c.id == category ? 'selected' : '' }}>
-							{{ c.label|capitalize }}
-						</option>
+		<form method="get" class="catalog-filters" role="search">
+			<label class="catalog-filters__field">
+				<span class="catalog-filters__label">Catégorie</span>
+				<select name="category" class="catalog-filters__control catalog-filters__select" onchange="this.form.submit()">
+					<option value="">Toutes les catégories</option>
+					{% for c in nav_categories() %}
+						<option value="{{ c.id }}" {{ c.id == category ? 'selected' }}>{{ c.label|capitalize }}</option>
 					{% endfor %}
 				</select>
 			</label>
 
-			<label class="products-page__field">
-				<span class="products-page__label">Recherche</span>
-				<input type="search" name="q" value="{{ q ?? '' }}" placeholder="Nom du produit" class="products-page__input">
+			<label class="catalog-filters__field">
+				<span class="catalog-filters__label">Rechercher un produit</span>
+				<span class="catalog-filters__search">
+					<i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+					<input type="search" name="q" value="{{ q ?? '' }}" placeholder="Nom ou référence…" maxlength="80"
+						   class="catalog-filters__control catalog-filters__input">
+				</span>
 			</label>
 
-			<label class="products-page__field">
-				<span class="products-page__label">Trier</span>
-				<select name="sort" class="products-page__select" onchange="this.form.submit()">
-					<option value="newest" {% if sort == 'newest' %} selected {% endif %}>Nouveautés</option>
-					<option value="price_asc" {% if sort == 'price_asc' %} selected {% endif %}>Prix ↑</option>
-					<option value="price_desc" {% if sort == 'price_desc' %} selected {% endif %}>Prix ↓</option>
-					<option value="title_asc" {% if sort == 'title_asc' %} selected {% endif %}>Titre A→Z</option>
-					<option value="title_desc" {% if sort == 'title_desc' %} selected {% endif %}>Titre Z→A</option>
+			<label class="catalog-filters__field">
+				<span class="catalog-filters__label">Trier par</span>
+				<select name="sort" class="catalog-filters__control catalog-filters__select" onchange="this.form.submit()">
+					{% for value, label in {
+						newest: 'Nouveautés',
+						price_asc: 'Prix croissant',
+						price_desc: 'Prix décroissant',
+						title_asc: 'Nom de A à Z',
+						title_desc: 'Nom de Z à A',
+					} %}
+						<option value="{{ value }}" {{ sort == value ? 'selected' }}>{{ label }}</option>
+					{% endfor %}
 				</select>
 			</label>
 
-			<button type="submit" class="products-page__submit">Rechercher</button>
+			<button type="submit" class="aq-btn aq-btn--primary catalog-filters__submit">Rechercher</button>
 		</form>
 
 		{% set baseParams = {} %}
@@ -62,75 +82,52 @@
 		{% endif %}
 
 		{% if products is empty %}
-			{% if q %}
-				<p class="products-page__empty">Aucun produit trouvé pour «
-					<strong>{{ q }}</strong>
-					».</p>
-			{% else %}
-				<p class="products-page__empty">Aucun produit disponible.</p>
-			{% endif %}
+			<div class="catalog__empty">
+				<i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+				{% if q %}
+					<p>Aucun produit trouvé pour « <strong>{{ q }}</strong> ».</p>
+				{% else %}
+					<p>Aucun produit disponible pour le moment.</p>
+				{% endif %}
+				<a href="{{ path('app_products_index') }}" class="aq-btn aq-btn--outline aq-btn--sm">Voir tous les produits</a>
+			</div>
 		{% else %}
-			<div class="products-grid">
+			<div class="catalog__grid">
 				{% for product in products %}
-					<article class="product-card">
-						<a href="{{ path('app_products_show', {id: product.id}) }}" class="product-card__image-link">
-							{% if product.image %}
-								<img src="{{ asset('uploads/products/' ~ product.image) }}" alt="{{ product.title }}" onerror="this.onerror=null;this.src='{{ asset('images/products/no-image.jpg') }}';">
-							{% else %}
-								<img src="{{ asset('images/products/no-image.jpg') }}" alt="No image">
-							{% endif %}
-						</a>
-
-						<div class="product-card__meta">
-							<h2 class="product-card__title">
-								<a href="{{ path('app_products_show', {id: product.id}) }}">{{ product.title }}</a>
-							</h2>
-
-							<p class="product-card__ref">Réf :
-								{{ product.reference }}</p>
-							<p class="product-card__price">Prix :
-								{{ product.getPriceEur() }}
-								€</p>
-							<div class="product-card__actions">
-								<form method="post" action="{{ path('app_cart_add', {id: product.id}) }}" data-controller="cart-add" data-action="cart-add#submit">
-									<input type="hidden" name="_token" value="{{ csrf_token('cart_add_' ~ product.id) }}">
-									<button type="submit" class="product-card__add-button">
-                                        Ajouter au panier
-                                    </button>
-								</form>
-							</div>
-						</div>
-
-					</article>
+					{% include '_partials/_product_card.html.twig' with {product: product, catalog: true} %}
 				{% endfor %}
 			</div>
 
 			{% if pages > 1 %}
-				<nav class="paginated">
+				<nav class="catalog-pagination" aria-label="Pagination">
 					{% if page > 1 %}
-						<a href="{{ path('app_products_index', baseParams|merge({page: page - 1})) }}" class="previous">‹</a>
+						<a href="{{ path('app_products_index', baseParams|merge({page: page - 1})) }}" class="catalog-pagination__item" aria-label="Page précédente">
+							<i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+						</a>
 					{% endif %}
 
-					<a href="{{ path('app_products_index', baseParams|merge({page: 1})) }}" class="{{ page == 1 ? 'is-current' : '' }}">1</a>
+					<a href="{{ path('app_products_index', baseParams|merge({page: 1})) }}" class="catalog-pagination__item {{ page == 1 ? 'is-current' }}" {% if page == 1 %}aria-current="page"{% endif %}>1</a>
 
 					{% if pagination.start > 2 %}
-						<span class="dots">…</span>
+						<span class="catalog-pagination__dots" aria-hidden="true">…</span>
 					{% endif %}
 
 					{% for p in pagination.start..pagination.end %}
 						{% if p > 1 and p < pages %}
-							<a href="{{ path('app_products_index', baseParams|merge({page: p})) }}" class="{{ page == p ? 'is-current' : '' }}">{{ p }}</a>
+							<a href="{{ path('app_products_index', baseParams|merge({page: p})) }}" class="catalog-pagination__item {{ page == p ? 'is-current' }}" {% if page == p %}aria-current="page"{% endif %}>{{ p }}</a>
 						{% endif %}
 					{% endfor %}
 
 					{% if pagination.end < pages - 1 %}
-						<span class="dots">…</span>
+						<span class="catalog-pagination__dots" aria-hidden="true">…</span>
 					{% endif %}
 
-					<a href="{{ path('app_products_index', baseParams|merge({page: pages})) }}" class="{{ page == pages ? 'is-current' : '' }}">{{ pages }}</a>
+					<a href="{{ path('app_products_index', baseParams|merge({page: pages})) }}" class="catalog-pagination__item {{ page == pages ? 'is-current' }}" {% if page == pages %}aria-current="page"{% endif %}>{{ pages }}</a>
 
 					{% if page < pages %}
-						<a href="{{ path('app_products_index', baseParams|merge({page: page + 1})) }}" class="next">›</a>
+						<a href="{{ path('app_products_index', baseParams|merge({page: page + 1})) }}" class="catalog-pagination__item" aria-label="Page suivante">
+							<i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+						</a>
 					{% endif %}
 				</nav>
 			{% endif %}

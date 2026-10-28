@@ -1,27 +1,25 @@
-{% extends 'base.html.twig' %}
+{% extends 'security/_auth_layout.html.twig' %}
 
-{% block title %}Renvoyer l'email de vérification{% endblock %}
+{% block title %}Renvoyer l'e-mail de vérification - AquaSphère{% endblock %}
 
-{% block body %}
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">{{ message }}</div>
-    {% endfor %}
+{% block auth_content %}
+    <p class="aq-kicker">Activation du compte</p>
+    <h1 class="auth__title">Renvoyer l'e-mail de vérification.</h1>
+    <p class="auth__subtitle">Saisissez l'adresse de votre compte : nous vous enverrons un nouveau lien d'activation.</p>
 
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger">{{ message }}</div>
-    {% endfor %}
-
-    <div class="container mt-4">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h1>Renvoyer l'email de vérification</h1>
-
-                {{ form_start(form) }}
-                {{ form_row(form.email) }}
-
-                <button type="submit" class="btn btn-primary">Envoyer</button>
-                {{ form_end(form) }}
-            </div>
+    {{ form_start(form, {attr: {class: 'auth-form'}}) }}
+        <div class="auth-field">
+            {{ form_label(form.email, 'E-mail', {label_attr: {class: 'auth-field__label'}}) }}
+            {{ form_widget(form.email, {attr: {class: 'auth-field__input', placeholder: 'votre@email.com', autocomplete: 'email'}}) }}
+            {{ form_errors(form.email) }}
         </div>
-    </div>
+
+        <button type="submit" class="aq-btn aq-btn--primary aq-btn--block auth-form__submit">
+            Envoyer le lien <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
+    {{ form_end(form) }}
+
+    <p class="auth__switch">
+        <a href="{{ path('app_login') }}" class="auth__link"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Retour à la connexion</a>
+    </p>
 {% endblock %}

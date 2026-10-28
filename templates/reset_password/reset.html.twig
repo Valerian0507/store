@@ -1,35 +1,42 @@
-{% extends 'base.html.twig' %}
+{% extends 'security/_auth_layout.html.twig' %}
 
-{% block title %}Réinitialiser le mot de passe{% endblock %}
+{% block title %}Nouveau mot de passe - AquaSphère{% endblock %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('styles/pages/auth.css') }}">
-{% endblock %}
+{% block auth_content %}
+    <p class="aq-kicker">Votre espace AquaSphère</p>
+    <h1 class="auth__title">Nouveau mot de passe.</h1>
+    <p class="auth__subtitle">Choisissez un nouveau mot de passe pour votre compte.</p>
 
-{% block body %}
-    <section class="container auth-page">
-        <div class="auth-card">
-            <h1 class="auth-card__title">Nouveau mot de passe</h1>
-            <p class="auth-card__subtitle">Choisissez un nouveau mot de passe pour votre compte.</p>
+    {{ form_start(resetForm, {attr: {class: 'auth-form', 'data-turbo': 'false'}}) }}
+        {{ form_errors(resetForm) }}
 
-            {{ form_start(resetForm, { attr: { 'data-turbo': 'false' } }) }}
-                {{ form_errors(resetForm) }}
-
-                <div class="auth-form__group">
-                    {{ form_label(resetForm.plainPassword.first, 'Nouveau mot de passe', { label_attr: { class: 'auth-form__label' } }) }}
-                    {{ form_widget(resetForm.plainPassword.first, { attr: { class: 'auth-form__input', placeholder: 'Votre nouveau mot de passe' } }) }}
-                    {{ form_help(resetForm.plainPassword.first) }}
-                    {{ form_errors(resetForm.plainPassword.first) }}
-                </div>
-
-                <div class="auth-form__group">
-                    {{ form_label(resetForm.plainPassword.second, 'Confirmer le mot de passe', { label_attr: { class: 'auth-form__label' } }) }}
-                    {{ form_widget(resetForm.plainPassword.second, { attr: { class: 'auth-form__input', placeholder: 'Répétez le mot de passe' } }) }}
-                    {{ form_errors(resetForm.plainPassword.second) }}
-                </div>
-
-                <button class="auth-form__submit" type="submit">Réinitialiser</button>
-            {{ form_end(resetForm) }}
+        <div class="auth-field" data-controller="password-rules">
+            {{ form_label(resetForm.plainPassword.first, 'Nouveau mot de passe', {label_attr: {class: 'auth-field__label'}}) }}
+            <div class="auth-field__password" data-controller="password-toggle">
+                {{ form_widget(resetForm.plainPassword.first, {attr: {
+                    class: 'auth-field__input', placeholder: 'Votre nouveau mot de passe', autocomplete: 'new-password',
+                    'aria-describedby': 'password-rules',
+                    'data-password-toggle-target': 'input',
+                    'data-password-rules-target': 'input', 'data-action': 'input->password-rules#check'
+                }}) }}
+                {% include 'security/_password_toggle.html.twig' %}
+            </div>
+            {% include 'security/_password_rules.html.twig' %}
+            {{ form_errors(resetForm.plainPassword) }}
+            {{ form_errors(resetForm.plainPassword.first) }}
         </div>
-    </section>
+
+        <div class="auth-field">
+            {{ form_label(resetForm.plainPassword.second, 'Confirmer le mot de passe', {label_attr: {class: 'auth-field__label'}}) }}
+            <div class="auth-field__password" data-controller="password-toggle">
+                {{ form_widget(resetForm.plainPassword.second, {attr: {class: 'auth-field__input', placeholder: 'Répétez le mot de passe', 'data-password-toggle-target': 'input'}}) }}
+                {% include 'security/_password_toggle.html.twig' %}
+            </div>
+            {{ form_errors(resetForm.plainPassword.second) }}
+        </div>
+
+        <button class="aq-btn aq-btn--primary aq-btn--block auth-form__submit" type="submit">
+            Enregistrer <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
+    {{ form_end(resetForm) }}
 {% endblock %}

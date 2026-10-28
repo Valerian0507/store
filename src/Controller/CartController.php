@@ -99,17 +99,21 @@ class CartController extends AbstractController
 
         $cartManager->add($id, $qty);
 
-        return $this->addResponse($request, 'success', sprintf('« %s » a été ajouté au panier.', $product->getTitle()));
+        return $this->addResponse($request, 'success', sprintf('« %s » a été ajouté au panier.', $product->getTitle()), $cartManager->countItems());
     }
 
     /**
-     * Ajout depuis le JS (assets/controllers/cart_add_controller.js) : réponse JSON affichée en notification.
+     * Ajout depuis le JS (assets/controllers/cart_add_controller.js) : réponse JSON affichée en notification,
+     * avec le nouveau nombre d'articles pour le badge de l'en-tête.
      * Sans JS : message flash et retour sur la page d'origine.
      */
-    private function addResponse(Request $request, string $type, string $message): Response
+    private function addResponse(Request $request, string $type, string $message, ?int $cartCount = null): Response
     {
         if ($request->getPreferredFormat() === 'json') {
-            return $this->json(['type' => $type, 'message' => $message], $type === 'success' ? 200 : 422);
+            return $this->json(
+                ['type' => $type, 'message' => $message, 'cartCount' => $cartCount],
+                $type === 'success' ? 200 : 422
+            );
         }
 
         $this->addFlash($type, $message);

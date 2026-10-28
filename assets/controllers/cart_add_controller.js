@@ -22,10 +22,22 @@ export default class extends Controller {
             });
             const data = await response.json();
             showToast(data.type, data.message);
+            if (Number.isInteger(data.cartCount)) this.updateBadge(data.cartCount);
         } catch (error) {
             showToast('danger', 'Impossible d\'ajouter le produit, veuillez réessayer.');
         } finally {
             if (button) button.disabled = false;
         }
+    }
+
+    // Badge sur l'icône panier (_partials/_navbar.html.twig)
+    updateBadge(count) {
+        document.querySelectorAll('[data-cart-count]').forEach((badge) => {
+            badge.textContent = count > 99 ? '99+' : String(count);
+            badge.hidden = count === 0;
+        });
+        document.querySelectorAll('[data-cart-link]').forEach((link) => {
+            link.setAttribute('aria-label', count > 0 ? `Panier (${count} article${count > 1 ? 's' : ''})` : 'Panier');
+        });
     }
 }

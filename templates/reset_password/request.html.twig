@@ -1,33 +1,25 @@
-{% extends 'base.html.twig' %}
+{% extends 'security/_auth_layout.html.twig' %}
 
-{% block title %}Mot de passe oublié{% endblock %}
+{% block title %}Mot de passe oublié - AquaSphère{% endblock %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('styles/pages/auth.css') }}">
-{% endblock %}
-{% block body %}
-    <section class="container auth-page">
-        <div class="auth-card">
-            {% for flash_error in app.flashes('reset_password_error') %}
-                <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-            {% endfor %}
+{% block auth_content %}
+    <p class="aq-kicker">Mot de passe oublié</p>
+    <h1 class="auth__title">Pas de souci.</h1>
+    <p class="auth__subtitle">Saisissez votre e-mail, nous vous enverrons un lien pour choisir un nouveau mot de passe.</p>
 
-            <h1 class="auth-card__title">Mot de passe oublié ?</h1>
-            <p class="auth-card__subtitle">Saisissez votre e-mail, nous vous enverrons un lien de réinitialisation.</p>
-
-            {{ form_start(requestForm, { attr: { 'data-turbo': 'false' } }) }}
-                <div class="auth-form__group">
-                    {{ form_label(requestForm.email, 'E-mail', { label_attr: { class: 'auth-form__label' } }) }}
-                    {{ form_widget(requestForm.email, { attr: { class: 'auth-form__input', placeholder: 'Votre e-mail' } }) }}
-                    {{ form_errors(requestForm.email) }}
-                </div>
-
-                <button class="auth-form__submit" type="submit">Envoyer le lien</button>
-            {{ form_end(requestForm) }}
-
-            <p class="auth-form__footer">
-                <a href="{{ path('app_login') }}" class="auth-form__link">Retour à la connexion</a>
-            </p>
+    {{ form_start(requestForm, {attr: {class: 'auth-form', 'data-turbo': 'false'}}) }}
+        <div class="auth-field">
+            {{ form_label(requestForm.email, 'E-mail', {label_attr: {class: 'auth-field__label'}}) }}
+            {{ form_widget(requestForm.email, {attr: {class: 'auth-field__input', placeholder: 'votre@email.com', autocomplete: 'email'}}) }}
+            {{ form_errors(requestForm.email) }}
         </div>
-    </section>
+
+        <button class="aq-btn aq-btn--primary aq-btn--block auth-form__submit" type="submit">
+            Envoyer le lien <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
+    {{ form_end(requestForm) }}
+
+    <p class="auth__switch">
+        <a href="{{ path('app_login') }}" class="auth__link"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Retour à la connexion</a>
+    </p>
 {% endblock %}

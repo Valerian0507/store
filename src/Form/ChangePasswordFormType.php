@@ -7,10 +7,8 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
+use App\Validator\StrongPassword;
 use Symfony\Component\Validator\Constraints\NotCompromisedPassword;
-use Symfony\Component\Validator\Constraints\PasswordStrength;
 
 class ChangePasswordFormType extends AbstractType
 {
@@ -25,25 +23,14 @@ class ChangePasswordFormType extends AbstractType
                     ],
                 ],
                 'first_options' => [
+                    // Même règle qu'à l'inscription (App\Validator\StrongPassword)
                     'constraints' => [
-                        new NotBlank(
-                            message: 'Veuillez saisir un mot de passe.',
-                        ),
-                        new Length(
-                            min: 12,
-                            minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères.',
-                            // max length allowed by Symfony for security reasons
-                            max: 4096,
-                        ),
-                        new PasswordStrength(
-                             message: 'Mot de passe trop faible : utilisez majuscules, minuscules, chiffres et symboles.',
-                        ),
+                        new StrongPassword(),
                         new NotCompromisedPassword(
                             message: 'Ce mot de passe a été exposé dans une fuite de données. Choisissez-en un autre.',
                         ),
                     ],
-                    'label' => 'New password',
-                    'help' => 'Au moins 12 caractères : majuscules, minuscules, chiffres et symboles.',
+                    'label' => 'Nouveau mot de passe',
                 ],
                 'second_options' => [
                     'attr' => ['autocomplete' => 'new-password'],

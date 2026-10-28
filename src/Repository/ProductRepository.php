@@ -35,9 +35,10 @@ class ProductRepository extends ServiceEntityRepository
 
     private function applySearch(QueryBuilder $qb, ?string $q): void
     {
+        // Recherche dans le nom et la référence
         if ($q !== null && $q !== '') {
             $qb
-                ->andWhere('LOWER(products.title) LIKE LOWER(:q)')
+                ->andWhere('(LOWER(products.title) LIKE LOWER(:q) OR LOWER(products.reference) LIKE LOWER(:q))')
                 ->setParameter('q', '%' . $q . '%');
         }
     }
@@ -74,7 +75,10 @@ class ProductRepository extends ServiceEntityRepository
         $perPage = max(1, min(100, $perPage));
         $offset = ($page - 1) * $perPage;
 
+        // Catégorie chargée avec le produit : affichée sur chaque carte sans requête supplémentaire
         $qb = $this->createCatalogQueryBuilder()
+            ->leftJoin('products.category', 'category')
+            ->addSelect('category')
             ->setFirstResult($offset)
             ->setMaxResults($perPage);
 
@@ -106,6 +110,45 @@ class ProductRepository extends ServiceEntityRepository
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
+    }
+
+    // Fiche produit "Complétez votre installation" : catégories complémentaires, sinon la même catégorie
+    private const COMPLEMENTS = [
+        'piscines' => ['entretien', 'accessoires'],
+        'spa' => ['entretien', 'accessoires'],
+    ];
+
+    /**
+     * @return Product[]
+     * Produits disponibles (prix, stock, image), répartis à parts égales entre les catégories complémentaires
+     * (ex. piscine : 2 entretien + 2 accessoires), consommables d'abord (chlore, algicide…).
+     */
+    public function findComplements(Product $product, int $limit = 4): array
+    {
+        $label = mb_strtolower((string) $product->getCategory()?->getLabel());
+        $labels = self::COMPLEMENTS[$label] ?? [$label];
+        $perLabel = (int) ceil($limit / count($labels));
+
+        $suggestions = [];
+        foreach ($labels as $complementLabel) {
+            $suggestions = [...$suggestions, ...$this->createCatalogQueryBuilder()
+                ->innerJoin('products.category', 'category')
+                ->addSelect('category')
+                ->andWhere('LOWER(category.label) = :label')
+                ->andWhere('products.id != :id')
+                ->andWhere('products.priceCents > 0')
+                ->andWhere('products.stock > 0')
+                ->andWhere('products.image IS NOT NULL')
+                ->setParameter('label', $complementLabel)
+                ->setParameter('id', $product->getId())
+                ->orderBy('products.replenishable', 'DESC')
+                ->addOrderBy('products.id', 'DESC')
+                ->setMaxResults($perLabel)
+                ->getQuery()
+                ->getResult()];
+        }
+
+        return array_slice($suggestions, 0, $limit);
     }
 
     public function findOneForCatalog(int $id): ?Product

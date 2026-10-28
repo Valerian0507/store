@@ -7,7 +7,7 @@
 					{% include '_partials/_logo.html.twig' with {variant: 'light'} %}
 				</a>
 				<p class="site-footer__tagline">
-					Piscines, spas et accessoires pour faire de votre jardin un lieu d'évasion.
+					Des piscines, des spas et des équipements pour profiter pleinement de votre extérieur, aujourd'hui et pour longtemps.
 				</p>
 				<ul class="site-footer__social">
 					<li>
@@ -76,6 +76,13 @@
 						<a href="{{ path('app_politique_confidentialite') }}">Confidentialité</a>
 					</li>
 				</ul>
+			</div>
+
+			{# Olivier + devise (image décorative, le texte reste lisible) #}
+			<div class="site-footer__signature">
+				<img class="site-footer__tree" src="{{ asset('images/icons/olive-tree-footer.webp') }}"
+					 alt="" width="433" height="420" loading="lazy">
+				<p class="site-footer__motto">Plus qu'une piscine,<br>un art de vivre.</p>
 			</div>
 		</div>
 

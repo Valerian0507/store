@@ -57,6 +57,14 @@ class CartStorage
         $this->getSession()->set(self::CART_KEY, $cleanCart);
     }
 
+    // Un visiteur sans session n'a pas de panier : inutile d'en ouvrir une juste pour le compter
+    public function hasSession(): bool
+    {
+        $request = $this->requestStack->getCurrentRequest();
+
+        return $request !== null && ($request->hasPreviousSession() || ($request->hasSession() && $request->getSession()->isStarted()));
+    }
+
     public function clear(): void
     {
         $this->getSession()->remove(self::CART_KEY);

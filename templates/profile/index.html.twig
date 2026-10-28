@@ -1,105 +1,90 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}My Profile{% endblock %}
+{% block title %}Mon compte - AquaSphère{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/pages/profile.css') }}">
+{% endblock %}
 
 {% block body %}
-<div class="container py-4">
-    <div class="mx-auto" style="max-width: 1100px;">
-        <div class="mb-4">
-            <h1 class="fw-bold mb-2">Mon Compte</h1>
-            <p class="text-muted mb-0">
-                Gérez vos commandes, adresses et profil.
-            </p>
+    {% set sections = [
+        {icon: 'fa-regular fa-user', title: 'Mon profil', text: 'Gérez vos informations personnelles et votre mot de passe.', route: 'app_profile_edit', cta: 'Voir mon profil'},
+        {icon: 'fa-solid fa-box-open', title: 'Mes commandes', text: "Suivez l'état de vos commandes et consultez votre historique d'achats.", route: 'app_profile_orders', cta: 'Voir mes commandes'},
+        {icon: 'fa-solid fa-location-dot', title: 'Mes adresses', text: 'Gérez vos adresses de livraison pour un passage de commande plus rapide.', route: 'app_profile_addresses', cta: 'Gérer mes adresses'},
+    ] %}
+
+    <div class="aq-container account">
+        {# Bandeau d'accueil #}
+        <header class="account-hero">
+            <img class="account-hero__image" src="{{ asset('images/profil/mon-compte-olive-background.webp') }}" alt="" width="1800" height="607">
+            <div class="account-hero__text">
+                <p class="aq-kicker">Votre espace personnel</p>
+                <h1 class="account-hero__title">Mon compte</h1>
+                <p class="account-hero__subtitle">
+                    Bonjour {{ user.firstName }}, tout pour préparer vos beaux jours.
+                </p>
+            </div>
+        </header>
+
+        {# Profil, commandes, adresses #}
+        <div class="account-grid account-grid--3">
+            {% for section in sections %}
+                <section class="account-card">
+                    <span class="account-card__icon" aria-hidden="true"><i class="{{ section.icon }}"></i></span>
+                    <h2 class="account-card__title">{{ section.title }}</h2>
+                    <p class="account-card__text">{{ section.text }}</p>
+                    <a href="{{ path(section.route) }}" class="aq-btn aq-btn--primary aq-btn--block account-card__cta">
+                        {{ section.cta }} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </a>
+                </section>
+            {% endfor %}
         </div>
 
-        <div class="row g-4">
-            <div class="col-12 col-md-6 col-xl-4">
-                <div class="card h-100 shadow-sm border-0 rounded-4">
-                    <div class="card-body p-4 d-flex flex-column">
-                        <h2 class="h4 mb-3">Mon Profil</h2>
-                        <p class="text-muted flex-grow-1">
-                            Affichez et modifiez les informations de votre profil.
-                        </p>
-                        <a href="{{ path('app_profile_edit') }}" class="btn btn-primary">Gérer mon profil</a>
-                    </div>
-                </div>
-            </div>
+        <div class="account-grid account-grid--2">
+            <section class="account-card">
+                <span class="account-card__icon" aria-hidden="true"><i class="fa-solid fa-rotate"></i></span>
+                <h2 class="account-card__title">Mes abonnements démo</h2>
+                <p class="account-card__text">
+                    Planifiez le réapprovisionnement de vos produits d'entretien : intervalle, quantité, pause ou annulation.
+                    Sans paiement ni livraison automatique.
+                </p>
+                <a href="{{ path('app_care_plans') }}" class="aq-btn aq-btn--primary aq-btn--block account-card__cta">
+                    Voir mes abonnements démo <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </a>
+            </section>
 
-            <div class="col-12 col-md-6 col-xl-4">
-                <div class="card h-100 shadow-sm border-0 rounded-4">
-                    <div class="card-body p-4 d-flex flex-column">
-                        <h2 class="h4 mb-3">Mes Commandes</h2>
-                        <p class="text-muted flex-grow-1">
-                            Affichez l'historique de vos commandes, les statuts de suivi et les détails des commandes ouvertes.
-                        </p>
-                        <a href="{{ path('app_profile_orders') }}" class="btn btn-primary">
-                            Voir mes commandes
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-md-6 col-xl-4">
-                <div class="card h-100 shadow-sm border-0 rounded-4">
-                    <div class="card-body p-4 d-flex flex-column">
-                        <h2 class="h4 mb-3">Mes Adresses</h2>
-                        <p class="text-muted flex-grow-1">
-                            Gérez vos adresses de livraison pour un paiement plus rapide.
-                        </p>
-                        <a href="{{ path('app_profile_addresses') }}" class="btn btn-primary">
-                            Voir mes adresses
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-md-6 col-xl-4">
-                <div class="card h-100 shadow-sm border-0 rounded-4">
-                    <div class="card-body p-4 d-flex flex-column">
-                        <h2 class="h4 mb-3">Mes abonnements démo</h2>
-                        <p class="text-muted flex-grow-1">Gérez vos plannings de réapprovisionnement : intervalle, quantité, pause ou annulation. Sans paiement ni livraison automatique.</p>
-                        <a href="{{ path('app_care_plans') }}" class="aq-btn aq-btn--primary">Gérer mes plannings</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-md-6 col-xl-4" id="newsletter">
-                <div class="card h-100 shadow-sm border-0 rounded-4">
-                    <div class="card-body p-4 d-flex flex-column">
-                        <h2 class="h4 mb-3">Newsletter</h2>
-                        <p class="text-muted flex-grow-1">
-                            {% if newsletterSubscribed %}
-                                Vous recevez nos inspirations et conseils à l'adresse <strong>{{ user.email }}</strong>.
-                            {% else %}
-                                Vous n'êtes pas inscrit(e). Recevez nos inspirations et conseils au fil des saisons.
-                            {% endif %}
-                        </p>
-                        <form method="post" action="{{ path('app_newsletter_account') }}">
-                            <input type="hidden" name="_token" value="{{ csrf_token('newsletter_account') }}">
-                            {% if newsletterSubscribed %}
-                                <button type="submit" name="action" value="unsubscribe" class="aq-btn aq-btn--outline">Se désinscrire</button>
-                            {% else %}
-                                <button type="submit" name="action" value="subscribe" class="aq-btn aq-btn--primary">S'inscrire</button>
-                            {% endif %}
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            {# <div class="col-12 col-md-6 col-xl-4">
-                <div class="card h-100 shadow-sm border-0 rounded-4">
-                    <div class="card-body p-4 d-flex flex-column">
-                        <h2 class="h4 mb-3">Payment Methods</h2>
-                        <p class="text-muted flex-grow-1">
-                            Manage your saved payment methods securely through the payment provider.
-                        </p>
-                        <a href="{{ path('app_profile_payment_methods') }}" class="btn btn-outline-primary">
-                            Go to payment methods
-                        </a>
-                    </div>
-                </div>
-            </div> #}
+            {# Newsletter : interrupteur + enregistrement (NewsletterController::account) #}
+            <section class="account-card" id="newsletter">
+                <span class="account-card__icon" aria-hidden="true"><i class="fa-regular fa-envelope"></i></span>
+                <h2 class="account-card__title">Newsletter</h2>
+                <p class="account-card__text">
+                    Recevez nos conseils et nos inspirations pour profiter pleinement de votre piscine et de votre spa.
+                    {% if newsletterSubscribed %}
+                        <br>Envoi à <strong>{{ user.email }}</strong>.
+                    {% endif %}
+                </p>
+                <form method="post" action="{{ path('app_newsletter_account') }}" class="account-newsletter">
+                    <input type="hidden" name="_token" value="{{ csrf_token('newsletter_account') }}">
+                    <label class="aq-switch">
+                        <input type="checkbox" name="newsletter" value="1" role="switch" {{ newsletterSubscribed ? 'checked' }}>
+                        <span class="aq-switch__track" aria-hidden="true"></span>
+                        <span>Je souhaite recevoir la newsletter AquaSphère</span>
+                    </label>
+                    <button type="submit" class="aq-btn aq-btn--outline aq-btn--block account-card__cta">Enregistrer mes préférences</button>
+                </form>
+            </section>
         </div>
+
+        {# Bandeau inspiration #}
+        <section class="account-banner">
+            <img class="account-banner__image" src="{{ asset('images/profil/pool-and-loungers.webp') }}" alt="" width="1800" height="600" loading="lazy">
+            <div class="account-banner__content">
+                <h2 class="account-banner__title">Profitez de chaque<br>instant au jardin.</h2>
+                <p>Des piscines aux spas, tout pour créer un espace de bien-être qui vous ressemble.</p>
+                <a href="{{ path('app_products_index') }}" class="aq-btn aq-btn--primary">
+                    Découvrir la collection <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </a>
+            </div>
+        </section>
     </div>
-</div>
 {% endblock %}

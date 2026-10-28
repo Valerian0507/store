@@ -3,13 +3,14 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Validator\StrongPassword;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
-use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -39,20 +40,24 @@ class RegistrationType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('plainPassword', PasswordType::class, [
+            // Mot de passe saisi deux fois (les deux champs doivent être identiques)
+            ->add('plainPassword', RepeatedType::class, [
+                'type' => PasswordType::class,
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
-                'attr' => ['autocomplete' => 'new-password'],
+                'invalid_message' => 'Les deux mots de passe ne correspondent pas.',
+                'first_options' => [
+                    'label' => 'Mot de passe',
+                    'attr' => ['autocomplete' => 'new-password'],
+                ],
+                'second_options' => [
+                    'label' => 'Confirmer le mot de passe',
+                    'attr' => ['autocomplete' => 'new-password'],
+                ],
+                // 8 caractères min., une majuscule, un chiffre, un caractère spécial
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer un mot de passe',
-                    ]),
-                    new Length(
-                        min: 8,
-                        max: 4096,
-                        minMessage: 'Votre mot de passe doit contenir au moins {{ limit }} caractères'
-                    ),
+                    new StrongPassword(),
                 ],
             ])
         ;

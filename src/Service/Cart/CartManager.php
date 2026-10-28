@@ -127,6 +127,18 @@ final class CartManager
         return $raw;
     }
 
+    // Nombre d'articles (somme des quantités) pour le badge du panier dans l'en-tête
+    public function countItems(): int
+    {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof User && !$this->cartStorage->hasSession()) {
+            return 0;
+        }
+
+        return array_sum($this->getRaw());
+    }
+
     /** @return array<int, int> productId => quantité */
     private function getCleanSessionCart(): array
     {

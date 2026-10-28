@@ -1,112 +1,184 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ product.title }}{% endblock %}
+{% set categoryLabel = product.category ? product.category.label|lower : null %}
+{% set categoryUrl = product.category ? path('app_products_index', {category: product.category.id}) : path('app_products_index') %}
+{% set noImage = asset('images/products/no-image.jpg') %}
+
+{# Guide de conseils et outil adaptés à la catégorie (AdviceController, PoolToolsController) #}
+{% set adviceByCategory = {
+    piscines: {slug: 'choisir-sa-piscine', title: 'Choisir sa piscine', text: 'Hors-sol, tubulaire ou gonflable : nos repères pour choisir le bassin adapté à votre espace.'},
+    spa: {slug: 'creer-son-espace-detente', title: 'Créer son espace détente', text: 'Spa, transats et accessoires : nos idées pour aménager un coin bien-être chez vous.'},
+    accessoires: {slug: 'creer-son-espace-detente', title: 'Créer son espace détente', text: 'Spa, transats et accessoires : nos idées pour aménager un coin bien-être chez vous.'},
+    matelas: {slug: 'creer-son-espace-detente', title: 'Créer son espace détente', text: 'Spa, transats et accessoires : nos idées pour aménager un coin bien-être chez vous.'},
+    entretien: {slug: 'entretenir-son-eau', title: 'Entretenir son eau', text: 'Filtration, nettoyage et traitement : les bons gestes pour une eau claire toute la saison.'},
+} %}
+{% set advice = adviceByCategory[categoryLabel] ?? null %}
+
+{% block title %}{{ product.title }} - AquaSphère{% endblock %}
 
 {% block stylesheets %}
-	<link rel="stylesheet" href="{{ asset('styles/pages/product-show.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/pages/product-show.css') }}">
     <link rel="stylesheet" href="{{ asset('styles/pages/tools.css') }}">
 {% endblock %}
 
 {% block body %}
-    <section class="container py-4">
-        <a href="{{ path('app_products_index') }}" class="product-show__back">
-            ← Retour au catalogue
-        </a>
-
-        <div class="product-show__layout">
-            <div class="product-show__media">
-                <div class="product-show__image-wrap">
-                    {% if product.image %}
-                        <img
-                            src="{{ asset('uploads/products/' ~ product.image) }}"
-                            alt="{{ product.title }}"
-                            class="product-show__image"
-                            onerror="this.onerror=null;this.src='{{ asset('images/products/no-image.jpg') }}';"
-                        >
-                    {% else %}
-                        <img
-                            src="{{ asset('images/products/no-image.jpg') }}"
-                            alt="No image"
-                            class="product-show__image"
-                        >
+    <div class="aq-container product-page">
+        <div class="product-page__top">
+            <nav aria-label="Fil d'Ariane">
+                <ol class="product-breadcrumb">
+                    <li><a href="{{ path('app_home') }}">Accueil</a></li>
+                    {% if product.category %}
+                        <li><a href="{{ categoryUrl }}">{{ product.category.label|capitalize }}</a></li>
                     {% endif %}
-                </div>
+                    <li aria-current="page">{{ product.title }}</li>
+                </ol>
+            </nav>
+            <a href="{{ categoryUrl }}" class="product-page__back">
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Retour au catalogue
+            </a>
+        </div>
+
+        {# Photo + achat #}
+        <div class="product-hero">
+            <div class="product-box product-hero__media">
+                <img src="{{ product.image ? asset('uploads/products/' ~ product.image) : noImage }}"
+                     alt="{{ product.title }}" width="800" height="800"
+                     onerror="this.onerror=null;this.src='{{ noImage }}';">
             </div>
 
-            <aside class="product-show__panel">
-                <h1 class="product-show__title">{{ product.title }}</h1>
+            <div class="product-box product-hero__info">
+                {% if product.category %}
+                    <p class="product-hero__category">{{ product.category.label }}</p>
+                {% endif %}
+                <h1 class="product-hero__title">{{ product.title }}</h1>
+                <p class="product-hero__ref">Réf. {{ product.reference }}</p>
 
-                <p class="product-show__ref">
-                    Référence : {{ product.reference }}
+                {% if product.stock > 0 %}
+                    <p class="product-stock product-stock--in">
+                        <span class="product-stock__dot" aria-hidden="true"></span>
+                        <span>
+                            <strong>En stock</strong>
+                            <small>{{ product.stock <= 5 ? 'Plus que ' ~ product.stock ~ ' disponible' ~ (product.stock > 1 ? 's') : 'Disponible immédiatement' }}</small>
+                        </span>
+                    </p>
+                {% else %}
+                    <p class="product-stock product-stock--out">
+                        <span class="product-stock__dot" aria-hidden="true"></span>
+                        <span>
+                            <strong>Rupture de stock</strong>
+                            <small>Produit actuellement indisponible</small>
+                        </span>
+                    </p>
+                {% endif %}
+
+                <p class="product-hero__price">
+                    {{ (product.priceCents / 100)|number_format(2, ',', ' ') }} €
+                    <small>TVA incluse</small>
                 </p>
 
                 {% if product.stock > 0 %}
-                    <div class="product-show__status product-show__status--ok">
-                        En stock
-                    </div>
-                    <p class="product-show__delivery">Disponible immédiatement</p>
-                {% else %}
-                    <div class="product-show__status product-show__status--out">
-                        Rupture de stock
-                    </div>
-                    <p class="product-show__delivery">Produit actuellement indisponible</p>
-                {% endif %}
-
-                <div class="product-show__price">
-                    {{ product.getPriceEur() }} €
-                </div>
-                    <p class="product-show__delivery">Livraison gratuit</p>
-
-                <div class="product-show__buy-box">
-                    <form method="post" action="{{ path('app_cart_add', { id: product.id }) }}" class="product-show__form"
+                    {# Ajout sans rechargement (cart_add_controller.js), quantité limitée au stock #}
+                    <form method="post" action="{{ path('app_cart_add', {id: product.id}) }}" class="product-buy"
                           data-controller="cart-add" data-action="cart-add#submit">
-                        <input
-                            type="number"
-                            name="qty"
-                            value="1"
-                            min="1"
-                            class="product-show__qty"
-                        >
                         <input type="hidden" name="_token" value="{{ csrf_token('cart_add_' ~ product.id) }}">
 
-                        <button
-                            type="submit"
-                            class="product-show__submit"
-                        >
-                            Ajouter au panier
+                        <div class="product-qty" data-controller="quantity">
+                            <button type="button" class="product-qty__btn" data-quantity-target="decrement" data-action="quantity#decrement" aria-label="Diminuer la quantité">
+                                <i class="fa-solid fa-minus" aria-hidden="true"></i>
+                            </button>
+                            <label class="visually-hidden" for="product-qty">Quantité</label>
+                            <input class="product-qty__input" id="product-qty" type="number" name="qty" value="1" min="1" max="{{ product.stock }}"
+                                   inputmode="numeric" data-quantity-target="input" data-action="change->quantity#clamp">
+                            <button type="button" class="product-qty__btn" data-quantity-target="increment" data-action="quantity#increment" aria-label="Augmenter la quantité">
+                                <i class="fa-solid fa-plus" aria-hidden="true"></i>
+                            </button>
+                        </div>
+
+                        <button type="submit" class="aq-btn aq-btn--primary product-buy__submit">
+                            <i class="fa-solid fa-bag-shopping" aria-hidden="true"></i> Ajouter au panier
                         </button>
                     </form>
-                </div>
+                {% else %}
+                    <button type="button" class="aq-btn aq-btn--outline aq-btn--block" disabled>Rupture de stock</button>
+                {% endif %}
+
+                <ul class="product-trust">
+                    <li>
+                        <i class="fa-solid fa-truck-fast" aria-hidden="true"></i>
+                        <span><strong>Livraison offerte</strong><small>en France métropolitaine</small></span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                        <span><strong>Paiement sécurisé</strong><small>par carte bancaire</small></span>
+                    </li>
+                </ul>
+
+                {% if categoryLabel == 'piscines' %}
+                    <a href="{{ path('app_tools_volume') }}" class="product-tool">
+                        <i class="fa-solid fa-calculator" aria-hidden="true"></i>
+                        <span><strong>Quel volume pour votre piscine ?</strong><small>Calculez facilement le volume d'eau nécessaire.</small></span>
+                        <span class="product-tool__cta">Ouvrir le calculateur <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+                    </a>
+                {% elseif categoryLabel in ['spa', 'entretien'] %}
+                    <a href="{{ path('app_tools_water') }}" class="product-tool">
+                        <i class="fa-solid fa-droplet" aria-hidden="true"></i>
+                        <span><strong>Votre eau est-elle équilibrée ?</strong><small>Comparez votre pH, chlore et TAC aux bons repères.</small></span>
+                        <span class="product-tool__cta">Analyser mes mesures <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+                    </a>
+                {% endif %}
+
                 {% if product.replenishable %}
                     {% include 'tools/_care_plan_form.html.twig' with {product: product} %}
                 {% endif %}
-                {% if product.category and product.category.label|lower == 'piscines' %}
-                    <p class="mt-4"><a href="{{ path('app_tools_volume') }}" class="aq-link-arrow">Calculer le volume de mon bassin</a></p>
-                {% elseif product.category and product.category.label|lower in ['spa', 'entretien'] %}
-                    <p class="mt-4"><a href="{{ path('app_tools_water') }}" class="aq-link-arrow">Analyser mes mesures d’eau</a></p>
-                {% endif %}
-            </aside>
+            </div>
         </div>
 
-        <div class="product-show__details">
+        {# Description (ou, à défaut, un guide de conseils) + caractéristiques #}
+        <div class="product-details">
             {% if product.description %}
-                <section class="product-show__section">
-                    <h2 class="product-show__section-title">Description</h2>
-                    <p class="product-show__description">
-                        {{ product.description }}
-                    </p>
+                <section class="product-box">
+                    <h2 class="product-box__title">Description</h2>
+                    <div class="product-description">{{ product.description|nl2br }}</div>
+                </section>
+            {% elseif advice %}
+                <section class="product-box product-advice">
+                    <h2 class="product-box__title">Nos conseils</h2>
+                    <h3 class="product-advice__title">{{ advice.title }}</h3>
+                    <p>{{ advice.text }}</p>
+                    <a href="{{ path('app_advice_show', {slug: advice.slug}) }}" class="aq-link-arrow">
+                        Lire le conseil <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </a>
                 </section>
             {% endif %}
 
-            <section class="product-show__section">
-                <h2 class="product-show__section-title">Caractéristiques</h2>
-                <ul class="product-show__features">
-                    <li>Catégorie : {{ product.category ? product.category.label : '-' }}</li>
-                    <li>Référence : {{ product.reference }}</li>
-                    <li>Volume (m³) : {{ product.volumeM3 is not null ? product.volumeM3 : '-' }}</li>
-                    <li>Poids (kg) : {{ product.weightKg is not null ? product.weightKg : '-' }}</li>
-                </ul>
+            <section class="product-box">
+                <h2 class="product-box__title">Caractéristiques</h2>
+                <table class="product-specs">
+                    <tbody>
+                        <tr><th scope="row">Catégorie</th><td>{{ product.category ? product.category.label|capitalize : '-' }}</td></tr>
+                        <tr><th scope="row">Référence</th><td>{{ product.reference }}</td></tr>
+                        {% if product.weightKg %}
+                            <tr><th scope="row">Poids</th><td>{{ product.weightKg|number_format(2, ',', ' ') }} kg</td></tr>
+                        {% endif %}
+                        {% if product.volumeM3 %}
+                            <tr><th scope="row">Volume du colis</th><td>{{ product.volumeM3|number_format(3, ',', ' ') }} m³</td></tr>
+                        {% endif %}
+                        <tr><th scope="row">Disponibilité</th><td>{{ product.stock > 0 ? 'En stock' : 'Rupture de stock' }}</td></tr>
+                    </tbody>
+                </table>
             </section>
         </div>
-    </section>
+
+        {% if suggestions is not empty %}
+            <section class="product-suggestions">
+                {# Piscine / spa : produits complémentaires ; sinon, même catégorie (ProductRepository::findComplements) #}
+                <h2 class="aq-section-title">{{ categoryLabel in ['piscines', 'spa'] ? 'Complétez votre installation' : 'Vous aimerez aussi' }}</h2>
+                <div class="product-suggestions__grid">
+                    {% for suggestion in suggestions %}
+                        {% include '_partials/_product_card.html.twig' with {product: suggestion, catalog: true, titleTag: 'h3'} %}
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+    </div>
 {% endblock %}

@@ -1,95 +1,84 @@
-{% extends 'base.html.twig' %}
+{% extends 'security/_auth_layout.html.twig' %}
 
-{% block title %}Inscription{% endblock %}
+{% block title %}Créer un compte - AquaSphère{% endblock %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('styles/pages/auth.css') }}">
-{% endblock %}
+{% block auth_image %}{{ asset('images/login/register-pool-garden.webp') }}{% endblock %}
+{% block auth_tagline %}Votre été<br>commence ici.{% endblock %}
 
-{% block body %}
-    <section class="container auth-page">
-        <div class="auth-card">
-            {% for flash_error in app.flashes('verify_email_error') %}
-                <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-            {% endfor %}
+{% block auth_content %}
+    <p class="aq-kicker">Bienvenue chez AquaSphère</p>
+    <h1 class="auth__title">Créer un compte</h1>
+    <p class="auth__subtitle">Un espace pour tous vos beaux jours.</p>
 
-            <h1 class="auth-card__title">Créer un compte</h1>
-            <p class="auth-card__subtitle">Inscrivez-vous pour accéder à la boutique.</p>
+    {{ form_start(registrationForm, {attr: {class: 'auth-form', 'data-turbo': 'false'}}) }}
+        {{ form_errors(registrationForm) }}
 
-            {{ form_start(registrationForm, {
-                attr: { 'data-turbo': 'false' }
-            }) }}
-                {{ form_errors(registrationForm) }}
+        <div class="auth-form__pair">
+            <div class="auth-field">
+                {{ form_label(registrationForm.lastName, 'Nom', {label_attr: {class: 'auth-field__label'}}) }}
+                {{ form_widget(registrationForm.lastName, {attr: {class: 'auth-field__input', placeholder: 'Votre nom', autocomplete: 'family-name'}}) }}
+                {{ form_errors(registrationForm.lastName) }}
+            </div>
 
-                <div class="auth-form__group">
-                    {{ form_label(registrationForm.lastName, 'Nom', {
-                        label_attr: { class: 'auth-form__label' }
-                    }) }}
-                    {{ form_widget(registrationForm.lastName, {
-                        attr: {
-                            class: 'auth-form__input',
-                            placeholder: 'Votre nom',
-                            autocomplete: 'family-name'
-                        }
-                    }) }}
-                    {{ form_errors(registrationForm.lastName) }}
-                </div>
-
-                <div class="auth-form__group">
-                    {{ form_label(registrationForm.firstName, 'Prénom', {
-                        label_attr: { class: 'auth-form__label' }
-                    }) }}
-                    {{ form_widget(registrationForm.firstName, {
-                        attr: {
-                            class: 'auth-form__input',
-                            placeholder: 'Votre prénom',
-                            autocomplete: 'given-name'
-                        }
-                    }) }}
-                    {{ form_errors(registrationForm.firstName) }}
-                </div>
-
-                <div class="auth-form__group">
-                    {{ form_label(registrationForm.email, 'E-mail', {
-                        label_attr: { class: 'auth-form__label' }
-                    }) }}
-                    {{ form_widget(registrationForm.email, {
-                        attr: {
-                            class: 'auth-form__input',
-                            placeholder: 'Votre e-mail',
-                            autocomplete: 'email'
-                        }
-                    }) }}
-                    {{ form_errors(registrationForm.email) }}
-                </div>
-
-                <div class="auth-form__group">
-                    {{ form_label(registrationForm.plainPassword, 'Mot de passe', {
-                        label_attr: { class: 'auth-form__label' }
-                    }) }}
-                    {{ form_widget(registrationForm.plainPassword, {
-                        attr: {
-                            class: 'auth-form__input',
-                            placeholder: 'Votre mot de passe',
-                            autocomplete: 'new-password'
-                        }
-                    }) }}
-                    {{ form_errors(registrationForm.plainPassword) }}
-                </div>
-
-                <div class="auth-form__checkbox">
-                    {{ form_widget(registrationForm.agreeTerms) }}
-                    {{ form_label(registrationForm.agreeTerms,"J'accepte les conditions générales") }}
-                </div>
-                {{ form_errors(registrationForm.agreeTerms) }}
-
-                <button type="submit" class="auth-form__submit">Créer mon compte</button>
-            {{ form_end(registrationForm) }}
-
-            <p class="auth-form__footer">
-                Vous avez déjà un compte ?
-                <a href="{{ path('app_login') }}" class="auth-form__link">Connectez-vous</a>
-            </p>
+            <div class="auth-field">
+                {{ form_label(registrationForm.firstName, 'Prénom', {label_attr: {class: 'auth-field__label'}}) }}
+                {{ form_widget(registrationForm.firstName, {attr: {class: 'auth-field__input', placeholder: 'Votre prénom', autocomplete: 'given-name'}}) }}
+                {{ form_errors(registrationForm.firstName) }}
+            </div>
         </div>
-    </section>
+
+        <div class="auth-field">
+            {{ form_label(registrationForm.email, 'E-mail', {label_attr: {class: 'auth-field__label'}}) }}
+            {{ form_widget(registrationForm.email, {attr: {class: 'auth-field__input', placeholder: 'votre@email.com', autocomplete: 'email'}}) }}
+            {{ form_errors(registrationForm.email) }}
+        </div>
+
+        {# Mot de passe saisi deux fois (RepeatedType) : erreurs (longueur, "ne correspondent pas") portées par le champ parent,
+           affichées sous le 1er champ ; les deux champs passent en rouge #}
+        {% set passwordClass = 'auth-field__input' ~ (registrationForm.plainPassword.vars.valid ? '' : ' is-invalid') %}
+        <div class="auth-field" data-controller="password-rules">
+            {{ form_label(registrationForm.plainPassword.first, 'Mot de passe', {label_attr: {class: 'auth-field__label'}}) }}
+            <div class="auth-field__password" data-controller="password-toggle">
+                {{ form_widget(registrationForm.plainPassword.first, {attr: {
+                    class: passwordClass, placeholder: 'Votre mot de passe', autocomplete: 'new-password',
+                    'aria-describedby': 'password-rules',
+                    'data-password-toggle-target': 'input',
+                    'data-password-rules-target': 'input', 'data-action': 'input->password-rules#check'
+                }}) }}
+                {% include 'security/_password_toggle.html.twig' %}
+            </div>
+            {% include 'security/_password_rules.html.twig' %}
+            {{ form_errors(registrationForm.plainPassword) }}
+            {{ form_errors(registrationForm.plainPassword.first) }}
+        </div>
+
+        <div class="auth-field">
+            {{ form_label(registrationForm.plainPassword.second, 'Confirmer le mot de passe', {label_attr: {class: 'auth-field__label'}}) }}
+            <div class="auth-field__password" data-controller="password-toggle">
+                {{ form_widget(registrationForm.plainPassword.second, {attr: {class: passwordClass, placeholder: 'Répétez le mot de passe', autocomplete: 'new-password', 'data-password-toggle-target': 'input'}}) }}
+                {% include 'security/_password_toggle.html.twig' %}
+            </div>
+            {{ form_errors(registrationForm.plainPassword.second) }}
+        </div>
+
+        <div class="auth-field">
+            {# Case écrite à la main (le thème Bootstrap ajoute son propre libellé) : nom, id et valeur viennent du formulaire #}
+            {% set terms = registrationForm.agreeTerms.vars %}
+            <label class="auth-check">
+                <input type="checkbox" class="auth-check__input" id="{{ terms.id }}" name="{{ terms.full_name }}"
+                       value="{{ terms.value }}" {{ terms.checked ? 'checked' }} required>
+                <span>J’accepte les <a href="{{ path('app_cgv') }}" class="auth__link" target="_blank" rel="noopener">conditions générales</a></span>
+            </label>
+            {% do registrationForm.agreeTerms.setRendered %}
+            {{ form_errors(registrationForm.agreeTerms) }}
+        </div>
+
+        <button type="submit" class="aq-btn aq-btn--primary aq-btn--block auth-form__submit">
+            Créer mon compte <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
+    {{ form_end(registrationForm) }}
+
+    <p class="auth__switch">
+        Déjà un compte ? <a href="{{ path('app_login') }}" class="auth__link">Connectez-vous</a>
+    </p>
 {% endblock %}
