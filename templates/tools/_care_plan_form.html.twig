@@ -1,0 +1,16 @@
+<section class="care-plan-form" aria-label="Planning de réapprovisionnement">
+    <h2>Prévoir mon réapprovisionnement</h2>
+    <p class="tool-note">Mode démo : sauvegardez une quantité et un intervalle. Aucun paiement, commande, envoi ou rappel automatique.</p>
+    {% if app.user %}
+        <form method="post" action="{{ path('app_care_plan_create', {id: product.id}) }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('care_plan_create_' ~ product.id) }}">
+            <div class="tool-fields">
+                <label class="tool-field">Quantité par échéance<input type="number" name="quantity" min="1" max="20" value="1" required></label>
+                <label class="tool-field">Intervalle<select name="interval"><option value="4">4 semaines</option><option value="6" selected>6 semaines</option><option value="8">8 semaines</option><option value="12">12 semaines</option></select></label>
+            </div>
+            <button class="aq-btn aq-btn--primary aq-btn--sm" type="submit" {% if product.stock < 1 %}disabled{% endif %}>Enregistrer mon planning</button>
+        </form>
+    {% else %}
+        <a href="{{ path('app_login') }}" class="aq-link-arrow">Me connecter pour enregistrer un planning</a>
+    {% endif %}
+</section>

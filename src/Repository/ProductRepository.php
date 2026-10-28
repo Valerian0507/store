@@ -87,6 +87,27 @@ class ProductRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * @return Product[]
+     * Sélection de l'accueil : le dernier produit de chaque catégorie (avec image, prix et stock).
+     */
+    public function findHomeSelection(int $limit = 4): array
+    {
+        $latestPerCategory = $this->createQueryBuilder('p2')
+            ->select('MAX(p2.id)')
+            ->andWhere('p2.priceCents > 0')
+            ->andWhere('p2.stock > 0')
+            ->andWhere('p2.image IS NOT NULL')
+            ->groupBy('p2.category');
+
+        return $this->createCatalogQueryBuilder()
+            ->andWhere('products.id IN (' . $latestPerCategory->getDQL() . ')')
+            ->orderBy('products.id', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findOneForCatalog(int $id): ?Product
     {
         return $this->createQueryBuilder('products')

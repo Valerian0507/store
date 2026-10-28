@@ -53,6 +53,39 @@
                 </div>
             </div>
 
+            <div class="col-12 col-md-6 col-xl-4">
+                <div class="card h-100 shadow-sm border-0 rounded-4">
+                    <div class="card-body p-4 d-flex flex-column">
+                        <h2 class="h4 mb-3">Mes abonnements démo</h2>
+                        <p class="text-muted flex-grow-1">Gérez vos plannings de réapprovisionnement : intervalle, quantité, pause ou annulation. Sans paiement ni livraison automatique.</p>
+                        <a href="{{ path('app_care_plans') }}" class="aq-btn aq-btn--primary">Gérer mes plannings</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-xl-4" id="newsletter">
+                <div class="card h-100 shadow-sm border-0 rounded-4">
+                    <div class="card-body p-4 d-flex flex-column">
+                        <h2 class="h4 mb-3">Newsletter</h2>
+                        <p class="text-muted flex-grow-1">
+                            {% if newsletterSubscribed %}
+                                Vous recevez nos inspirations et conseils à l'adresse <strong>{{ user.email }}</strong>.
+                            {% else %}
+                                Vous n'êtes pas inscrit(e). Recevez nos inspirations et conseils au fil des saisons.
+                            {% endif %}
+                        </p>
+                        <form method="post" action="{{ path('app_newsletter_account') }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('newsletter_account') }}">
+                            {% if newsletterSubscribed %}
+                                <button type="submit" name="action" value="unsubscribe" class="aq-btn aq-btn--outline">Se désinscrire</button>
+                            {% else %}
+                                <button type="submit" name="action" value="subscribe" class="aq-btn aq-btn--primary">S'inscrire</button>
+                            {% endif %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             {# <div class="col-12 col-md-6 col-xl-4">
                 <div class="card h-100 shadow-sm border-0 rounded-4">
                     <div class="card-body p-4 d-flex flex-column">

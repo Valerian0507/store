@@ -1,0 +1,48 @@
+{% extends 'advice/layout.html.twig' %}
+
+{% set article = {
+    title: 'Entretenir son eau',
+    description: 'Une routine régulière associe le nettoyage du bassin, l’entretien de la filtration et le contrôle de l’eau.',
+    image: 'images/home/advice-water.jpg',
+    imageAlt: 'Eau turquoise d’une piscine avec de fins reflets de lumière à la surface',
+    category: 'entretien',
+    ctaTitle: 'Préparez votre matériel d’entretien',
+    ctaDescription: 'Retrouvez les équipements et consommables à choisir selon votre bassin et sa filtration.',
+    ctaLabel: 'Voir l’entretien'
+} %}
+
+{% block guide_content %}
+    <section class="advice-guide__checklist" aria-labelledby="water-analysis">
+        <h2 id="water-analysis">Comprenez vos résultats de mesure</h2>
+        <p>Comparez les valeurs de votre kit aux repères du bassin et aux indications de votre notice.</p>
+        <a href="{{ path('app_tools_water') }}" class="aq-btn aq-btn--primary">Analyser mes mesures d’eau</a>
+    </section>
+    <section aria-labelledby="water-cleaning">
+        <h2 id="water-cleaning">Retirez les débris et nettoyez le bassin</h2>
+        <p>Feuilles, insectes et dépôts se retirent avec un matériel adapté à votre piscine. Une épuisette permet de ramasser les débris en surface ; une brosse, un aspirateur ou un robot compatible complète le nettoyage des parois et du fond.</p>
+        <p>Choisissez les outils selon le revêtement et les indications du fabricant. Le nettoyage mécanique complète la filtration et le traitement de l’eau.</p>
+    </section>
+
+    <section aria-labelledby="water-filtration">
+        <h2 id="water-filtration">Entretenez votre filtration</h2>
+        <p>Consultez la notice pour connaître les opérations de nettoyage, les consommables compatibles et les conditions de remplacement. Une cartouche et un filtre à sable ne s’entretiennent pas de la même manière.</p>
+        <p>Adaptez le fonctionnement aux recommandations propres à votre installation. Si la circulation d’eau change ou qu’un équipement semble fonctionner anormalement, recherchez la cause avant de poursuivre son utilisation.</p>
+    </section>
+
+    <section aria-labelledby="water-checks">
+        <h2 id="water-checks">Contrôlez l’eau avant de la corriger</h2>
+        <p>Utilisez un kit de mesure compatible avec votre méthode de traitement et suivez son mode d’emploi. Les résultats permettent de comparer l’état de l’eau aux valeurs recommandées pour votre bassin.</p>
+        <p>Pour tout ajustement, respectez l’étiquette du produit, le volume réel du bassin et les consignes du fabricant. Ne mélangez jamais différents produits d’entretien et conservez-les dans leurs emballages d’origine, hors de portée des enfants.</p>
+    </section>
+
+    <section class="advice-guide__checklist" aria-labelledby="water-checklist">
+        <h2 id="water-checklist">Votre liste de contrôle</h2>
+        <ul>
+            <li>Retirer les débris visibles et examiner le bassin.</li>
+            <li>Vérifier la filtration et suivre son programme d’entretien.</li>
+            <li>Mesurer l’eau avec le kit adapté avant toute correction.</li>
+            <li>Conserver une trace des contrôles et des opérations réalisées.</li>
+        </ul>
+        <p>Une eau visuellement claire ne remplace pas les contrôles prévus dans votre routine d’entretien.</p>
+    </section>
+{% endblock %}

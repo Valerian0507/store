@@ -1,223 +1,242 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil{% endblock %}
+{% block title %}AquaSphère - Piscines, spas et accessoires{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('styles/pages/home.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/pages/tools.css') }}">
 {% endblock %}
+
 {% block body %}
+    {# Image de chaque univers, par libellé de catégorie #}
+    {% set universeImages = {
+        piscines: 'images/home/intex-pool-garden.jpg',
+        spa: 'images/home/spa-daytime.webp',
+        accessoires: 'images/home/lounger-terrace.webp',
+        entretien: 'images/home/pool-care-lifestyle.jpg',
+        matelas: 'images/home/matelas-gonflable-intex-premaire-ii-electrique-2-pers.jpg',
+    } %}
+    {% set categories = nav_categories() %}
+    {% set spaCategory = categories|filter(c => c.label|lower == 'spa')|first %}
+
+    {# Hero #}
     <section class="home-hero">
-        <div class="container py-4">
+        <div class="aq-container home-hero__grid">
             <div class="home-hero__content">
-                <span class="home-hero__eyebrow">Nouvelle saison</span>
+                <span class="aq-kicker">Piscines &amp; spas</span>
+                <h1 class="home-hero__title">Votre jardin, votre évasion.</h1>
+                <p class="home-hero__text">Piscines, spas et accessoires pour profiter de chaque instant.</p>
 
-                <h1 class="home-hero__title">
-                    Profitez de toute la saison avec notre sélection de piscines, spas et équipements de loisirs
-                </h1>
-
-                <p class="home-hero__text">
-                    Découvrez des produits pensés pour le confort, la détente et l’entretien, avec une sélection adaptée
-                    à votre jardin, votre terrasse ou vos envies de bien-être.
-                </p>
-
-                <div class="d-flex flex-wrap gap-3">
-                    <a href="{{ path('app_products_index') }}" class="btn btn-light btn-lg px-4">
-                        Voir les produits
+                <div class="home-hero__actions">
+                    <a href="{{ path('app_products_index') }}" class="aq-btn aq-btn--primary">
+                        Voir les produits <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                     </a>
-
-                    <a href="#home-categories" class="btn btn-outline-light btn-lg px-4">
-                        Découvrir les catégories
-                    </a>
+                    <a href="#home-universes" class="aq-btn aq-btn--outline">Nos catégories</a>
                 </div>
             </div>
+
+            <div class="home-hero__media">
+                <img src="{{ asset('images/home/hero-pool-garden.webp') }}" alt="Piscine dans un jardin méditerranéen, avec transats et oliviers" width="1400" height="933" fetchpriority="high">
+            </div>
+        </div>
+
+        <div class="aq-container">
+            <ul class="home-trust">
+                <li><i class="fa-solid fa-lock" aria-hidden="true"></i> Paiement sécurisé</li>
+                <li><i class="fa-solid fa-leaf" aria-hidden="true"></i> Conseils personnalisés</li>
+                <li><i class="fa-solid fa-truck-fast" aria-hidden="true"></i> Livraison suivie</li>
+            </ul>
         </div>
     </section>
 
-    <section class="home-section home-section--light" id="home-categories">
-        <div class="container">
-            <h2 class="home-section-title">Nos catégories</h2>
-            <p class="home-section-text">
-                Retrouvez nos univers principaux pour aménager votre espace extérieur et profiter pleinement de la saison.
-            </p>
-
-            <div class="row g-4">
-                <div class="col-12 col-md-6 col-xl-4">
-                    <article class="category-card">
-                        <img
-                            src="{{ asset('images/home/Piscine.png') }}"
-                            alt="Piscines"
-                            class="category-card__image"
-                        >
-                        <div class="category-card__body">
-                            <h3 class="category-card__title">Piscines</h3>
-                            <p class="category-card__text">
-                                Des piscines conçues pour allier confort, durabilité et plaisir tout au long de la saison.
-                            </p>
-                        </div>
-                    </article>
-                </div>
-
-                <div class="col-12 col-md-6 col-xl-4">
-                    <article class="category-card">
-                        <img
-                            src="{{ asset('images/home/spa.jpg') }}"
-                            alt="Spas"
-                            class="category-card__image"
-                        >
-                        <div class="category-card__body">
-                            <h3 class="category-card__title">Spas</h3>
-                            <p class="category-card__text">
-                                Des spas pensés pour la détente et le bien-être, avec une installation simple et rapide.
-                            </p>
-                        </div>
-                    </article>
-                </div>
-
-                <div class="col-12 col-md-6 col-xl-4">
-                    <article class="category-card">
-                        <img
-                            src="{{ asset('images/home/Entretien Piscine.png') }}"
-                            alt="Entretien piscine"
-                            class="category-card__image"
-                        >
-                        <div class="category-card__body">
-                            <h3 class="category-card__title">Entretien</h3>
-                            <p class="category-card__text">
-                                Les essentiels pour garder une eau propre, saine et agréable au quotidien.
-                            </p>
-                        </div>
-                    </article>
-                </div>
-
-                <div class="col-12 col-md-6 col-xl-4">
-                    <article class="category-card">
-                        <img
-                            src="{{ asset('images/home/Accessoires.png') }}"
-                            alt="Accessoires"
-                            class="category-card__image"
-                        >
-                        <div class="category-card__body">
-                            <h3 class="category-card__title">Accessoires</h3>
-                            <p class="category-card__text">
-                                Bouées, jeux, confort et petits équipements pour compléter votre espace de loisirs.
-                            </p>
-                        </div>
-                    </article>
-                </div>
-
-                <div class="col-12 col-md-6 col-xl-4">
-                    <article class="category-card">
-                        <img
-                            src="{{ asset('images/home/entretien-piscine-materiel-02.jpg') }}"
-                            alt="Matériel d'entretien"
-                            class="category-card__image"
-                        >
-                        <div class="category-card__body">
-                            <h3 class="category-card__title">Nettoyage</h3>
-                            <p class="category-card__text">
-                                Pompes, kits et solutions techniques pour une utilisation plus simple et plus fiable.
-                            </p>
-                        </div>
-                    </article>
-                </div>
-
-                <div class="col-12 col-md-6 col-xl-4">
-                    <article class="category-card">
-                        <img
-                            src="{{ asset('images/home/matelas-gonflable-intex-premaire-ii-electrique-2-pers.jpg') }}"
-                            alt="Matelas gonflables"
-                            class="category-card__image"
-                        >
-                        <div class="category-card__body">
-                            <h3 class="category-card__title">Matelas gonflables</h3>
-                            <p class="category-card__text">
-                                Des solutions pratiques et confortables pour les invités, le camping ou les moments de détente.
-                            </p>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="home-section">
-        <div class="container">
-            <div class="home-promo">
-                <span class="home-promo__badge">Offre du moment</span>
-                <h2 class="home-promo__title">Préparez votre été avec notre sélection spéciale</h2>
-                <p class="home-promo__text">
-                    Profitez d’une mise en avant saisonnière sur les produits les plus recherchés : piscines, spas,
-                    entretien et accessoires pour l’extérieur.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section class="home-section">
-        <div class="container">
-            <h2 class="home-section-title">Pourquoi nous choisir</h2>
-            <p class="home-section-text">
-                Des engagements simples à afficher sur la page d’accueil avant d’ajouter la vraie logique métier.
-            </p>
-
-            <div class="row g-4">
-                <div class="col-12 col-md-6 col-xl-3">
-                    <article class="trust-card">
-                        <h3 class="trust-card__title">Produits sélectionnés</h3>
-                        <p class="trust-card__text">
-                            Une gamme pensée pour le confort, l’extérieur et la facilité d’utilisation.
-                        </p>
-                    </article>
-                </div>
-
-                <div class="col-12 col-md-6 col-xl-3">
-                    <article class="trust-card">
-                        <h3 class="trust-card__title">Paiement sécurisé</h3>
-                        <p class="trust-card__text">
-                            Un espace d’achat rassurant, clair et prêt à accueillir plus tard le vrai tunnel de vente.
-                        </p>
-                    </article>
-                </div>
-
-                <div class="col-12 col-md-6 col-xl-3">
-                    <article class="trust-card">
-                        <h3 class="trust-card__title">Livraison rapide</h3>
-                        <p class="trust-card__text">
-                            Un message simple pour mettre en avant la promesse logistique de la boutique.
-                        </p>
-                    </article>
-                </div>
-
-                <div class="col-12 col-md-6 col-xl-3">
-                    <article class="trust-card">
-                        <h3 class="trust-card__title">Support client</h3>
-                        <p class="trust-card__text">
-                            Une section de confiance utile pour rassurer avant même la fiche produit.
-                        </p>
-                    </article>
-                </div>
-            </div>
-        </div>
-    </section>
-{#
-    <section class="home-section home-section--light home-section--newsletter">
-        <div class="container">
-            <div class="newsletter-box">
-                <div class="row align-items-center g-3">
-                    <div class="col-12 col-md-8">
-                        <h2 class="newsletter-box__title">Abonnez-vous à la newsletter</h2>
-                        <p class="newsletter-box__text">
-                            Recevez les nouveautés, les offres saisonnières et les mises en avant produits.
-                        </p>
-                    </div>
-
-                    <div class="col-12 col-md-4 d-flex align-items-center justify-content-md-end">
-                        <button type="button" class="btn btn-outline-dark btn-lg px-4">
-                            S’inscrire
+    {# Univers = catégories #}
+    <section class="home-section" id="home-universes">
+        {# Carrousel : 4 catégories visibles, flèches si davantage (assets/controllers/carousel_controller.js) #}
+        <div class="aq-container" data-controller="carousel">
+            <div class="aq-section-head">
+                <h2 class="aq-section-title">Explorez nos univers</h2>
+                <div class="aq-section-head__actions">
+                    <a href="{{ path('app_products_index') }}" class="aq-link-arrow">Tout découvrir <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                    <div class="aq-carousel-nav">
+                        <button type="button" class="aq-carousel-btn" data-carousel-target="prev" data-action="carousel#prev"
+                                aria-controls="home-universes-track" aria-label="Catégories précédentes">
+                            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="aq-carousel-btn" data-carousel-target="next" data-action="carousel#next"
+                                aria-controls="home-universes-track" aria-label="Catégories suivantes">
+                            <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                         </button>
                     </div>
                 </div>
             </div>
+
+            <div class="home-universes" id="home-universes-track" data-carousel-target="track">
+                {% for category in categories %}
+                    <a href="{{ path('app_products_index', {category: category.id}) }}" class="home-universe">
+                        <img src="{{ asset(universeImages[category.label|lower] ?? 'images/home/hero-pool-garden.webp') }}" alt="" loading="lazy">
+                        <span class="home-universe__label">{{ category.label|capitalize }}</span>
+                        <span class="home-universe__arrow" aria-hidden="true"><i class="fa-solid fa-arrow-right"></i></span>
+                    </a>
+                {% endfor %}
+            </div>
         </div>
-    </section> #}
+    </section>
+
+    {# Sélection produits #}
+    {% if featured is not empty %}
+        <section class="home-section">
+            <div class="aq-container">
+                <div class="aq-section-head">
+                    <h2 class="aq-section-title">Notre sélection</h2>
+                    <a href="{{ path('app_products_index') }}" class="aq-link-arrow">Voir tous les produits <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                </div>
+
+                <div class="home-products">
+                    {% for product in featured %}
+                        {% include '_partials/_product_card.html.twig' with {product: product} %}
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    {% endif %}
+
+    {# Bannière spa pleine largeur #}
+    <section class="home-banner">
+        <img class="home-banner__image" src="{{ asset('images/home/spa-sunset-banner.webp') }}" alt="" loading="lazy">
+        <div class="aq-container home-banner__content">
+            <h2 class="home-banner__title">Un moment<br>rien qu'à vous.</h2>
+            <p class="home-banner__text">Découvrez notre univers spa et détente.</p>
+            <a href="{{ path('app_products_index', spaCategory ? {category: spaCategory.id} : {}) }}" class="aq-btn aq-btn--accent">
+                Découvrir les spas <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            </a>
+        </div>
+    </section>
+
+    {# Bien choisir #}
+    <section class="home-section">
+        <div class="aq-container home-choose">
+            <div class="home-choose__media">
+                <img src="{{ asset('images/home/pool-garden-advice.jpg') }}" alt="Piscine dans un jardin méditerranéen, avec olivier et transats sur une terrasse en pierre" width="1280" height="960" loading="lazy">
+            </div>
+
+            <div>
+                <h2 class="aq-section-title">Bien choisir, simplement.</h2>
+                <p class="home-choose__lead">Trouvez les équipements adaptés à votre espace et à vos envies.</p>
+
+                <ul class="home-choose__list">
+                    <li>
+                        <span class="home-choose__icon" aria-hidden="true"><i class="fa-solid fa-seedling"></i></span>
+                        <div>
+                            <h3 class="home-choose__title">Pour votre jardin</h3>
+                            <p>Des solutions adaptées à tous les espaces.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="home-choose__icon" aria-hidden="true"><i class="fa-solid fa-spa"></i></span>
+                        <div>
+                            <h3 class="home-choose__title">Pour votre bien-être</h3>
+                            <p>Relaxation et moments de partage.</p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="home-choose__icon" aria-hidden="true"><i class="fa-solid fa-droplet"></i></span>
+                        <div>
+                            <h3 class="home-choose__title">Pour une eau limpide</h3>
+                            <p>Des équipements performants et faciles à utiliser.</p>
+                        </div>
+                    </li>
+                </ul>
+
+                <a href="{{ path('app_products_index') }}" class="aq-btn aq-btn--primary">
+                    Explorer le catalogue <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    {# Conseils : chaque carte ouvre son guide dédié #}
+    <section class="home-section" id="home-advice">
+        <div class="aq-container">
+            <div class="aq-section-head">
+                <h2 class="aq-section-title">Conseils &amp; inspirations</h2>
+            </div>
+
+            <div class="home-advice">
+                <article class="home-advice__item">
+                    <img src="{{ asset('images/home/advice-pool.jpg') }}" alt="" width="1200" height="675" loading="lazy">
+                    <h3 class="home-advice__title">Choisir sa piscine</h3>
+                    <p>Hors-sol, tubulaire ou gonflable : trouvez la piscine adaptée à votre espace et à votre mode de vie.</p>
+                    <a href="{{ path('app_advice_show', {slug: 'choisir-sa-piscine'}) }}" class="aq-link-arrow" aria-label="Lire le conseil : Choisir sa piscine">
+                        Lire le conseil <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </a>
+                </article>
+
+                <article class="home-advice__item">
+                    <img src="{{ asset('images/home/advice-spa-evening.jpg') }}" alt="" width="1200" height="675" loading="lazy">
+                    <h3 class="home-advice__title">Créer son espace détente</h3>
+                    <p>Spa, transats et accessoires pour aménager un coin bien-être chez vous.</p>
+                    <a href="{{ path('app_advice_show', {slug: 'creer-son-espace-detente'}) }}" class="aq-link-arrow" aria-label="Lire le conseil : Créer son espace détente">
+                        Lire le conseil <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </a>
+                </article>
+
+                <article class="home-advice__item">
+                    <img src="{{ asset('images/home/advice-water.jpg') }}" alt="" width="1200" height="675" loading="lazy">
+                    <h3 class="home-advice__title">Entretenir son eau</h3>
+                    <p>Filtration, nettoyage et traitement pour une eau toujours claire et saine.</p>
+                    <a href="{{ path('app_advice_show', {slug: 'entretenir-son-eau'}) }}" class="aq-link-arrow" aria-label="Lire le conseil : Entretenir son eau">
+                        Lire le conseil <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    {# Outils (PoolToolsController) #}
+    <section class="home-section" id="home-tools">
+        <div class="aq-container">
+            <div class="aq-section-head"><h2 class="aq-section-title">Les outils pour votre piscine</h2></div>
+            <div class="tools-layout">
+                <article class="tool-panel">
+                    <span class="aq-kicker"><i class="fa-solid fa-calculator" aria-hidden="true"></i> Préparer son bassin</span>
+                    <h3 class="aq-section-title">Calculer le volume</h3>
+                    <p>Rectangulaire, ronde ou ovale : estimez la quantité d’eau et votre budget à partir de vos dimensions.</p>
+                    <a href="{{ path('app_tools_volume') }}" class="aq-btn aq-btn--primary">Ouvrir le calculateur <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
+                <article class="tool-panel">
+                    <span class="aq-kicker"><i class="fa-solid fa-droplet" aria-hidden="true"></i> Comprendre son eau</span>
+                    <h3 class="aq-section-title">Analyser mes mesures</h3>
+                    <p>Renseignez votre pH, le chlore libre et le TAC pour les comparer aux repères adaptés à votre bassin.</p>
+                    <a href="{{ path('app_tools_water') }}" class="aq-btn aq-btn--outline">Comparer mes mesures <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    {# Newsletter (traitée par NewsletterController) #}
+    <section class="home-section" id="newsletter">
+        <div class="aq-container">
+            <div class="home-newsletter">
+                <img class="home-newsletter__leaves" src="{{ asset('images/home/newsletter-olive-branch.png') }}"
+                     alt="" width="288" height="432" loading="lazy" aria-hidden="true">
+
+                <div class="home-newsletter__intro">
+                    <h2 class="home-newsletter__title">Un peu d'été dans votre boîte mail.</h2>
+                    <p>Nos inspirations et conseils au fil des saisons.</p>
+                </div>
+
+                {{ form_start(newsletterForm, {attr: {class: 'home-newsletter__form'}}) }}
+                    <div class="home-newsletter__field">
+                        {{ form_label(newsletterForm.email, null, {label_attr: {class: 'visually-hidden'}}) }}
+                        {{ form_widget(newsletterForm.email, {attr: {class: 'home-newsletter__input'}}) }}
+                        <button type="submit" class="aq-btn aq-btn--primary aq-btn--sm">S'inscrire</button>
+                    </div>
+                    <p class="home-newsletter__note">
+                        Vous pouvez vous désinscrire à tout moment.
+                        <a href="{{ path('app_politique_confidentialite') }}">En savoir plus</a>
+                    </p>
+                {{ form_end(newsletterForm) }}
+            </div>
+        </div>
+    </section>
 {% endblock %}

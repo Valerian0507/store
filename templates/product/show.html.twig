@@ -4,6 +4,7 @@
 
 {% block stylesheets %}
 	<link rel="stylesheet" href="{{ asset('styles/pages/product-show.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/pages/tools.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -57,7 +58,8 @@
                     <p class="product-show__delivery">Livraison gratuit</p>
 
                 <div class="product-show__buy-box">
-                    <form method="post" action="{{ path('app_cart_add', { id: product.id }) }}" class="product-show__form">
+                    <form method="post" action="{{ path('app_cart_add', { id: product.id }) }}" class="product-show__form"
+                          data-controller="cart-add" data-action="cart-add#submit">
                         <input
                             type="number"
                             name="qty"
@@ -75,6 +77,14 @@
                         </button>
                     </form>
                 </div>
+                {% if product.replenishable %}
+                    {% include 'tools/_care_plan_form.html.twig' with {product: product} %}
+                {% endif %}
+                {% if product.category and product.category.label|lower == 'piscines' %}
+                    <p class="mt-4"><a href="{{ path('app_tools_volume') }}" class="aq-link-arrow">Calculer le volume de mon bassin</a></p>
+                {% elseif product.category and product.category.label|lower in ['spa', 'entretien'] %}
+                    <p class="mt-4"><a href="{{ path('app_tools_water') }}" class="aq-link-arrow">Analyser mes mesures d’eau</a></p>
+                {% endif %}
             </aside>
         </div>
 

@@ -10,6 +10,15 @@
 	<section class="container py-4">
 		<h1 class="products-page__title">Catalogue des produits</h1>
 
+        {% set selectedCategory = categories|filter(c => c.id == category)|first %}
+        {% if selectedCategory %}
+            {% if selectedCategory.label|lower == 'piscines' %}
+                <p><a class="aq-link-arrow" href="{{ path('app_tools_volume') }}">Besoin de connaître le volume ? Ouvrir le calculateur</a></p>
+            {% elseif selectedCategory.label|lower in ['spa', 'entretien'] %}
+                <p><a class="aq-link-arrow" href="{{ path('app_tools_water') }}">Comprendre mes mesures d’eau</a></p>
+            {% endif %}
+        {% endif %}
+
 		<form method="get" class="products-page__filters">
 			<label class="products-page__field">
 				<span class="products-page__label">Catégorie</span>
@@ -83,7 +92,7 @@
 								{{ product.getPriceEur() }}
 								€</p>
 							<div class="product-card__actions">
-								<form method="post" action="{{ path('app_cart_add', {id: product.id}) }}">
+								<form method="post" action="{{ path('app_cart_add', {id: product.id}) }}" data-controller="cart-add" data-action="cart-add#submit">
 									<input type="hidden" name="_token" value="{{ csrf_token('cart_add_' ~ product.id) }}">
 									<button type="submit" class="product-card__add-button">
                                         Ajouter au panier

@@ -1,0 +1,50 @@
+{% extends 'advice/layout.html.twig' %}
+
+{% set article = {
+    title: 'Choisir sa piscine',
+    description: 'Un bassin adapté à votre jardin commence par quelques choix simples : l’emplacement, les dimensions et les équipements.',
+    image: 'images/home/advice-pool.jpg',
+    imageAlt: 'Piscine dans un jardin méditerranéen, avec terrasse en pierre et transats à l’ombre d’un olivier',
+    category: 'piscines',
+    ctaTitle: 'Trouvez votre piscine',
+    ctaDescription: 'Comparez les modèles et leurs caractéristiques pour préparer votre projet.',
+    ctaLabel: 'Voir les piscines'
+} %}
+
+{% block guide_content %}
+    <section class="advice-guide__checklist" aria-labelledby="pool-calculator">
+        <h2 id="pool-calculator">Estimez votre volume d’eau</h2>
+        <p>Indiquez la forme, les dimensions intérieures et la profondeur moyenne d’eau.</p>
+        <a href="{{ path('app_tools_volume') }}" class="aq-btn aq-btn--primary">Calculer le volume de mon bassin</a>
+    </section>
+    <section aria-labelledby="pool-space">
+        <h2 id="pool-space">Commencez par votre espace</h2>
+        <p>Mesurez la zone disponible en prévoyant la place du bassin, de ses supports et des équipements. Gardez aussi un passage pratique autour de la piscine pour accéder au filtre et effectuer l’entretien.</p>
+        <p>Avant de retenir un emplacement, consultez la notice du modèle : la préparation du terrain et les conditions d’installation varient selon la piscine choisie.</p>
+    </section>
+
+    <section aria-labelledby="pool-type">
+        <h2 id="pool-type">Quel type de piscine choisir ?</h2>
+        <ul>
+            <li><strong>Gonflable ou autoportante :</strong> une option à comparer pour une installation saisonnière, en vérifiant les dimensions et le matériel fourni.</li>
+            <li><strong>Tubulaire :</strong> une structure à tubes qui soutient le bassin. Examinez l’encombrement total, y compris les pieds de support.</li>
+            <li><strong>À parois rigides :</strong> un projet à préparer selon les exigences du fabricant, notamment pour le support et le montage.</li>
+        </ul>
+    </section>
+
+    <section aria-labelledby="pool-size">
+        <h2 id="pool-size">Pensez à l’usage avant de choisir la taille</h2>
+        <p>Pour se rafraîchir, se détendre ou disposer d’une zone de baignade plus longue, les attentes ne sont pas les mêmes. Comparez la forme, la profondeur utile et le volume d’eau, puis vérifiez que l’ensemble reste adapté à votre espace.</p>
+        <p>Le budget comprend aussi la préparation, la filtration, les accessoires et l’entretien. Une comparaison du kit complet est plus utile que celle du seul prix du bassin.</p>
+    </section>
+
+    <section class="advice-guide__checklist" aria-labelledby="pool-checklist">
+        <h2 id="pool-checklist">Avant de commander</h2>
+        <ul>
+            <li>Relever les dimensions hors tout du modèle.</li>
+            <li>Vérifier les conditions de pose dans la notice.</li>
+            <li>Identifier la filtration et les accessoires inclus.</li>
+            <li>Prévoir le rangement et l’entretien de fin de saison.</li>
+        </ul>
+    </section>
+{% endblock %}

@@ -1,0 +1,33 @@
+{# templates/_partials/_product_card.html.twig - attend la variable "product" #}
+{% set productUrl = path('app_products_show', {id: product.id}) %}
+{% set noImage = asset('images/products/no-image.jpg') %}
+
+<article class="aq-product-card">
+    <a href="{{ productUrl }}" class="aq-product-card__media" tabindex="-1" aria-hidden="true">
+        <img src="{{ product.image ? asset('uploads/products/' ~ product.image) : noImage }}"
+             alt="" loading="lazy"
+             onerror="this.onerror=null;this.src='{{ noImage }}';">
+    </a>
+
+    <div class="aq-product-card__body">
+        <h3 class="aq-product-card__title">
+            <a href="{{ productUrl }}" title="{{ product.title }}">{{ product.title }}</a>
+        </h3>
+        <p class="aq-product-card__price">{{ (product.priceCents / 100)|number_format(2, ',', ' ') }} €</p>
+
+        <form method="post" action="{{ path('app_cart_add', {id: product.id}) }}" class="aq-product-card__form"
+              data-controller="cart-add" data-action="cart-add#submit">
+            <input type="hidden" name="_token" value="{{ csrf_token('cart_add_' ~ product.id) }}">
+            {% if product.stock > 0 %}
+                <button type="submit" class="aq-btn aq-btn--primary aq-btn--sm aq-btn--block">
+                    <i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>
+                    Ajouter au panier
+                </button>
+            {% else %}
+                <button type="button" class="aq-btn aq-btn--outline aq-btn--sm aq-btn--block" disabled>
+                    Rupture de stock
+                </button>
+            {% endif %}
+        </form>
+    </div>
+</article>

@@ -7,15 +7,8 @@ import './stimulus_bootstrap.js';
  */
 import './styles/app.css';
 import 'bootstrap';
-
-console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
+import { autoHide } from './lib/toast.js';
 
 document.addEventListener('turbo:load', () => {
-    document.querySelectorAll('.js-flash').forEach((alert) => {
-        window.setTimeout(() => {
-            alert.style.transition = 'opacity 0.5s ease';
-            alert.style.opacity = '0';
-            window.setTimeout(() => alert.remove(), 500);
-        }, 5000);
-    });
+    document.querySelectorAll('.js-flash').forEach(autoHide);
 });

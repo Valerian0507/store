@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+{% block title %}Calculateur de volume | AquaSphère{% endblock %}
+{% block stylesheets %}<link rel="stylesheet" href="{{ asset('styles/pages/tools.css') }}">{% endblock %}
+{% block body %}
+<main class="aq-container tools-page" data-controller="pool-volume">
+    <a href="{{ path('app_home') }}#home-tools" class="aq-link-arrow">Retour aux outils</a>
+    <header class="tools-heading">
+        <span class="aq-kicker">Votre piscine, simplement</span>
+        <h1>Quel volume pour votre bassin ?</h1>
+        <p>Renseignez les dimensions intérieures et la profondeur moyenne réelle de l’eau, en mètres.</p>
+    </header>
+    <div class="tools-layout">
+        <form class="tool-panel" data-pool-volume-target="form" data-action="submit->pool-volume#calculate input->pool-volume#invalidate">
+            <label class="tool-field">Forme du bassin
+                <select name="shape" data-action="change->pool-volume#changeShape"><option value="rectangle">Rectangulaire</option><option value="round">Ronde</option><option value="oval">Ovale (ellipse)</option></select>
+            </label>
+            <div class="tool-fields" data-pool-volume-target="dimensions">
+                <label class="tool-field">Longueur (m)<input type="number" name="length" min="0.05" max="100" step="any" value="8" required></label>
+                <label class="tool-field">Largeur (m)<input type="number" name="width" min="0.05" max="100" step="any" value="4" required></label>
+            </div>
+            <div data-pool-volume-target="diameter" hidden><label class="tool-field">Diamètre intérieur (m)<input type="number" name="diameter" min="0.05" max="100" step="any" value="4" required disabled></label></div>
+            <label class="tool-field">Profondeur moyenne d’eau (m)<input type="number" name="depth" min="0.05" max="10" step="any" value="1.4" required></label>
+            <details class="tool-budget"><summary>Estimer mon budget</summary>
+                <label class="tool-field">Prix de l’eau sur votre facture (€/m³)<input type="number" name="waterPrice" min="0" max="1000" step="0.01" value="0" required></label>
+                <div class="tool-fields">
+                    <label class="tool-field">Budget entretien prévu (€/mois)<input type="number" name="monthlyBudget" min="0" max="10000" step="0.01" value="0" required></label>
+                    <label class="tool-field">Mois d’utilisation par an<input type="number" name="months" min="1" max="12" step="1" value="6" required></label>
+                </div>
+                <p class="tool-note">Ces estimations utilisent vos montants : elles ne prédisent pas une consommation de produits.</p>
+            </details>
+            <p class="tool-error" role="alert" data-pool-volume-target="error"></p>
+            <button class="aq-btn aq-btn--primary" type="submit">Calculer mon volume</button>
+            <noscript><p>Activez JavaScript pour utiliser ce calculateur interactif.</p></noscript>
+        </form>
+        <aside class="tool-panel tool-panel--result" aria-label="Résultat du calcul">
+            <h2>Votre estimation</h2><p>Le calcul reste dans votre navigateur.</p>
+            <div data-pool-volume-target="result" aria-live="polite" hidden>
+                <strong class="tool-volume" data-pool-volume-target="litres"></strong><p data-pool-volume-target="volume"></p>
+                <dl><dt>Remplissage (hors abonnement et frais fixes)</dt><dd data-pool-volume-target="filling"></dd><dt>Budget d’entretien saisi</dt><dd data-pool-volume-target="care"></dd></dl>
+            </div>
+            <p class="tool-note">Pour une forme irrégulière ou un fond en pente, le résultat est approximatif. Vérifiez le volume indiqué dans la notice du bassin.</p>
+            <a class="aq-link-arrow" href="{{ path('app_advice_show', {slug: 'choisir-sa-piscine'}) }}">Lire le guide piscine</a>
+        </aside>
+    </div>
+</main>
+{% endblock %}

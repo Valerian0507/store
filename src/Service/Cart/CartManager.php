@@ -127,6 +127,7 @@ final class CartManager
         return $raw;
     }
 
+    /** @return array<int, int> productId => quantité */
     private function getCleanSessionCart(): array
     {
         $cart = $this->cartStorage->get();

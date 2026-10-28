@@ -1,0 +1,41 @@
+{% extends 'advice/layout.html.twig' %}
+
+{% set article = {
+    title: 'Créer son espace détente',
+    description: 'Un spa, une lumière douce et quelques accessoires bien choisis : imaginez un coin de jardin agréable à utiliser au quotidien.',
+    image: 'images/home/advice-spa-evening.jpg',
+    imageAlt: 'Spa sur une terrasse de jardin à la tombée du jour, entouré d’oliviers et d’un éclairage chaleureux',
+    category: 'spa',
+    ctaTitle: 'Composez votre espace bien-être',
+    ctaDescription: 'Découvrez les spas et comparez leur capacité, leurs dimensions et leurs équipements.',
+    ctaLabel: 'Voir les spas'
+} %}
+
+{% block guide_content %}
+    <section aria-labelledby="spa-location">
+        <h2 id="spa-location">Choisissez un emplacement pratique</h2>
+        <p>Imaginez le trajet depuis la maison, l’accès au spa et l’espace nécessaire pour ouvrir sa couverture. Un coin facile à rejoindre et à entretenir sera plus agréable au fil des saisons.</p>
+        <p>Vérifiez les exigences du fabricant avant toute installation. Le support doit convenir au spa rempli et occupé ; faites confirmer sa capacité si nécessaire. Pour l’alimentation électrique, suivez la notice et faites appel à un professionnel pour toute adaptation.</p>
+    </section>
+
+    <section aria-labelledby="spa-model">
+        <h2 id="spa-model">Comparez le confort et l’encombrement</h2>
+        <p>Le nombre de places annoncé ne suffit pas à décrire le confort. Regardez les dimensions intérieures, la disposition des assises et les fonctions proposées, puis tenez compte de vos habitudes d’utilisation.</p>
+        <p>Examinez également l’isolation, la couverture et les informations de consommation du modèle. Comparez les données dans les mêmes conditions d’usage pour garder une lecture cohérente.</p>
+    </section>
+
+    <section aria-labelledby="spa-atmosphere">
+        <h2 id="spa-atmosphere">Aménagez les abords</h2>
+        <ul>
+            <li><strong>Une zone de repos :</strong> un fauteuil ou un transat pour prolonger le moment de détente.</li>
+            <li><strong>Des accessoires à portée de main :</strong> un rangement pour les serviettes et les petits objets.</li>
+            <li><strong>Un éclairage adapté :</strong> des équipements prévus pour l’extérieur et l’emplacement concerné.</li>
+            <li><strong>Un peu d’intimité :</strong> des plantations ou un aménagement qui préserve les accès techniques.</li>
+        </ul>
+    </section>
+
+    <section class="advice-guide__checklist" aria-labelledby="spa-routine">
+        <h2 id="spa-routine">Prévoyez une routine simple</h2>
+        <p>Gardez la notice accessible, entretenez la filtration et contrôlez l’eau selon les indications du fabricant. Une couverture utilisée conformément à la notice aide à protéger le bassin entre deux utilisations.</p>
+    </section>
+{% endblock %}

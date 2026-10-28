@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Désinscription de la newsletter{% endblock %}
+
+{% block body %}
+    <section class="aq-container newsletter-page">
+        <div class="newsletter-page__card">
+            {% if subscriber %}
+                <h1 class="newsletter-page__title">Se désinscrire de la newsletter</h1>
+                <p>
+                    Vous ne recevrez plus nos e-mails à l'adresse <strong>{{ subscriber.email }}</strong>.
+                    Votre adresse sera supprimée de notre liste.
+                </p>
+                <form method="post">
+                    <input type="hidden" name="_token" value="{{ csrf_token('newsletter_unsubscribe') }}">
+                    <div class="newsletter-page__actions">
+                        <button type="submit" class="aq-btn aq-btn--primary">Confirmer la désinscription</button>
+                        <a href="{{ path('app_home') }}" class="aq-btn aq-btn--outline">Annuler</a>
+                    </div>
+                </form>
+            {% else %}
+                <h1 class="newsletter-page__title">Lien invalide</h1>
+                <p>Ce lien de désinscription n'est plus valable : l'adresse a peut-être déjà été retirée de la liste.</p>
+                <a href="{{ path('app_home') }}" class="aq-btn aq-btn--primary">Retour à l'accueil</a>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}

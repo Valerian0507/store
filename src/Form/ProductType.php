@@ -49,6 +49,10 @@ class ProductType extends AbstractType
             ->add('description', TextareaType::class, [
                 'required' => false,
             ])
+            ->add('replenishable', CheckboxType::class, [
+                'label' => 'Consommable : autoriser un planning de réapprovisionnement (démo)',
+                'required' => false,
+            ])
             ->add('volumeM3', NumberType::class, [
                 'required' => true,
                 'scale' => 3,

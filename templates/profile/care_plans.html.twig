@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+{% block title %}Mes abonnements démo | AquaSphère{% endblock %}
+{% block stylesheets %}<link rel="stylesheet" href="{{ asset('styles/pages/tools.css') }}">{% endblock %}
+{% block body %}
+<main class="aq-container tools-page">
+    <a href="{{ path('app_profile_index') }}" class="aq-link-arrow">Retour à mon compte</a>
+    <header class="tools-heading"><span class="aq-kicker">Mon compte</span><h1>Mes abonnements démo</h1><p>Vos plannings de réapprovisionnement sont enregistrés dans votre compte. Aucune commande, livraison, notification ni prélèvement n’est déclenché.</p></header>
+    <div class="care-plans">
+    {% for plan in plans %}
+        <article class="tool-panel">
+            <h2><a href="{{ path('app_products_show', {id: plan.product.id}) }}">{{ plan.product.title }}</a></h2>
+            <p class="care-plan-status">{{ {active: 'Actif', paused: 'En pause', cancelled: 'Annulé'}[plan.status] }}</p>
+            <p>{{ plan.quantity }} unité(s) toutes les {{ plan.intervalWeeks }} semaines.</p>
+            {% if plan.nextDate %}<p>Prochaine échéance indicative : <strong>{{ plan.nextDate|date('d/m/Y') }}</strong>. Aucune action automatique à cette date.</p>{% endif %}
+            {% if plan.status != 'cancelled' %}
+                <form method="post" action="{{ path('app_care_plan_update', {id: plan.id, operation: 'edit'}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('care_plan_edit_' ~ plan.id) }}">
+                    <div class="tool-fields">
+                        <label class="tool-field">Quantité<input type="number" name="quantity" min="1" max="20" value="{{ plan.quantity }}" required></label>
+                        <label class="tool-field">Intervalle<select name="interval">{% for weeks in [4, 6, 8, 12] %}<option value="{{ weeks }}" {{ plan.intervalWeeks == weeks ? 'selected' : '' }}>{{ weeks }} semaines</option>{% endfor %}</select></label>
+                    </div>
+                    <p class="tool-note">Pour un planning actif, une modification recalcule la prochaine échéance à partir d’aujourd’hui.</p>
+                    <button type="submit" class="aq-btn aq-btn--outline aq-btn--sm">Enregistrer les modifications</button>
+                </form>
+                <div class="care-plan-actions">
+                    {% set operation = plan.status == 'active' ? 'pause' : 'resume' %}
+                    <form method="post" action="{{ path('app_care_plan_update', {id: plan.id, operation: operation}) }}"><input type="hidden" name="_token" value="{{ csrf_token('care_plan_' ~ operation ~ '_' ~ plan.id) }}"><button type="submit" class="aq-btn aq-btn--primary aq-btn--sm">{{ operation == 'pause' ? 'Mettre en pause' : 'Reprendre' }}</button></form>
+                    <form method="post" action="{{ path('app_care_plan_update', {id: plan.id, operation: 'cancel'}) }}"><input type="hidden" name="_token" value="{{ csrf_token('care_plan_cancel_' ~ plan.id) }}"><button type="submit" class="aq-btn aq-btn--outline aq-btn--sm">Annuler le planning</button></form>
+                </div>
+            {% endif %}
+        </article>
+    {% else %}
+        <div class="tool-panel"><h2>Aucun planning pour le moment</h2><p>Ouvrez un consommable du catalogue et choisissez son intervalle de réapprovisionnement.</p><a href="{{ path('app_products_index') }}" class="aq-btn aq-btn--primary">Explorer le catalogue</a></div>
+    {% endfor %}
+    </div>
+</main>
+{% endblock %}

@@ -1,58 +1,17 @@
-{# Footer #}
-<footer class="footer bg-light border-top mt-5">
-	<div class="container py-4">
-		<div class="row gy-4">
-
-			<div class="col-6 col-md-3">
-				<h6 class="fw-bold mb-3">Aide</h6>
-				<ul class="footer__links">
+{# templates/_partials/_footer.html.twig #}
+<footer class="site-footer">
+	<div class="aq-container">
+		<div class="site-footer__grid">
+			<div class="site-footer__about">
+				<a href="{{ path('app_home') }}">
+					{% include '_partials/_logo.html.twig' with {variant: 'light'} %}
+				</a>
+				<p class="site-footer__tagline">
+					Piscines, spas et accessoires pour faire de votre jardin un lieu d'évasion.
+				</p>
+				<ul class="site-footer__social">
 					<li>
-						<a href="#">Contact</a>
-					</li>
-					<li>
-						<a href="#">FAQ</a>
-					</li>
-					<li>
-						<a href="#">À propos</a>
-					</li>
-				</ul>
-			</div>
-
-			<div class="col-6 col-md-3">
-				<h6 class="fw-bold mb-3">Informations légales</h6>
-				<ul class="footer__links">
-					<li>
-						<a href="{{ path('app_mentions_legales') }}">Mentions légales</a>
-					</li>
-					<li>
-						<a href="{{ path('app_cgv') }}">CGV</a>
-					</li>
-					<li>
-						<a href="{{ path('app_politique_confidentialite') }}">Politique de confidentialité</a>
-					</li>
-					<li>
-						<a href="#`">Conditions d'utilisation</a>
-					</li>
-				</ul>
-			</div>
-
-			<div class="col-6 col-md-3">
-				<h6 class="fw-bold mb-3">Achats</h6>
-				<ul class="footer__links">
-					<li>
-						<a href="#">Politique de remboursement</a>
-					</li>
-					<li>
-						<a href="#">Politique d'expédition</a>
-					</li>
-				</ul>
-			</div>
-
-			<div class="col-6 col-md-3">
-				<h6 class="fw-bold mb-3">Suivez-nous</h6>
-				<ul class="footer__social">
-					<li>
-						<a href="https://www.linkedin.com/..." aria-label="LinkedIn">
+						<a href="https://www.linkedin.com/in/oleksii-chahinian" target="_blank" rel="noopener" aria-label="LinkedIn">
 							<i class="fa-brands fa-linkedin"></i>
 						</a>
 					</li>
@@ -69,17 +28,60 @@
 				</ul>
 			</div>
 
+			<div>
+				<h2 class="site-footer__title">Nos univers</h2>
+				<ul class="site-footer__links">
+					{% for category in nav_categories() %}
+						<li>
+							<a href="{{ path('app_products_index', {category: category.id}) }}">{{ category.label|capitalize }}</a>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+
+			<div>
+				<h2 class="site-footer__title">Mon compte</h2>
+				<ul class="site-footer__links">
+					{% if app.user %}
+						<li>
+							<a href="{{ path('app_profile_index') }}">Mon profil</a>
+						</li>
+						<li>
+							<a href="{{ path('app_profile_orders') }}">Mes commandes</a>
+						</li>
+					{% else %}
+						<li>
+							<a href="{{ path('app_login') }}">Connexion</a>
+						</li>
+						<li>
+							<a href="{{ path('app_register') }}">Inscription</a>
+						</li>
+					{% endif %}
+					<li>
+						<a href="{{ path('app_cart_index') }}">Mon panier</a>
+					</li>
+				</ul>
+			</div>
+
+			<div>
+				<h2 class="site-footer__title">Informations</h2>
+				<ul class="site-footer__links">
+					<li>
+						<a href="{{ path('app_mentions_legales') }}">Mentions légales</a>
+					</li>
+					<li>
+						<a href="{{ path('app_cgv') }}">CGV</a>
+					</li>
+					<li>
+						<a href="{{ path('app_politique_confidentialite') }}">Confidentialité</a>
+					</li>
+				</ul>
+			</div>
 		</div>
 
-		<hr class="my-3">
-
-		<p class="text-center text-muted mb-0">
-        © {{ "now"|date("Y") }} AquaSphère
-        </p>
-
-        <p class="text-center text-muted small mb-0">
-            Projet réalisé à des fins pédagogiques (formation TP DWWM).
-            Aucune vente réelle - les produits présentés ne sont pas commercialisés.
-        </p>
+		<div class="site-footer__bottom">
+			<p>© {{ "now"|date("Y") }} AquaSphère. Tous droits réservés.</p>
+			<p>Projet réalisé à des fins pédagogiques (formation TP DWWM). Aucune vente réelle - les produits présentés ne sont pas commercialisés.</p>
+		</div>
 	</div>
 </footer>

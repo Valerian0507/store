@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+{% block title %}Analyser mes mesures d’eau | AquaSphère{% endblock %}
+{% block stylesheets %}<link rel="stylesheet" href="{{ asset('styles/pages/tools.css') }}">{% endblock %}
+{% block body %}
+<main class="aq-container tools-page" data-controller="water-analysis">
+    <a href="{{ path('app_home') }}#home-tools" class="aq-link-arrow">Retour aux outils</a>
+    <header class="tools-heading"><span class="aq-kicker">Comprendre vos mesures</span><h1>Faites le point sur votre eau.</h1><p>Entrez les résultats de votre kit de mesure. Cet outil compare des valeurs ; il ne teste pas l’eau et ne calcule pas de dosage.</p></header>
+    <div class="tools-layout">
+        <form class="tool-panel" data-water-analysis-target="form" data-action="submit->water-analysis#analyse input->water-analysis#invalidate change->water-analysis#invalidate">
+            <div class="tool-fields">
+                <label class="tool-field">Bassin<select name="poolType"><option value="pool">Piscine au chlore</option><option value="spa">Spa au chlore</option></select></label>
+                <label class="tool-field">Présence de stabilisant (acide cyanurique)<select name="stabilizer"><option value="unknown">Je ne sais pas</option><option value="no">Non</option><option value="yes">Oui</option></select></label>
+            </div>
+            <label class="tool-field">pH mesuré<input name="ph" type="number" min="0" max="14" step="0.1" placeholder="Ex. : 7,4" required></label>
+            <label class="tool-field">Chlore libre mesuré (ppm = mg/L)<input name="chlorine" type="number" min="0" max="20" step="0.1" placeholder="Ex. : 2" required></label>
+            <label class="tool-field">Alcalinité totale / TAC mesuré (ppm)<input name="alkalinity" type="number" min="0" max="500" step="any" placeholder="Ex. : 100" required></label>
+            <details class="tool-budget"><summary>Plage TAC recommandée dans ma notice (facultatif)</summary><div class="tool-fields"><label class="tool-field">Minimum TAC (ppm)<input name="alkalinityMin" type="number" min="0" max="500" step="any"></label><label class="tool-field">Maximum TAC (ppm)<input name="alkalinityMax" type="number" min="0" max="500" step="any"></label></div></details>
+            <p class="tool-error" role="alert" data-water-analysis-target="error"></p>
+            <button class="aq-btn aq-btn--primary" type="submit">Comparer mes mesures</button>
+            <noscript><p>Activez JavaScript pour utiliser cet outil interactif.</p></noscript>
+        </form>
+        <aside class="tool-panel" aria-label="Lecture des mesures">
+            <h2>Vos repères</h2>
+            <div data-water-analysis-target="result" aria-live="polite" hidden>
+                <dl class="tool-readings"><dt>pH</dt><dd data-water-analysis-target="ph"></dd><dt>Chlore libre</dt><dd data-water-analysis-target="chlorine"></dd><dt>TAC</dt><dd data-water-analysis-target="alkalinity"></dd></dl>
+            </div>
+            <p>Repère pH : 7,0 à 7,8. Pour une piscine au chlore : minimum 1 ppm sans stabilisant, 2 ppm avec stabilisant ; plage usuelle de comparaison jusqu’à 4 ppm. Pour un spa au chlore : minimum 3 ppm, maximum à vérifier sur la notice.</p>
+            <p class="tool-note">Avec un stabilisant inconnu, dans un spa stabilisé ou au-dessus de 10 ppm de chlore, vérifiez la mesure et la notice avant toute interprétation. Le CDC déconseille le stabilisant dans les spas. Aucun résultat ne confirme à lui seul que la baignade est possible.</p>
+            <p class="tool-note">Le TAC est comparé uniquement à la plage que vous indiquez. Pour le brome, l’oxygène actif ou les dosages, utilisez les instructions du produit et du bassin.</p>
+            <p class="tool-note">Sources : <a href="https://www.cdc.gov/healthy-swimming/about/home-pool-and-hot-tub-water-treatment-and-testing.html" target="_blank" rel="noopener noreferrer">CDC — mesures piscine et spa</a> ; <a href="https://www.cdc.gov/healthy-swimming/safety/what-you-can-do-to-stay-healthy-in-swimming-pools.html" target="_blank" rel="noopener noreferrer">plages usuelles</a>.</p>
+            <a class="aq-link-arrow" href="{{ path('app_advice_show', {slug: 'entretenir-son-eau'}) }}">Lire le guide d’entretien</a>
+        </aside>
+    </div>
+</main>
+{% endblock %}

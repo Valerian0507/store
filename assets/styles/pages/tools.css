@@ -1,0 +1,30 @@
+.tools-page { padding-block: 2rem; }
+.tools-heading { max-width: 780px; margin: 2rem 0; }
+.tools-heading h1 { margin: .75rem 0 1rem; font-size: clamp(2.3rem, 5vw, 3.8rem); line-height: 1.08; }
+.tools-heading p { color: var(--aq-muted); font-size: 1.1rem; line-height: 1.7; }
+.tools-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; align-items: start; }
+.tool-panel { padding: clamp(1.25rem, 3vw, 2rem); border: 1px solid var(--aq-border); border-radius: var(--aq-radius-card); background: var(--aq-surface); }
+.tool-panel h2 { font-size: 1.9rem; }
+.tool-panel p { line-height: 1.65; }
+.tool-panel--result { background: var(--aq-ink); color: var(--aq-bg); }
+.tool-panel--result h2, .tool-panel--result a { color: var(--aq-bg); }
+.tool-field { display: flex; flex-direction: column; gap: .45rem; margin-bottom: 1.1rem; font-size: .9rem; font-weight: 600; }
+.tool-field input, .tool-field select { width: 100%; min-width: 0; min-height: 46px; padding: .65rem .8rem; color: var(--aq-text); border: 1px solid var(--aq-border); border-radius: var(--aq-radius-sm); background: var(--aq-bg); font: inherit; }
+.tool-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.tool-fields[hidden], [data-pool-volume-target="diameter"][hidden] { display: none; }
+.tool-volume { display: block; margin-top: 1.5rem; font-size: clamp(2rem, 4vw, 3rem); }
+.tool-note { font-size: .85rem; color: var(--aq-muted); line-height: 1.65; }
+.tool-panel--result .tool-note { color: rgba(247,243,236,.8); }
+.tool-budget { margin-bottom: 1.25rem; }
+.tool-budget summary { cursor: pointer; margin-bottom: 1rem; font-weight: 600; }
+.tool-error { color: #a32d2d; }
+.tool-readings dd { padding: .8rem; margin-bottom: 1rem; border-radius: var(--aq-radius-sm); background: var(--aq-mint); }
+.tool-readings dd[data-status="low"], .tool-readings dd[data-status="high"], .tool-readings dd[data-status="review"] { background: #fff0d9; }
+.care-plan-form { margin-top: 1.5rem; padding: 1.25rem; border: 1px solid var(--aq-border); border-radius: var(--aq-radius); background: var(--aq-mint); }
+.care-plan-form h2 { font-size: 1.5rem; }
+.care-plans { display: grid; gap: 1.5rem; margin-top: 2rem; }
+.care-plan-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1rem; }
+.care-plan-actions form { margin: 0; }
+.care-plan-status { color: var(--aq-accent-text); font-weight: 600; }
+@media (max-width: 767.98px) { .tools-layout { grid-template-columns: 1fr; gap: 1.25rem; } }
+@media (max-width: 420px) { .tool-fields { grid-template-columns: 1fr; gap: 0; } }

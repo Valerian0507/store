@@ -59,6 +59,17 @@ class Product
     #[Assert\PositiveOrZero(message: 'Le stock ne peut pas être négatif.')]
     private int $stock = 0;
 
+    #[ORM\Column(options: ['default' => false])]
+    private bool $replenishable = false;
+
+    public function isReplenishable(): bool { return $this->replenishable; }
+
+    public function setReplenishable(bool $replenishable): static
+    {
+        $this->replenishable = $replenishable;
+        return $this;
+    }
+
     #[ORM\Column]
     private \DateTimeImmutable $createdAt;
 

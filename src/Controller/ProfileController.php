@@ -6,6 +6,7 @@ use App\Entity\Address;
 use App\Entity\User;
 use App\Form\AddressType;
 use App\Repository\AddressRepository;
+use App\Repository\NewsletterSubscriberRepository;
 use App\Repository\OrderRepository;
 use App\Service\Address\AddressManager;
 use App\Service\Checkout\OrderSuccessBuilder;
@@ -24,12 +25,13 @@ use App\Form\ProfileChangePasswordType;
 final class ProfileController extends AbstractController
 {
     #[Route('', name: 'index', methods: ['GET'])]
-    public function index(): Response
+    public function index(NewsletterSubscriberRepository $newsletterSubscribers): Response
     {
         $user = $this->getUser();
 
         return $this->render('profile/index.html.twig', [
             'user' => $user,
+            'newsletterSubscribed' => $user instanceof User && $newsletterSubscribers->findOneByEmail($user->getEmail()) !== null,
         ]);
     }
 

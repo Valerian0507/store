@@ -18,6 +18,12 @@ use App\Repository\CategoryRepository;
 )]
 final class ImportProductsCommand extends Command
 {
+    // Mêmes règles que les migrations Version20261028090000 (catégories) et Version20261028120000 (consommables) :
+    // sur une base neuve, les migrations passent avant l'import et ne trouvent encore aucun produit.
+    private const ACCESSORY_TITLE_PREFIXES = ['Bouée', 'Fauteuil', 'Canapé', 'Gilet', 'Échelle'];
+    private const MATTRESS_TITLE_PREFIX = 'Matelas gonflable double';
+    private const REPLENISHABLE_REFERENCES = ['10', '16', '22', '28', '34', '39'];
+
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly CategoryRepository $categoryRepository,
@@ -63,6 +69,8 @@ final class ImportProductsCommand extends Command
             if (!$product) {
                 $product = new Product();
                 $product->setReference($row['reference']);
+                // Produit existant : on garde le choix fait dans l'admin
+                $product->setReplenishable(in_array((string) $row['reference'], self::REPLENISHABLE_REFERENCES, true));
                 $this->em->persist($product);
                 $created++;
             }
@@ -76,6 +84,8 @@ final class ImportProductsCommand extends Command
                 $output->writeln('<error>Category is missing for reference: '.$row['reference'].'</error>');
                 continue;
             }
+
+            $label = $this->resolveCategoryLabel($label, (string) ($row['title'] ?? ''));
 
             if (!isset($categoryCache[$label])) {
                 $category = $this->categoryRepository->findOneBy(['label' => $label]);
@@ -105,5 +115,23 @@ final class ImportProductsCommand extends Command
         $output->writeln("Imported products: {$created}");
 
         return Command::SUCCESS;
+    }
+
+    // Le JSON ne connaît pas "accessoires" : on y range bouées, fauteuils, canapés, gilets et échelles
+    private function resolveCategoryLabel(string $label, string $title): string
+    {
+        if (str_starts_with($title, self::MATTRESS_TITLE_PREFIX)) {
+            return 'matelas';
+        }
+
+        if ($label === 'entretien') {
+            foreach (self::ACCESSORY_TITLE_PREFIXES as $prefix) {
+                if (str_starts_with($title, $prefix)) {
+                    return 'accessoires';
+                }
+            }
+        }
+
+        return $label;
     }
 }

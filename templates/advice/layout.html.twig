@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ article.title }} | AquaSphère{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/pages/advice.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% set category = nav_categories()|filter(c => c.label|lower == article.category)|first %}
+    {% set guides = {
+        'choisir-sa-piscine': 'Choisir sa piscine',
+        'creer-son-espace-detente': 'Créer son espace détente',
+        'entretenir-son-eau': 'Entretenir son eau'
+    } %}
+
+    <main class="aq-container advice-page">
+        <nav class="advice-breadcrumb" aria-label="Fil d'Ariane">
+            <a href="{{ path('app_home') }}">Accueil</a>
+            <span aria-hidden="true">/</span>
+            <a href="{{ path('app_home') }}#home-advice">Conseils &amp; inspirations</a>
+        </nav>
+
+        <article class="advice-guide">
+            <header class="advice-guide__header">
+                <span class="aq-kicker">Conseils &amp; inspirations</span>
+                <h1>{{ article.title }}</h1>
+                <p class="advice-guide__intro">{{ article.description }}</p>
+            </header>
+
+            <img class="advice-guide__image" src="{{ asset(article.image) }}"
+                 alt="{{ article.imageAlt }}" width="1200" height="675" fetchpriority="high">
+
+            <div class="advice-guide__content">
+                {% block guide_content %}{% endblock %}
+            </div>
+
+            <aside class="advice-guide__cta" aria-label="Produits associés">
+                <div>
+                    <h2>{{ article.ctaTitle }}</h2>
+                    <p>{{ article.ctaDescription }}</p>
+                </div>
+                <a href="{{ path('app_products_index', category ? {category: category.id} : {}) }}" class="aq-btn aq-btn--primary">
+                    {{ article.ctaLabel }} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </a>
+            </aside>
+        </article>
+
+        <nav class="advice-related" aria-label="Autres conseils">
+            <h2 class="aq-section-title">À lire aussi</h2>
+            <div class="advice-related__links">
+                {% for slug, title in guides %}
+                    {% if slug != app.request.attributes.get('slug') %}
+                        <a href="{{ path('app_advice_show', {slug: slug}) }}" class="aq-link-arrow">
+                            {{ title }} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </nav>
+    </main>
+{% endblock %}

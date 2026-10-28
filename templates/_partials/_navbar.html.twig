@@ -1,50 +1,106 @@
 {# templates/_partials/_navbar.html.twig #}
 {% set route = app.request.attributes.get('_route') %}
+{% set currentCategory = app.request.query.get('category') %}
 
-<nav class="navbar navbar-expand-md navbar-light bg-light site-navbar">
-    <div class="container">
-        <a class="navbar-brand site-navbar__brand" href="{{ path('app_home') }}">
-            {# Logo complet : au-dessus de 768px #}
-            <img src="{{ asset('images/icons/logo-aquasphere.svg') }}" alt="AquaSphere" class="logo">
-            {# Icone seule : 768px et moins #}
-            <img src="{{ asset('images/icons/logo-aquasphere-icon.svg') }}" alt="AquaSphere" class="logo-icon">
-        </a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+<header class="site-header">
+    <div class="aq-container site-header__bar">
+        {# Burger : mobile et tablette uniquement #}
+        <button class="site-header__icon site-header__toggle" type="button"
+                data-bs-toggle="collapse" data-bs-target="#siteMenu"
+                aria-controls="siteMenu" aria-expanded="false" aria-label="Ouvrir le menu">
+            <i class="fa-solid fa-bars"></i>
         </button>
 
-        <div class="collapse navbar-collapse justify-content-between site-navbar__collapse" id="navbarNav">
-            {# Lien actif selon la route courante #}
-            <ul class="navbar-nav site-navbar__nav">
-                <li class="nav-item">
-                    <a class="nav-link {{ route == 'app_home' ? 'active' : '' }}"
-                    href="{{ path('app_home') }}">
-                        Accueil
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ route starts with 'app_products' ? 'active' : '' }}"
-                    href="{{ path('app_products_index') }}">
-                        Produits
-                    </a>
-                </li>
-                {# Navigation compte utilisateur #}
-                {% if is_granted('ROLE_ADMIN') %}
-                    <li class="nav-item">
-                        <a class="nav-link {{ route starts with 'admin_' ? 'active' : '' }}"
-                        href="{{ path('admin_dashboard') }}">
-                            Admin
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
+        <a class="site-header__brand" href="{{ path('app_home') }}">
+            {% include '_partials/_logo.html.twig' %}
+        </a>
 
-            <div class="site-navbar__account">
-                {% include '_partials/_account_nav.html.twig' %}
+        {# Lien actif selon la route et la catégorie courantes #}
+        <nav class="site-header__nav" aria-label="Navigation principale">
+            {% for category in nav_categories() %}
+                <a class="site-header__link {{ route == 'app_products_index' and currentCategory == category.id ? 'is-active' : '' }}"
+                   href="{{ path('app_products_index', {category: category.id}) }}">
+                    {{ category.label|capitalize }}
+                </a>
+            {% endfor %}
+        </nav>
+
+        <div class="site-header__actions">
+            <form class="site-search site-header__search" method="get" action="{{ path('app_products_index') }}" role="search">
+                <label class="visually-hidden" for="site-search-desktop">Rechercher un produit</label>
+                <input class="site-search__input" id="site-search-desktop" type="search" name="q"
+                       value="{{ route == 'app_products_index' ? app.request.query.get('q') : '' }}"
+                       placeholder="Rechercher un produit…" maxlength="80">
+                <button class="site-search__button" type="submit" aria-label="Rechercher">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+
+            {% if is_granted('ROLE_ADMIN') %}
+                <a class="site-header__icon site-header__account {{ route starts with 'admin_' ? 'is-active' : '' }}" href="{{ path('admin_dashboard') }}" title="Administration" aria-label="Administration">
+                    <i class="fa-solid fa-gauge"></i>
+                </a>
+            {% endif %}
+
+            {% if app.user %}
+                <a class="site-header__icon site-header__account" href="{{ path('app_profile_index') }}" title="Mon compte ({{ app.user.firstName }})" aria-label="Mon compte">
+                    <i class="fa-regular fa-user"></i>
+                </a>
+            {% endif %}
+
+            <a class="site-header__icon {{ route starts with 'app_cart_' ? 'is-active' : '' }}" href="{{ path('app_cart_index') }}" title="Panier" aria-label="Panier">
+                <i class="fa-solid fa-bag-shopping"></i>
+            </a>
+
+            {# Connexion / déconnexion toujours en dernier : l'icône indique l'action, pas l'état #}
+            {% if app.user %}
+                <form class="site-header__account" method="POST" action="{{ path('app_logout') }}">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+                    <button type="submit" class="site-header__icon" title="Déconnexion" aria-label="Déconnexion">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </button>
+                </form>
+            {% else %}
+                <a class="site-header__icon site-header__account {{ route == 'app_login' ? 'is-active' : '' }}" href="{{ path('app_login') }}" title="Connexion" aria-label="Connexion">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    {# Menu déroulant mobile #}
+    <div class="collapse site-menu" id="siteMenu">
+        <div class="aq-container site-menu__inner">
+            <form class="site-search" method="get" action="{{ path('app_products_index') }}" role="search">
+                <label class="visually-hidden" for="site-search-mobile">Rechercher un produit</label>
+                <input class="site-search__input" id="site-search-mobile" type="search" name="q" placeholder="Rechercher un produit…" maxlength="80">
+                <button class="site-search__button" type="submit" aria-label="Rechercher">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+
+            <nav class="site-menu__links" aria-label="Navigation mobile">
+                <a href="{{ path('app_products_index') }}">Tous les produits</a>
+                {% for category in nav_categories() %}
+                    <a href="{{ path('app_products_index', {category: category.id}) }}">{{ category.label|capitalize }}</a>
+                {% endfor %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('admin_dashboard') }}">Admin</a>
+                {% endif %}
+            </nav>
+
+            <div class="site-menu__account">
+                {% if app.user %}
+                    <a href="{{ path('app_profile_index') }}"><i class="fa-regular fa-user"></i> Mon compte</a>
+                    <form method="POST" action="{{ path('app_logout') }}">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+                        <button type="submit"><i class="fa-solid fa-arrow-right-from-bracket"></i> Déconnexion</button>
+                    </form>
+                {% else %}
+                    <a href="{{ path('app_login') }}"><i class="fa-solid fa-arrow-right-to-bracket"></i> Connexion</a>
+                    <a href="{{ path('app_register') }}"><i class="fa-solid fa-user-plus"></i> Inscription</a>
+                {% endif %}
             </div>
         </div>
     </div>
-</nav>
-
-
+</header>

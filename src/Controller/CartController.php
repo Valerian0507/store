@@ -66,50 +66,61 @@ class CartController extends AbstractController
     }
 
     #[Route('/add/{id}', name: 'add', methods: ['POST'], requirements: ['id' => '\d+'])]
-
     public function add(int $id, Request $request, CartManager $cartManager, ProductRepository $productRepository): Response
     {
         $qty = max(1, (int) $request->getPayload()->get('qty', 1));
         $token = (string) $request->getPayload()->get('_token', '');
 
         if (!$this->isCsrfTokenValid('cart_add_' . $id, $token)) {
-            $this->addFlash('error', 'Invalid CSRF token.');
-
-            return $this->redirectToRoute('app_cart_index');
+            return $this->addResponse($request, 'danger', 'Jeton de sécurité invalide, veuillez recharger la page.');
         }
 
         $product = $productRepository->find($id);
 
         if ($product === null) {
-            $this->addFlash('danger', 'Produit introuvable.');
-            return $this->redirectToRoute('app_cart_index');
+            return $this->addResponse($request, 'danger', 'Produit introuvable.');
         }
 
         if ($product->getStock() < 1) {
-            $this->addFlash('warning', 'Ce produit est en rupture de stock.');
-            return $this->redirectToRoute('app_products_index');
+            return $this->addResponse($request, 'warning', 'Ce produit est en rupture de stock.');
         }
 
         $alreadyInCart = $cartManager->getRaw()[$id] ?? 0;
         if ($alreadyInCart + $qty > $product->getStock()) {
-            $this->addFlash('warning', sprintf(
+            return $this->addResponse($request, 'warning', sprintf(
                 'Stock insuffisant : il ne reste que %d en stock.',
                 $product->getStock()
             ));
-
-            return $this->redirectToRoute('app_products_index');
         }
 
         if ($product->getPriceCents() === null || $product->getPriceCents() <= 0) {
-            $this->addFlash('warning', 'Ce produit n\'est pas disponible à la vente.');
-            return $this->redirectToRoute('app_products_index');
+            return $this->addResponse($request, 'warning', 'Ce produit n\'est pas disponible à la vente.');
         }
 
         $cartManager->add($id, $qty);
 
-        $this->addFlash('success', 'Produit ajouté au panier.');
+        return $this->addResponse($request, 'success', sprintf('« %s » a été ajouté au panier.', $product->getTitle()));
+    }
 
-        return $this->redirectToRoute('app_cart_index');
+    /**
+     * Ajout depuis le JS (assets/controllers/cart_add_controller.js) : réponse JSON affichée en notification.
+     * Sans JS : message flash et retour sur la page d'origine.
+     */
+    private function addResponse(Request $request, string $type, string $message): Response
+    {
+        if ($request->getPreferredFormat() === 'json') {
+            return $this->json(['type' => $type, 'message' => $message], $type === 'success' ? 200 : 422);
+        }
+
+        $this->addFlash($type, $message);
+
+        // Referer accepté uniquement s'il pointe vers ce site (pas de redirection ouverte)
+        $referer = (string) $request->headers->get('referer', '');
+        if (str_starts_with($referer, $request->getSchemeAndHttpHost() . '/')) {
+            return $this->redirect($referer);
+        }
+
+        return $this->redirectToRoute('app_products_index');
     }
 
     #[Route('/update/{id}', name: 'update', methods: ['POST'], requirements: ['id' => '\d+'])]

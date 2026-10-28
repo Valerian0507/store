@@ -1,0 +1,5 @@
+{# templates/_partials/_logo.html.twig - variant: 'dark' (fond clair) | 'light' (fond foncé) #}
+{% set variant = variant|default('dark') %}
+<img class="brand brand--{{ variant }}"
+     src="{{ asset(variant == 'light' ? 'images/icons/aquasphere-logo-light.png' : 'images/icons/aquasphere-logo.png') }}"
+     alt="AquaSphère" width="640" height="93">
