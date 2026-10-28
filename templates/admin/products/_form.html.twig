@@ -1,0 +1,91 @@
+{# Formulaire produit (création et modification) - attend : form, product (null en création), submitLabel #}
+{% import 'admin/_partials/_fields.html.twig' as fields %}
+{% set isEdit = product is not null and product.id is not null %}
+{% set currentImage = isEdit and product.image ? asset('uploads/products/' ~ product.image) : null %}
+
+{{ form_start(form, {attr: {class: 'admin-form', novalidate: 'novalidate'}}) }}
+    {{ form_errors(form) }}
+
+    <div class="admin-form-grid">
+        <div class="admin-form-main">
+            <section class="admin-panel">
+                <h2 class="admin-panel__title">Informations du produit</h2>
+                <div class="admin-form-row">
+                    {{ fields.field(form.reference, 'Ex. INTEX-ULTRA-XTR') }}
+                    {{ fields.field(form.category, null, {class: 'admin-input admin-filters__select'}) }}
+                </div>
+                {{ fields.field(form.title, 'Ex. Piscine hors-sol Intex Ultra XTR ronde') }}
+                {{ fields.field(form.description, 'Décrivez le produit, ses caractéristiques principales…', {rows: 4}) }}
+            </section>
+
+            <section class="admin-panel">
+                <h2 class="admin-panel__title">Caractéristiques et stock</h2>
+                <div class="admin-form-row">
+                    {{ fields.field(form.volumeM3, 'Ex. 0,25', {inputmode: 'decimal'}) }}
+                    {{ fields.field(form.weightKg, 'Ex. 12,5', {inputmode: 'decimal'}) }}
+                </div>
+                <div class="admin-form-row">
+                    {# Équivalent en euros affiché en direct (price_preview_controller.js) #}
+                    <div class="admin-field" data-controller="price-preview">
+                        {{ form_label(form.priceCents, null, {label_attr: {class: 'admin-field__label'}}) }}
+                        {{ form_widget(form.priceCents, {attr: {class: 'admin-input', placeholder: 'Ex. 49900', min: 0,
+                            'data-price-preview-target': 'input', 'data-action': 'input->price-preview#update'}}) }}
+                        <p class="admin-field__help" data-price-preview-target="output"></p>
+                        {{ form_errors(form.priceCents) }}
+                    </div>
+                    {{ fields.field(form.stock, 'Ex. 10', {min: 0}, isEdit ? 'Stock actuel : ' ~ product.stock ~ '. La quantité saisie s’ajoute au stock.' : null) }}
+                </div>
+
+                {# Case écrite à la main (le thème Bootstrap ajoute son propre libellé) #}
+                {% set repl = form.replenishable.vars %}
+                <label class="admin-check">
+                    <input type="checkbox" id="{{ repl.id }}" name="{{ repl.full_name }}" value="{{ repl.value }}" {{ repl.checked ? 'checked' }}>
+                    <span>
+                        {{ repl.label }}
+                        <small>{{ repl.help }}</small>
+                    </span>
+                </label>
+                {% do form.replenishable.setRendered %}
+            </section>
+        </div>
+
+        <aside class="admin-form-side">
+            {# Aperçu avant envoi (image_preview_controller.js) #}
+            <section class="admin-panel" data-controller="image-preview">
+                <h2 class="admin-panel__title">Image du produit</h2>
+
+                <label class="admin-dropzone" for="{{ form.image.vars.id }}">
+                    <i class="fa-regular fa-image admin-dropzone__icon" aria-hidden="true"></i>
+                    <strong>{{ currentImage ? 'Remplacer l’image' : 'Choisir une image' }}</strong>
+                    <small>JPG, PNG ou WEBP · 2 Mo maximum</small>
+                </label>
+                {{ form_widget(form.image, {attr: {class: 'admin-dropzone__input', accept: 'image/jpeg,image/png,image/webp',
+                    'data-image-preview-target': 'input', 'data-action': 'change->image-preview#change'}}) }}
+                <p class="admin-field__help admin-dropzone__name" data-image-preview-target="name">{{ isEdit and product.image ? product.image }}</p>
+                {{ form_errors(form.image) }}
+
+                <div class="admin-preview">
+                    <img {% if currentImage %}src="{{ currentImage }}"{% else %}hidden{% endif %} alt="Aperçu de l'image du produit" data-image-preview-target="image"
+                         onerror="this.onerror=null;this.src='{{ asset('images/products/no-image.jpg') }}';">
+                    {% if not currentImage %}
+                        <i class="fa-regular fa-image admin-preview__placeholder" aria-hidden="true" data-image-preview-target="placeholder"></i>
+                    {% endif %}
+                </div>
+
+                {% if isEdit and product.image %}
+                    {# Suppression de l'image actuelle : confirmation SweetAlert (adminBase.html.twig) #}
+                    <input type="hidden" name="_token_delete_image" value="{{ csrf_token('delete_product_image_' ~ product.id) }}">
+                    <button type="button" class="admin-action admin-action--danger admin-preview__delete js-delete-image"
+                            data-action="{{ path('admin_products_delete_image', {id: product.id}) }}">
+                        <i class="fa-regular fa-trash-can" aria-hidden="true"></i> Supprimer l’image
+                    </button>
+                {% endif %}
+            </section>
+
+            <div class="admin-form-actions">
+                <a href="{{ path('admin_products_index') }}" class="aq-btn aq-btn--outline">Annuler</a>
+                <button type="submit" class="aq-btn aq-btn--primary">{{ submitLabel }}</button>
+            </div>
+        </aside>
+    </div>
+{{ form_end(form) }}

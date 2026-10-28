@@ -1,131 +1,97 @@
-{% extends 'base.html.twig' %}
+{% extends 'profile/_layout.html.twig' %}
 
-{% block title %}Order Details
+{% set accountTab = 'orders' %}
+{% set noImage = asset('images/products/no-image.jpg') %}
+{% set itemCount = order.items|reduce((sum, item) => sum + item.quantity, 0) %}
+{# Prix TTC, TVA française à 20 % : part de TVA = total / 6 #}
+{% set vatCents = (order.totalCents / 6)|round %}
+
+{% block title %}Commande {{ order.reference }} - AquaSphère{% endblock %}
+{% block account_title %}Détails de ma commande{% endblock %}
+{% block account_subtitle %}
+    {% set months = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'] %}
+    <span class="account-hero__meta">
+        {{ order.reference }} · {{ order.createdAt|date('j') }} {{ months[order.createdAt|date('n') - 1] }} {{ order.createdAt|date('Y') }}
+        <span class="order-status order-status--{{ order.status }}">{{ order.statusLabel }}</span>
+    </span>
 {% endblock %}
+{% block account_breadcrumb %}
+    <li><a href="{{ path('app_profile_orders') }}">Mes commandes</a></li>
+    <li aria-current="page">{{ order.reference }}</li>
+{% endblock %}
+{% block account_back %}
+    <a href="{{ path('app_profile_orders') }}" class="account-hero__back">
+        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Retour à mes commandes
+    </a>
+{% endblock %}
+{% block account_help %}Une question sur cette commande ?{% endblock %}
 
-{% block body %}
-	<div class="container py-4">
-		<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-			<div>
-				<h1 class="h2 fw-bold mb-1">Détails de la Commande</h1>
-				<p class="text-muted mb-0">
-					Date:
-					<span class="fw-semibold">{{ order.createdAt|date('d M Y') }}</span>
-					| Reference:
-					<span class="fw-semibold">{{ order.reference }}</span>
-				</p>
-			</div>
+{% block account_content %}
+    {% if order.status == 'pending' %}
+        <div class="account-toolbar">
+            <a href="{{ path('app_checkout_pay', {id: order.orderId}) }}" class="aq-btn aq-btn--primary" data-turbo="false">
+                Finaliser le paiement <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            </a>
+        </div>
+    {% endif %}
 
-			<a href="{{ path('app_profile_orders') }}" class="btn btn-outline-secondary">
-				Retour
-			</a>
-		</div>
+    <div class="account-order-detail">
+        <section class="account-card">
+            <h2 class="account-card__title">Articles</h2>
+            <p class="account-card__lead">{{ itemCount }} article{{ itemCount > 1 ? 's' }}</p>
 
+            <div class="account-items" role="table" aria-label="Articles de la commande">
+                <div class="account-items__head" role="row">
+                    <span role="columnheader">Produit</span>
+                    <span role="columnheader">Quantité</span>
+                    <span role="columnheader">Prix unitaire</span>
+                    <span role="columnheader">Total</span>
+                </div>
+                {% for item in order.items %}
+                    <div class="account-item" role="row">
+                        <span class="account-item__product" role="cell">
+                            <img src="{{ item.imagePath ? asset('uploads/products/' ~ item.imagePath) : noImage }}" alt="" width="96" height="72" loading="lazy"
+                                 onerror="this.onerror=null;this.src='{{ noImage }}';">
+                            <span class="account-item__name">{{ item.productName }}</span>
+                        </span>
+                        <span role="cell" data-label="Quantité">{{ item.quantity }}</span>
+                        <span role="cell" data-label="Prix unitaire">{{ (item.unitPriceCents / 100)|number_format(2, ',', ' ') }} €</span>
+                        <span class="account-item__total" role="cell" data-label="Total">{{ (item.lineTotalCents / 100)|number_format(2, ',', ' ') }} €</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
 
-		<div class="row g-4">
-			<div class="col-12 col-lg-8">
-				<div class="card shadow-sm border-0">
-					<div class="card-body">
-						<div class="d-flex justify-content-between align-items-center mb-4">
-							<h2 class="h4 mb-0">Articles</h2>
-							<span class="text-muted small">{{ order.items|length }}
-								article(s)</span>
-						</div>
+        <div class="account-order-detail__side">
+            <section class="account-card">
+                <h2 class="account-card__title">Récapitulatif</h2>
+                <dl class="account-summary">
+                    <dt>Sous-total ({{ itemCount }} article{{ itemCount > 1 ? 's' }})</dt>
+                    <dd>{{ (order.subtotalCents / 100)|number_format(2, ',', ' ') }} €</dd>
+                    <dt>Livraison</dt>
+                    <dd>{{ order.shippingCents > 0 ? (order.shippingCents / 100)|number_format(2, ',', ' ') ~ ' €' : 'Offerte' }}</dd>
+                </dl>
+                <div class="account-summary__total">
+                    <span>Total TTC</span>
+                    <strong>{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</strong>
+                    <small>TVA incluse ({{ (vatCents / 100)|number_format(2, ',', ' ') }} €)</small>
+                </div>
+            </section>
 
-						<div class="d-flex flex-column gap-3">
-							{% for item in order.items %}
-								<div class="border rounded-3 p-3">
-									<div class="row g-3 align-items-center">
-										<div class="col-12 col-sm-3 col-md-2">
-											{% if item.imagePath %}
-												<div class="d-flex align-items-center justify-content-center overflow-hidden" style="height: 96px;">
-													<img src="{{ asset('uploads/products/' ~ item.imagePath) }}"
-                                                         alt="{{ item.productName }}"
-                                                         class="img-fluid"
-                                                         style="max-height: 100%; object-fit: contain;"
-                                                         onerror="this.onerror=null;this.src='{{ asset('images/products/no-image.jpg') }}';">>
-												</div>
-											{% else %}
-												<div class="d-flex align-items-center justify-content-center" style="height: 96px;">
-													<span class="text-muted small">No image</span>
-												</div>
-											{% endif %}
-										</div>
-
-										<div class="col-12 col-sm-9 col-md-4">
-											<div class="fw-semibold mb-1">{{ item.productName }}</div>
-											<div class="text-muted small">
-												Instantané de la commande
-											</div>
-										</div>
-
-										<div class="col-4 col-md-2">
-											<div class="text-muted small mb-1">Qty</div>
-											<div class="fw-medium">{{ item.quantity }}</div>
-										</div>
-
-										<div class="col-4 col-md-2">
-											<div class="text-muted small mb-1">Prix unitaire</div>
-											<div>{{ (item.unitPriceCents / 100)|number_format(2, '.', ' ') }}
-												€</div>
-										</div>
-
-										<div class="col-4 col-md-2 text-md-end">
-											<div class="text-muted small mb-1">Total</div>
-											<div class="fw-semibold">
-												{{ (item.lineTotalCents / 100)|number_format(2, '.', ' ') }}
-												€
-											</div>
-										</div>
-									</div>
-								</div>
-							{% endfor %}
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-12 col-lg-4">
-				<div class="card shadow-sm border-0 mb-4">
-					<div class="card-body">
-						<h2 class="h5 mb-3">Récapitulatif de la Commande</h2>
-
-						<div class="d-flex justify-content-between mb-2">
-							<span class="text-muted">Total</span>
-							<span>{{ (order.subtotalCents / 100)|number_format(2, '.', ' ') }}
-								€</span>
-						</div>
-
-						<div class="d-flex justify-content-between mb-3">
-							<span class="text-muted">Frais de livraison</span>
-							<span>{{ (order.shippingCents / 100)|number_format(2, '.', ' ') }}
-								€</span>
-						</div>
-
-						<hr>
-
-						<div class="d-flex justify-content-between align-items-center">
-							<span class="fw-semibold">Total</span>
-							<span class="fs-5 fw-bold">
-								{{ (order.totalCents / 100)|number_format(2, '.', ' ') }}
-								€
-							</span>
-						</div>
-					</div>
-				</div>
-
-				<div class="card shadow-sm border-0">
-					<div class="card-body">
-						<h2 class="h5 mb-3">Adresse de Livraison</h2>
-
-						<div class="fw-semibold">{{ order.shippingFullName }}</div>
-						<div>{{ order.shippingStreet }}</div>
-						<div>{{ order.shippingPostalCode }}
-							{{ order.shippingCity }}</div>
-						<div>{{ order.shippingCountry }}</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+            <section class="account-card">
+                <div class="account-card__head account-card__head--flush">
+                    <span class="account-card__icon" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></span>
+                    <div>
+                        <h2 class="account-card__title">Adresse de livraison</h2>
+                        <address class="account-address__lines">
+                            {{ order.shippingFullName }}<br>
+                            {{ order.shippingStreet }}<br>
+                            {{ order.shippingPostalCode }} {{ order.shippingCity }}<br>
+                            {{ order.shippingCountry }}
+                        </address>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
 {% endblock %}

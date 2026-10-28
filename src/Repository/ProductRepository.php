@@ -112,6 +112,30 @@ class ProductRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * Liste de l'administration : tous les produits (même sans prix), recherche nom/référence, filtre catégorie, pagination.
+     *
+     * @return array{items: Product[], total: int}
+     */
+    public function findForAdmin(int $page, int $perPage, ?int $categoryId, ?string $q): array
+    {
+        $qb = $this->createCatalogQueryBuilder()
+            ->leftJoin('products.category', 'category')
+            ->addSelect('category');
+        $this->applyCategoryFilter($qb, $categoryId);
+        $this->applySearch($qb, $q);
+
+        $total = (int) (clone $qb)->select('COUNT(products.id)')->resetDQLPart('orderBy')->getQuery()->getSingleScalarResult();
+
+        $items = $qb->orderBy('products.id', 'DESC')
+            ->setFirstResult((max(1, $page) - 1) * $perPage)
+            ->setMaxResults($perPage)
+            ->getQuery()
+            ->getResult();
+
+        return ['items' => $items, 'total' => $total];
+    }
+
     // Fiche produit "Complétez votre installation" : catégories complémentaires, sinon la même catégorie
     private const COMPLEMENTS = [
         'piscines' => ['entretien', 'accessoires'],

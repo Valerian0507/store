@@ -1,54 +1,102 @@
 {% extends 'admin/adminBase.html.twig' %}
 
-{% block title %}Admin · Produits{% endblock %}
+{% block title %}Produits{% endblock %}
 
 {% block admin_content %}
-<div class="container py-4">
-    <h1 class="h2 fw-bold mb-3">Produits</h1>
+    {% set noImage = asset('images/products/no-image.jpg') %}
+    {% set filters = {category: category, q: q}|filter(v => v is not null) %}
 
-    <div class="d-flex justify-content-between align-items-center mb-2">
-        <a class="btn btn-primary" href="{{ path('admin_products_new') }}">Créer un produit</a>
-        <a href="{{ path('admin_dashboard') }}" class="btn btn-outline-secondary">
-            Retour au tableau de bord
-        </a>
-    </div>
+    <header class="admin-page-head admin-page-head--actions">
+        <div>
+            <h1 class="admin-page-head__title">Produits</h1>
+            <p class="admin-page-head__subtitle">Gérez les produits de votre catalogue.</p>
+        </div>
+        <div class="admin-page-head__actions">
+            <a href="{{ path('admin_dashboard') }}" class="admin-back"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Retour au tableau de bord</a>
+            <a href="{{ path('admin_products_new') }}" class="aq-btn aq-btn--primary"><i class="fa-solid fa-plus" aria-hidden="true"></i> Créer un produit</a>
+        </div>
+    </header>
 
-    <table class="table table-striped align-middle">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Référence</th>
-            <th>Catégorie</th>
-            <th>Titre</th>
-            <th class="text-end">Prix</th>
-            <th class="text-end">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for p in products %}
-            <tr>
-                <td>{{ p.id }}</td>
-                <td>{{ p.reference }}</td>
-                <td>{{ p.category }}</td>
-                <td>{{ p.title }}</td>
-                <td class="text-end">{{ (p.priceCents / 100) | number_format(2, '.', ' ') }}</td>
-                <td class="text-end">
-                    <a class="btn btn-sm btn-outline-secondary"
-                       href="{{ path('admin_products_edit', {id: p.id}) }}">Modifier</a>
+    <section class="admin-panel">
+        {# Recherche + filtre (GET) #}
+        <form method="get" class="admin-filters" role="search">
+            <label class="admin-filters__search">
+                <span class="visually-hidden">Rechercher un produit</span>
+                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                <input type="search" name="q" value="{{ q }}" placeholder="Rechercher un produit (nom ou référence)…" maxlength="80">
+            </label>
+            <label>
+                <span class="visually-hidden">Catégorie</span>
+                <select name="category" class="admin-filters__select" onchange="this.form.submit()">
+                    <option value="">Toutes les catégories</option>
+                    {% for c in categories %}
+                        <option value="{{ c.id }}" {{ c.id == category ? 'selected' }}>{{ c.label|capitalize }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            {% if filters is not empty %}
+                <a href="{{ path('admin_products_index') }}" class="admin-filters__reset">Réinitialiser</a>
+            {% endif %}
+        </form>
 
-                    <form method="post"
-                          action="{{ path('admin_products_delete', {id: p.id}) }}"
-                          style="display:inline"
-                          onsubmit="return confirm('Supprimer ce produit?');">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete_product_' ~ p.id) }}">
-                        <button class="btn btn-sm btn-outline-danger" type="submit">Supprimer</button>
-                    </form>
-                </td>
-            </tr>
-        {% else %}
-            <tr><td colspan="6">No products.</td></tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+        <div class="admin-table-wrap">
+            <table class="admin-table admin-table--cards">
+                <thead>
+                    <tr>
+                        <th scope="col" class="admin-table__id">ID</th>
+                        <th scope="col">Référence</th>
+                        <th scope="col" colspan="2">Produit</th>
+                        <th scope="col">Catégorie</th>
+                        <th scope="col" class="admin-table__num">Prix</th>
+                        <th scope="col" class="admin-table__actions">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in products %}
+                        <tr>
+                            <td class="admin-table__muted admin-table__id">{{ p.id }}</td>
+                            <td class="admin-table__muted admin-table__ref">{{ p.reference }}</td>
+                            <td class="admin-table__thumb">
+                                <img src="{{ p.image ? asset('uploads/products/' ~ p.image) : noImage }}" alt="" width="88" height="66" loading="lazy"
+                                     onerror="this.onerror=null;this.src='{{ noImage }}';">
+                            </td>
+                            <td class="admin-table__main">
+                                <a href="{{ path('admin_products_edit', {id: p.id}) }}" class="admin-table__title">{{ p.title }}</a>
+                                {% if p.stock > 0 %}
+                                    <span class="admin-table__sub">En stock : {{ p.stock }}</span>
+                                {% else %}
+                                    <span class="admin-table__sub admin-table__sub--alert">Rupture de stock</span>
+                                {% endif %}
+                            </td>
+                            <td class="admin-table__cat">{{ p.category ? p.category.label|capitalize : '-' }}</td>
+                            <td class="admin-table__num">{{ (p.priceCents / 100)|number_format(2, ',', ' ') }} €</td>
+                            <td class="admin-table__actions">
+                                <a class="admin-action" href="{{ path('admin_products_edit', {id: p.id}) }}" title="Modifier">
+                                    <i class="fa-solid fa-pen" aria-hidden="true"></i> <span class="admin-action__label">Modifier</span>
+                                </a>
+                                <form method="post" action="{{ path('admin_products_delete', {id: p.id}) }}"
+                                      onsubmit="return confirm('Supprimer le produit « {{ p.title|e('js') }} » ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete_product_' ~ p.id) }}">
+                                    <button class="admin-action admin-action--danger" type="submit" title="Supprimer">
+                                        <i class="fa-regular fa-trash-can" aria-hidden="true"></i> <span class="admin-action__label">Supprimer</span>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7" class="admin-table__empty">
+                                {{ q or category ? 'Aucun produit ne correspond à votre recherche.' : 'Aucun produit pour le moment.' }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <footer class="admin-panel__foot">
+            <span>{{ total }} produit{{ total > 1 ? 's' }}</span>
+            {% include 'admin/_partials/_pagination.html.twig' with {route: 'admin_products_index', params: filters, page: page, pages: pages} %}
+        </footer>
+    </section>
 {% endblock %}

@@ -1,26 +1,64 @@
 {% extends 'admin/adminBase.html.twig' %}
 
-{% block title %}Admin · Dashboard{% endblock %}
+{% block title %}Tableau de bord{% endblock %}
 
 {% block admin_content %}
-    <section class="container py-4">
-        <h1 class="h2 fw-bold">Tableau de bord d'administration</h1>
+    {% set sections = [
+        {route: 'admin_products_index', icon: 'fa-solid fa-cube', title: 'Produits', text: 'Ajoutez, modifiez et organisez votre catalogue de produits.',
+         stat: stats.products ~ ' produit' ~ (stats.products > 1 ? 's'), alert: stats.outOfStock > 0 ? stats.outOfStock ~ ' en rupture de stock' : null},
+        {route: 'admin_orders_index', icon: 'fa-solid fa-cart-shopping', title: 'Commandes', text: 'Consultez et traitez les commandes de vos clients.',
+         stat: stats.orders ~ ' commande' ~ (stats.orders > 1 ? 's'), alert: stats.pendingOrders > 0 ? stats.pendingOrders ~ ' en attente de paiement' : null},
+        {route: 'admin_categories_index', icon: 'fa-regular fa-folder', title: 'Catégories', text: 'Gérez vos catégories et organisez votre catalogue.',
+         stat: stats.categories ~ ' catégorie' ~ (stats.categories > 1 ? 's'), alert: null},
+        {route: 'admin_users_index', icon: 'fa-solid fa-user-group', title: 'Utilisateurs', text: 'Consultez les comptes clients et leurs commandes.',
+         stat: stats.users ~ ' compte' ~ (stats.users > 1 ? 's'), alert: null},
+    ] %}
 
-        <div class="list-group mt-3">
-            <a class="list-group-item list-group-item-action" href="{{ path('admin_products_index') }}">
-                Produits
+    <header class="admin-page-head">
+        <p class="aq-kicker">Administration</p>
+        <h1 class="admin-page-head__title">Tableau de bord</h1>
+        <p class="admin-page-head__subtitle">Gérez votre boutique au quotidien.</p>
+    </header>
+
+    <div class="admin-tiles">
+        {% for section in sections %}
+            <a href="{{ path(section.route) }}" class="admin-tile">
+                <span class="admin-tile__icon" aria-hidden="true"><i class="{{ section.icon }}"></i></span>
+                <span class="admin-tile__body">
+                    <span class="admin-tile__title">{{ section.title }}</span>
+                    <span class="admin-tile__text">{{ section.text }}</span>
+                    <span class="admin-tile__stats">
+                        <span class="admin-tile__stat">{{ section.stat }}</span>
+                        {% if section.alert %}
+                            <span class="admin-tile__alert"><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> {{ section.alert }}</span>
+                        {% endif %}
+                    </span>
+                    <span class="admin-tile__cta">Gérer <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+                </span>
             </a>
-            <br>
-            <a class="list-group-item list-group-item-action" href="{{ path('admin_users_index') }}">
-                Utilisateurs
+        {% endfor %}
+    </div>
+
+    <section class="admin-quick">
+        <h2 class="admin-quick__title">Accès rapides</h2>
+        <p class="admin-quick__subtitle">Gagnez du temps avec ces actions courantes.</p>
+
+        <div class="admin-quick__grid">
+            <a href="{{ path('admin_products_new') }}" class="admin-quick__item">
+                <span class="admin-quick__icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
+                <span>
+                    <strong>Créer un produit</strong>
+                    <small>Ajoutez un nouveau produit à votre catalogue.</small>
+                </span>
+                <i class="fa-solid fa-chevron-right admin-quick__chevron" aria-hidden="true"></i>
             </a>
-            <br>
-            <a class="list-group-item list-group-item-action" href="{{ path('admin_categories_index') }}">
-                Catégories
-            </a>
-            <br>
-            <a class="list-group-item list-group-item-action" href="{{ path('admin_orders_index') }}">
-                Commandes
+            <a href="{{ path('admin_categories_new') }}" class="admin-quick__item">
+                <span class="admin-quick__icon" aria-hidden="true"><i class="fa-regular fa-folder"></i></span>
+                <span>
+                    <strong>Créer une catégorie</strong>
+                    <small>Créez une nouvelle catégorie pour organiser vos produits.</small>
+                </span>
+                <i class="fa-solid fa-chevron-right admin-quick__chevron" aria-hidden="true"></i>
             </a>
         </div>
     </section>

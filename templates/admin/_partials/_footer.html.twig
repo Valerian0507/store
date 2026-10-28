@@ -1,0 +1,13 @@
+{# templates/admin/_partials/_footer.html.twig - pied de page réduit de l'administration #}
+<footer class="admin-footer">
+    <a href="{{ path('app_home') }}" class="admin-footer__brand">
+        {% include '_partials/_logo.html.twig' %}
+    </a>
+    <nav class="admin-footer__links" aria-label="Liens du site">
+        <a href="{{ path('app_home') }}">Boutique</a>
+        <a href="{{ path('app_mentions_legales') }}">Mentions légales</a>
+        <a href="{{ path('app_cgv') }}">Conditions générales</a>
+        <a href="{{ path('app_politique_confidentialite') }}">Politique de confidentialité</a>
+    </nav>
+    <p class="admin-footer__copy">© {{ "now"|date("Y") }} AquaSphère</p>
+</footer>

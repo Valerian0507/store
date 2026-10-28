@@ -1,101 +1,57 @@
-{% extends 'base.html.twig' %}
+{% extends 'profile/_layout.html.twig' %}
 
-{% block title %}Mes commandes{% endblock %}
+{% set accountTab = 'orders' %}
 
-{% block body %}
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="h2 fw-bold mb-1">Mes Commandes</h1>
-            <p class="text-muted mb-0">
-                Consultez vos commandes récentes et suivez leur statut.
-            </p>
-        </div>
+{% block title %}Mes commandes - AquaSphère{% endblock %}
+{% block account_title %}Mes commandes{% endblock %}
+{% block account_subtitle %}Retrouvez vos commandes et consultez leur statut.{% endblock %}
+{% block account_help %}Une question sur une commande ?{% endblock %}
 
-        <a href="{{ path('app_profile_index') }}" class="btn btn-outline-secondary">
-            Retour au tableau de bord
-        </a>
-    </div>
+{% block account_content %}
+    {% set statusLabels = {pending: 'En attente de paiement', paid: 'Payée', shipped: 'Expédiée', cancelled: 'Annulée'} %}
 
     {% if orders is empty %}
-        <div class="card shadow-sm border-0">
-            <div class="card-body py-5 text-center">
-                <h2 class="h4 mb-3">Aucune commande pour le moment</h2>
-                <p class="text-muted mb-4">
-                    Vous n'avez encore passé aucune commande.
-                </p>
-                <a href="{{ path('app_products_index') }}" class="btn btn-primary">
-                    Commencer achat
-                </a>
-            </div>
-        </div>
+        <section class="account-card account-empty">
+            <span class="account-card__icon" aria-hidden="true"><i class="fa-solid fa-box-open"></i></span>
+            <h2 class="account-card__title">Aucune commande pour le moment</h2>
+            <p class="account-card__lead">Vous n'avez encore passé aucune commande.</p>
+            <a href="{{ path('app_products_index') }}" class="aq-btn aq-btn--primary">Découvrir le catalogue <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </section>
     {% else %}
-        <div class="d-flex flex-column gap-3">
+        <div class="account-orders" role="table" aria-label="Mes commandes">
+            <div class="account-orders__head" role="row">
+                <span role="columnheader">Référence</span>
+                <span role="columnheader">Date</span>
+                <span role="columnheader">Statut</span>
+                <span role="columnheader">Total</span>
+                <span role="columnheader">Actions</span>
+            </div>
+
             {% for order in orders %}
-                {% set statusLabel = {
-                    'pending': 'En attente de paiement',
-                    'paid': 'Payée',
-                    'shipped': 'Expédiée',
-                    'cancelled': 'Annulée'
-                }[order.status] ?? order.status|capitalize %}
-
-                {% set statusBadgeClass = {
-                    'pending': 'bg-warning text-dark',
-                    'paid': 'bg-success text-white',
-                    'shipped': 'bg-primary text-white',
-                    'cancelled': 'bg-danger text-white'
-                }[order.status] ?? 'bg-secondary text-white' %}
-
-                <div class="card shadow-sm border-0">
-                    <div class="card-body">
-                        <div class="row g-3 align-items-center">
-                            <div class="col-12 col-md-3">
-                                <div class="text-muted small mb-1">Référence</div>
-                                <div class="fw-semibold">
-                                    {{ order.reference ?? ('#' ~ order.id) }}
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-3">
-                                <div class="text-muted small mb-1">Date</div>
-                                <div>
-                                    {{ order.createdAt|date('d/m/Y H:i') }}
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-2">
-                                <div class="text-muted small mb-1">Status</div>
-                                <span class="badge {{ statusBadgeClass }}">
-                                    {{ statusLabel }}
-                                </span>
-                            </div>
-
-                            <div class="col-12 col-md-2">
-                                <div class="text-muted small mb-1">Total</div>
-                                <div class="fw-semibold">
-                                    {{ (order.totalCents / 100)|number_format(2, '.', ' ') }} €
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-2 text-md-end d-flex flex-column gap-2 align-items-md-end">
-                                <a href="{{ path('app_profile_orders_show', { id: order.id }) }}" class="btn btn-outline-primary btn-sm">
-                                    Voir les détails
-                                </a>
-                                {% if order.status == 'pending' %}
-                                    <a href="{{ path('app_checkout_pay', { id: order.id }) }}" class="btn btn-success btn-sm" data-turbo="false">
-                                        Finaliser le paiement
-                                    </a>
-                                    <form method="post" action="{{ path('app_profile_orders_cancel', { id: order.id }) }}" data-turbo="false" onsubmit="return confirm('Annuler cette commande ?');">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('cancel_order_' ~ order.id) }}">
-                                        <button type="submit" class="btn btn-outline-danger btn-sm w-100">Annuler</button>
-                                    </form>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
+                <div class="account-order" role="row">
+                    <span class="account-order__ref" role="cell" data-label="Référence">{{ order.reference ?? ('#' ~ order.id) }}</span>
+                    <span role="cell" data-label="Date">{{ order.createdAt|date('d/m/Y') }}</span>
+                    <span role="cell" data-label="Statut">
+                        <span class="order-status order-status--{{ order.status }}">{{ statusLabels[order.status] ?? order.status|capitalize }}</span>
+                    </span>
+                    <span class="account-order__total" role="cell" data-label="Total">{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</span>
+                    <span class="account-order__actions" role="cell">
+                        <a href="{{ path('app_profile_orders_show', {id: order.id}) }}" class="aq-btn aq-btn--outline aq-btn--sm">
+                            Voir les détails <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                        </a>
+                        {% if order.status == 'pending' %}
+                            <a href="{{ path('app_checkout_pay', {id: order.id}) }}" class="aq-btn aq-btn--primary aq-btn--sm" data-turbo="false">
+                                Finaliser le paiement <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                            </a>
+                            <form method="post" action="{{ path('app_profile_orders_cancel', {id: order.id}) }}" data-turbo="false"
+                                  onsubmit="return confirm('Annuler la commande {{ order.reference|e('js') }} ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('cancel_order_' ~ order.id) }}">
+                                <button type="submit" class="aq-btn aq-btn--sm account-btn-danger">Annuler</button>
+                            </form>
+                        {% endif %}
+                    </span>
                 </div>
             {% endfor %}
         </div>
     {% endif %}
-</div>
 {% endblock %}

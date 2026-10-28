@@ -1,174 +1,73 @@
-{% extends 'base.html.twig' %}
+{% extends 'profile/_layout.html.twig' %}
 
-{% block title %}My Addresses{% endblock %}
+{% set accountTab = 'addresses' %}
 
-{% block stylesheets %}
-    <style>
-        .address-card {
-            height: 100%;
-            min-height: 280px;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid #d5d9d9;
-            border-radius: 10px;
-            background: #fff;
-            overflow: hidden;
-            box-shadow: 0 1px 2px rgba(15, 17, 17, 0.08);
-        }
+{% block title %}Mes adresses - AquaSphère{% endblock %}
+{% block account_title %}Mes adresses{% endblock %}
+{% block account_subtitle %}Gérez vos adresses de livraison enregistrées.{% endblock %}
 
-        .address-card:hover {
-            box-shadow: 0 2px 6px rgba(15, 17, 17, 0.10);
-        }
+{% block account_content %}
+    {% set ownerName = (app.user.firstName ~ ' ' ~ app.user.lastName)|trim %}
 
-        .address-card__header {
-            padding: 1rem 1.25rem;
-            border-bottom: 1px solid #e7e7e7;
-            background: #fff;
-        }
+    <div class="account-toolbar">
+        <a href="{{ path('app_profile_addresses_new') }}" class="aq-btn aq-btn--primary">
+            <i class="fa-solid fa-plus" aria-hidden="true"></i> Ajouter une adresse
+        </a>
+    </div>
 
-        .address-card__body {
-            flex: 1;
-            padding: 1rem 1.25rem;
-            color: #0f1111;
-            line-height: 1.5;
-        }
+    <div class="account-addresses">
+        {# Adresse par défaut en premier #}
+        {% for address in addresses|sort((a, b) => b.isDefault <=> a.isDefault) %}
+            <article class="account-card account-address">
+                <div class="account-address__main">
+                    <span class="account-card__icon" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></span>
+                    <div>
+                        <span class="account-address__badge {{ address.isDefault ? 'is-default' }}">
+                            {{ address.isDefault ? 'Adresse par défaut' : 'Adresse enregistrée' }}
+                        </span>
+                        <h2 class="account-address__name">{{ ownerName ?: 'Mon adresse' }}</h2>
+                        <address class="account-address__lines">
+                            {{ address.street }}<br>
+                            {{ address.postalCode }} {{ address.city }}<br>
+                            {{ address.country }}
+                        </address>
+                        <p class="account-address__date">Ajoutée le {{ address.createdAt|date('d/m/Y') }}</p>
+                    </div>
+                </div>
 
-        .address-card__footer {
-            margin-top: auto;
-            padding: 1rem 1.25rem 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
+                <footer class="account-address__actions">
+                    <a href="{{ path('app_profile_addresses_edit', {id: address.id}) }}" class="aq-btn aq-btn--outline aq-btn--sm">
+                        <i class="fa-solid fa-pen" aria-hidden="true"></i> Modifier
+                    </a>
+                    {% if not address.isDefault %}
+                        <form method="post" action="{{ path('app_profile_addresses_set_default', {id: address.id}) }}">
+                            <input type="hidden" name="_token" value="{{ csrf_token('set_default_address_' ~ address.id) }}">
+                            <button type="submit" class="account-link-btn"><i class="fa-regular fa-star" aria-hidden="true"></i> Définir par défaut</button>
+                        </form>
+                    {% endif %}
+                    <form method="post" action="{{ path('app_profile_addresses_delete', {id: address.id}) }}"
+                          onsubmit="return confirm('Supprimer cette adresse ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_address_' ~ address.id) }}">
+                        <button type="submit" class="account-link-btn account-link-btn--danger"><i class="fa-regular fa-trash-can" aria-hidden="true"></i> Supprimer</button>
+                    </form>
+                </footer>
+            </article>
+        {% endfor %}
 
-        .address-card__action-form {
-            margin: 0;
-        }
+        {# Carte d'ajout, toujours en dernier #}
+        <a href="{{ path('app_profile_addresses_new') }}" class="account-address-add">
+            <span class="account-card__icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
+            <strong>Ajouter une adresse</strong>
+            <span>{{ addresses is empty ? 'Enregistrez une adresse pour commander plus rapidement.' : 'Enregistrez une nouvelle adresse de livraison.' }}</span>
+            <span class="aq-link-arrow">Créer une adresse <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></span>
+        </a>
+    </div>
 
-        .address-card__action-link,
-        .address-card__action-button {
-            padding: 0;
-            border: 0;
-            background: none;
-            color: #0066c0;
-            font-size: 0.92rem;
-            line-height: 1.4;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .address-card__action-link:hover,
-        .address-card__action-button:hover {
-            color: #c7511f;
-            text-decoration: underline;
-        }
-
-        .address-card__separator {
-            color: #6b7280;
-            line-height: 1;
-        }
-    </style>
 {% endblock %}
 
-{% block body %}
-	<div class="container py-4">
-		<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-			<div>
-				<h1 class="h2 fw-bold mb-1">Mes Adresses</h1>
-				<p class="text-muted mb-0">
-					Gérez vos adresses de livraison enregistrées.
-				</p>
-			</div>
-
-			<div class="d-flex gap-2">
-				<a href="{{ path('app_profile_index') }}" class="btn btn-outline-secondary">
-					Retour au tableau de bord
-				</a>
-				<a href="{{ path('app_profile_addresses_new') }}" class="btn btn-primary">
-					Ajouter une adresse
-				</a>
-			</div>
-		</div>
-
-		{% if addresses is empty %}
-			<div class="card shadow-sm border-0">
-				<div class="card-body py-5 text-center">
-					<h2 class="h4 mb-3">Adresses non enregistrées</h2>
-					<p class="text-muted mb-4">
-						Enregistrez une adresse pour faciliter le paiement.
-					</p>
-					<a href="{{ path('app_profile_addresses_new') }}" class="btn btn-primary">
-						Créez votre adresse
-					</a>
-				</div>
-			</div>
-		{% else %}
-			<div class="row g-3">
-				{% for address in addresses %}
-					<div class="col-12 col-md-6 col-xl-4">
-						<div class="address-card">
-							<div class="address-card__header">
-								<div class="fw-semibold">
-									{% if address.isDefault %}
-										Adresse par défaut
-									{% else %}
-										Adresse enregistrée
-									{% endif %}
-								</div>
-
-								<div class="text-muted small">
-									Ajouté le
-									{{ address.createdAt|date('d/m/Y') }}
-								</div>
-							</div>
-
-							<div class="address-card__body">
-								<div class="fw-semibold mb-2">
-									{% if address.user.firstName or address.user.lastName %}
-										{{ address.user.firstName }}
-										{{ address.user.lastName }}
-									{% else %}
-										Propriétaire du compte
-									{% endif %}
-								</div>
-
-								<div>{{ address.street }}</div>
-								<div>{{ address.postalCode }}
-									{{ address.city }}</div>
-								<div>{{ address.country }}</div>
-							</div>
-
-							<div class="address-card__footer">
-								<a href="{{ path('app_profile_addresses_edit', { id: address.id }) }}" class="address-card__action-link">
-									Modifier
-								</a>
-
-								{% if not address.isDefault %}
-									<span class="address-card__separator">|</span>
-
-									<form method="post" action="{{ path('app_profile_addresses_set_default', { id: address.id }) }}" class="address-card__action-form">
-										<input type="hidden" name="_token" value="{{ csrf_token('set_default_address_' ~ address.id) }}">
-
-										<button type="submit" class="address-card__action-button">
-											Défini par défaut
-										</button>
-									</form>
-								{% endif %}
-
-								<span class="address-card__separator">|</span>
-
-								<form method="post" action="{{ path('app_profile_addresses_delete', { id: address.id }) }}" class="address-card__action-form">
-									<input type="hidden" name="_token" value="{{ csrf_token('delete_address_' ~ address.id) }}">
-
-									<button type="submit" class="address-card__action-button">
-										Supprimer
-									</button>
-								</form>
-							</div>
-						</div>
-					</div>
-				{% endfor %}
-			</div>
-		{% endif %}
-	</div>
+{% block account_aside %}
+    <p class="account-note">
+        <i class="fa-solid fa-box-open" aria-hidden="true"></i>
+        <span>Vos adresses sont disponibles lors de la commande.</span>
+    </p>
 {% endblock %}

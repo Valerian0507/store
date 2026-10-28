@@ -1,191 +1,127 @@
 {% extends 'admin/adminBase.html.twig' %}
 
-{% block title %}Admin · Utilisateur{% endblock %}
+{% block title %}{{ user.getFullName() ?: user.email }}{% endblock %}
 
 {% block admin_content %}
-    <section class="container py-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h1 class="h2 fw-bold mb-1">Utilisateur</h1>
-                <p class="text-muted mb-0">{{ user.email }}</p>
-            </div>
+    {% set statusLabels = {pending: 'En attente de paiement', paid: 'Payée', shipped: 'Expédiée', cancelled: 'Annulée'} %}
+    {% set isAdmin = 'ROLE_ADMIN' in user.roles %}
+    {% set isSelf = app.user and app.user.id == user.id %}
+    {% set displayName = user.getFullName() ?: user.email %}
+    {% set initials = ((user.firstName|default('')|first) ~ (user.lastName|default('')|first))|upper ?: (user.email|first|upper) %}
 
-            <a href="{{ path('admin_users_index') }}" class="btn btn-outline-secondary">
-                Retour à la liste
-            </a>
+    <nav aria-label="Fil d'Ariane">
+        <ol class="admin-breadcrumb">
+            <li><a href="{{ path('admin_dashboard') }}">Administration</a></li>
+            <li><a href="{{ path('admin_users_index') }}">Utilisateurs</a></li>
+            <li aria-current="page">{{ displayName }}</li>
+        </ol>
+    </nav>
+
+    <header class="admin-page-head admin-page-head--actions">
+        <div>
+            <h1 class="admin-page-head__title">{{ displayName }}</h1>
+            <p class="admin-page-head__subtitle">{{ user.email }}</p>
         </div>
+        <div class="admin-page-head__actions">
+            <a href="{{ path('admin_users_index') }}" class="admin-back"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Retour aux utilisateurs</a>
+        </div>
+    </header>
 
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <dl class="row mb-0">
-                    <dt class="col-sm-3">ID</dt>
-                    <dd class="col-sm-9">{{ user.id }}</dd>
-
-                    <dt class="col-sm-3">Adresse email</dt>
-                    <dd class="col-sm-9">{{ user.email }}</dd>
-
-                    <dt class="col-sm-3">Prénom</dt>
-                    <dd class="col-sm-9">{{ user.firstName ? user.firstName : '-' }}</dd>
-
-                    <dt class="col-sm-3">Nom</dt>
-                    <dd class="col-sm-9">{{ user.lastName ? user.lastName : '-' }}</dd>
-
-                    <dt class="col-sm-3">Nom complet</dt>
-                    <dd class="col-sm-9">{{ user.getFullName() ? user.getFullName() : '-' }}</dd>
-
-                    <dt class="col-sm-3">Vérifié</dt>
-                    <dd class="col-sm-9">
+    <div class="admin-detail-grid">
+        <section class="admin-panel">
+            <h2 class="admin-panel__title">Informations du compte</h2>
+            <div class="admin-account">
+                <span class="admin-avatar" aria-hidden="true">{{ initials }}</span>
+                <dl class="admin-dl admin-dl--lined">
+                    <dt>ID</dt><dd>{{ user.id }}</dd>
+                    <dt>E-mail</dt><dd>{{ user.email }}</dd>
+                    <dt>Prénom</dt><dd>{{ user.firstName ?: '-' }}</dd>
+                    <dt>Nom</dt><dd>{{ user.lastName ?: '-' }}</dd>
+                    <dt>E-mail vérifié</dt>
+                    <dd>
                         {% if user.verified %}
-                            <span class="badge bg-success">Oui</span>
+                            <span class="admin-chip admin-chip--ok"><i class="fa-solid fa-circle" aria-hidden="true"></i> Oui</span>
                         {% else %}
-                            <span class="badge bg-warning text-dark">Non</span>
+                            <span class="admin-chip admin-chip--warn"><i class="fa-solid fa-circle" aria-hidden="true"></i> Non</span>
                         {% endif %}
                     </dd>
-
-                    <dt class="col-sm-3">Rôle</dt>
-                    <dd class="col-sm-9">
-                        {% if 'ROLE_ADMIN' in user.roles %}
-                            Administrateur
-                        {% else %}
-                            Utilisateur
-                        {% endif %}
-                    </dd>
-
-                    <dt class="col-sm-3">Créé le</dt>
-                    <dd class="col-sm-9">{{ user.createdAt ? user.createdAt|date('d/m/Y H:i') : '-' }}</dd>
-
-                    <dt class="col-sm-3">Mis à jour</dt>
-                    <dd class="col-sm-9">{{ user.updatedAt ? user.updatedAt|date('d/m/Y H:i') : '-' }}</dd>
+                    <dt>Rôle</dt><dd>{{ isAdmin ? 'Administrateur' : 'Utilisateur' }}</dd>
+                    <dt>Créé le</dt><dd>{{ user.createdAt ? user.createdAt|date('d/m/Y H:i') : '-' }}</dd>
+                    <dt>Mis à jour le</dt><dd>{{ user.updatedAt ? user.updatedAt|date('d/m/Y H:i') : '-' }}</dd>
                 </dl>
             </div>
-        </div>
+        </section>
 
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <h2 class="h5 fw-bold mb-3">Changer le rôle</h2>
-
-                <form method="post" action="{{ path('admin_users_update_role', { id: user.id }) }}">
-                    <input type="hidden" name="_token" value="{{ csrf_token('update_user_role_' ~ user.id) }}">
-
-                    <div class="mb-3">
-                        <label for="role" class="form-label">Rôle</label>
-                        <select id="role" name="role" class="form-select">
-                            <option value="ROLE_USER" {% if 'ROLE_ADMIN' not in user.roles %}selected{% endif %}>
-                                Utilisateur
-                            </option>
-                            <option value="ROLE_ADMIN" {% if 'ROLE_ADMIN' in user.roles %}selected{% endif %}>
-                                Administrateur
-                            </option>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">
-                        Mettre à jour le rôle
-                    </button>
-                </form>
-            </div>
-        </div>
-
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <h2 class="h5 fw-bold mb-3">Adresses</h2>
-
-                {% if addresses is empty %}
-                    <div class="alert alert-info mb-0">
-                        Aucune adresse pour cet utilisateur.
-                    </div>
-                {% else %}
-                    <div class="row g-3">
-                        {% for address in addresses %}
-                            <div class="col-12 col-lg-6">
-                                <div class="border rounded p-3 h-100">
-                                    <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <strong>Adresse #{{ loop.index }}</strong>
-
-                                        {% if address.isDefault %}
-                                            <span class="badge bg-primary">Par défaut</span>
-                                        {% endif %}
-                                    </div>
-
-                                    <div>
-                                        <div>{{ address.street }}</div>
-                                        <div>{{ address.postalCode }} {{ address.city }}</div>
-                                        <div>{{ address.country }}</div>
-                                    </div>
-
-                                    <div class="text-muted small mt-3">
-                                        Créée le {{ address.createdAt ? address.createdAt|date('d/m/Y H:i') : '-' }}
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h2 class="h5 fw-bold mb-0">Dernières commandes</h2>
+        <section class="admin-panel">
+            <h2 class="admin-panel__title">Changer le rôle</h2>
+            <form method="post" action="{{ path('admin_users_update_role', {id: user.id}) }}" class="admin-form">
+                <input type="hidden" name="_token" value="{{ csrf_token('update_user_role_' ~ user.id) }}">
+                <div class="admin-field">
+                    <label for="role" class="admin-field__label">Rôle</label>
+                    <select id="role" name="role" class="admin-input admin-filters__select" {{ isSelf ? 'disabled' }}>
+                        <option value="ROLE_USER" {{ not isAdmin ? 'selected' }}>Utilisateur</option>
+                        <option value="ROLE_ADMIN" {{ isAdmin ? 'selected' }}>Administrateur</option>
+                    </select>
+                    <p class="admin-field__help">
+                        {{ isSelf
+                            ? 'Vous ne pouvez pas modifier votre propre rôle.'
+                            : 'Modifiez le rôle de cet utilisateur. Les administrateurs ont accès à l’ensemble de l’administration.' }}
+                    </p>
                 </div>
+                <button type="submit" class="aq-btn aq-btn--primary aq-btn--block" {{ isSelf ? 'disabled' }}>Mettre à jour le rôle</button>
+            </form>
+        </section>
+    </div>
 
-                {% if orders is empty %}
-                    <div class="alert alert-info mb-0">
-                        Aucune commande pour cet utilisateur.
+    <section class="admin-panel admin-panel--spaced">
+        <h2 class="admin-panel__title">Adresses</h2>
+        {% if addresses is empty %}
+            <p class="admin-table__muted">Aucune adresse pour cet utilisateur.</p>
+        {% else %}
+            <div class="admin-address-grid">
+                {% for address in addresses %}
+                    <div class="admin-address-card">
+                        {% if address.isDefault %}<span class="admin-chip admin-chip--ok">Par défaut</span>{% endif %}
+                        <address class="admin-address">
+                            {{ address.street }}<br>
+                            {{ address.postalCode }} {{ address.city }}<br>
+                            {{ address.country }}
+                        </address>
                     </div>
-                {% else %}
-                    <div class="table-responsive">
-                        <table class="table table-striped align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th>Référence</th>
-                                    <th>Date</th>
-                                    <th>Statut</th>
-                                    <th>Total</th>
-                                    <th class="text-end">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for order in orders %}
-                                    {% set statusLabel = {
-                                        'pending': 'En attente de paiement',
-                                        'paid': 'Payée',
-                                        'shipped': 'Expédiée',
-                                        'cancelled': 'Annulée'
-                                    }[order.status] ?? order.status|capitalize %}
-
-                                    {% set statusBadgeClass = {
-                                        'pending': 'bg-warning text-dark',
-                                        'paid': 'bg-success text-white',
-                                        'shipped': 'bg-primary text-white',
-                                        'cancelled': 'bg-danger text-white'
-                                    }[order.status] ?? 'bg-secondary text-white' %}
-
-                                    <tr>
-                                        <td>{{ order.reference }}</td>
-                                        <td>{{ order.createdAt ? order.createdAt|date('d/m/Y H:i') : '-' }}</td>
-                                        <td>
-                                            <span class="badge {{ statusBadgeClass }}">
-                                                {{ statusLabel }}
-                                            </span>
-                                        </td>
-                                        <td>{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</td>
-                                        <td class="text-end">
-                                            <a
-                                                href="{{ path('admin_orders_show', { id: order.id }) }}"
-                                                class="btn btn-sm btn-outline-primary"
-                                            >
-                                                Voir
-                                            </a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                {% endif %}
+                {% endfor %}
             </div>
+        {% endif %}
+    </section>
+
+    <section class="admin-panel admin-panel--spaced">
+        <h2 class="admin-panel__title">Dernières commandes</h2>
+        <div class="admin-table-wrap">
+            <table class="admin-table admin-table--scroll">
+                <thead>
+                    <tr>
+                        <th scope="col">Référence</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Statut</th>
+                        <th scope="col" class="admin-table__num">Total</th>
+                        <th scope="col" class="admin-table__actions">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td><a href="{{ path('admin_orders_show', {id: order.id}) }}" class="admin-table__title">{{ order.reference }}</a></td>
+                            <td class="admin-table__muted">{{ order.createdAt|date('d/m/Y') }}</td>
+                            <td>{% include 'admin/_partials/_order_status.html.twig' with {status: order.status} %}</td>
+                            <td class="admin-table__num">{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</td>
+                            <td class="admin-table__actions">
+                                <a href="{{ path('admin_orders_show', {id: order.id}) }}" class="admin-action">Voir <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="5" class="admin-table__empty">Aucune commande pour cet utilisateur.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </section>
 {% endblock %}

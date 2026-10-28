@@ -1,0 +1,28 @@
+{# Pagination de l'administration - attend : route, params (filtres à conserver), page, pages #}
+{% if pages > 1 %}
+    {% set start = max(1, page - 2) %}
+    {% set end = min(pages, page + 2) %}
+    <nav class="admin-pagination" aria-label="Pagination">
+        {% if page > 1 %}
+            <a href="{{ path(route, params|merge({page: page - 1})) }}" class="admin-pagination__item" aria-label="Page précédente"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></a>
+        {% endif %}
+
+        {% if start > 1 %}
+            <a href="{{ path(route, params|merge({page: 1})) }}" class="admin-pagination__item">1</a>
+            {% if start > 2 %}<span class="admin-pagination__dots" aria-hidden="true">…</span>{% endif %}
+        {% endif %}
+
+        {% for p in start..end %}
+            <a href="{{ path(route, params|merge({page: p})) }}" class="admin-pagination__item {{ p == page ? 'is-current' }}" {% if p == page %}aria-current="page"{% endif %}>{{ p }}</a>
+        {% endfor %}
+
+        {% if end < pages %}
+            {% if end < pages - 1 %}<span class="admin-pagination__dots" aria-hidden="true">…</span>{% endif %}
+            <a href="{{ path(route, params|merge({page: pages})) }}" class="admin-pagination__item">{{ pages }}</a>
+        {% endif %}
+
+        {% if page < pages %}
+            <a href="{{ path(route, params|merge({page: page + 1})) }}" class="admin-pagination__item" aria-label="Page suivante"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+        {% endif %}
+    </nav>
+{% endif %}

@@ -146,7 +146,8 @@ class Product
         return $this->volumeM3;
     }
 
-    public function setVolumeM3(float $volumeM3): static
+    // Nullable : un champ vide du formulaire admin arrive à null, la validation l'arrête ensuite
+    public function setVolumeM3(?float $volumeM3): static
     {
         $this->volumeM3 = $volumeM3;
 
@@ -158,7 +159,7 @@ class Product
         return $this->weightKg;
     }
 
-    public function setWeightKg(float $weightKg): static
+    public function setWeightKg(?float $weightKg): static
     {
         $this->weightKg = $weightKg;
 
@@ -170,7 +171,7 @@ class Product
         return $this->priceCents;
     }
 
-    public function setPriceCents(int $priceCents): static
+    public function setPriceCents(?int $priceCents): static
     {
         $this->priceCents = $priceCents;
 

@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Product;
 use App\Form\ProductType;
+use App\Repository\CategoryRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,11 +20,36 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 #[Route('/admin/products', name: 'admin_products_')]
 class ProductController extends AbstractController
 {
+    private const PER_PAGE = 20;
+
     #[Route('', name: 'index', methods: ['GET'])]
-    public function index(ProductRepository $productRepository): Response
+    public function index(Request $request, ProductRepository $productRepository, CategoryRepository $categoryRepository): Response
     {
+        $categoryId = $request->query->filter('category', null, FILTER_VALIDATE_INT, [
+            'flags' => FILTER_NULL_ON_FAILURE,
+            'options' => ['min_range' => 1],
+        ]);
+        $q = trim((string) $request->query->get('q', ''));
+        $q = $q !== '' ? mb_substr($q, 0, 80) : null;
+
+        $page = max(1, $request->query->getInt('page', 1));
+        $result = $productRepository->findForAdmin($page, self::PER_PAGE, $categoryId, $q);
+        $pages = max(1, (int) ceil($result['total'] / self::PER_PAGE));
+
+        // Page demandée au-delà de la dernière (ex. après une suppression) : on revient à la dernière
+        if ($page > $pages) {
+            $page = $pages;
+            $result = $productRepository->findForAdmin($page, self::PER_PAGE, $categoryId, $q);
+        }
+
         return $this->render('admin/products/index.html.twig', [
-            'products' => $productRepository->findBy([], ['id' => 'DESC']),
+            'products' => $result['items'],
+            'total' => $result['total'],
+            'page' => $page,
+            'pages' => $pages,
+            'categories' => $categoryRepository->findAllOrdered(),
+            'category' => $categoryId,
+            'q' => $q,
         ]);
     }
 
@@ -100,10 +126,11 @@ class ProductController extends AbstractController
             $this->addFlash('success', 'Produit mis à jour.');
             return $this->redirectToRoute('admin_products_index');
         }
+        // 422 si le formulaire est invalide : Turbo n'affiche les erreurs qu'avec un code 4xx
         return $this->render('admin/products/edit.html.twig', [
             'product' => $product,
             'form' => $form->createView(),
-        ]);
+        ], new Response(null, $form->isSubmitted() && !$form->isValid() ? 422 : 200));
     }
 
 

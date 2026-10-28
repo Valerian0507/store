@@ -1,47 +1,98 @@
-{% extends 'base.html.twig' %}
+{% extends 'profile/_layout.html.twig' %}
 
-{% block title %}Mon profil{% endblock %}
+{% set accountTab = 'profile' %}
 
-{% block body %}
-<div class="container py-4">
-<div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h4 mb-3">Gérer mon profil</h1>
+{% block title %}Mon profil - AquaSphère{% endblock %}
+{% block account_title %}Mon profil{% endblock %}
+{% block account_subtitle %}Gérez vos informations personnelles et votre mot de passe.{% endblock %}
 
-        <a href="{{ path('app_profile_index') }}" class="btn btn-outline-secondary">
-            Retour au tableau de bord
-        </a>
-</div>
-    <div class="mx-auto" style="max-width: 520px;">
+{% block account_content %}
+    <div class="account-grid account-grid--2 account-grid--even">
+        {# Informations personnelles (ProfileType) #}
+        <section class="account-card">
+            <header class="account-card__head">
+                <span class="account-card__icon" aria-hidden="true"><i class="fa-regular fa-user"></i></span>
+                <div>
+                    <h2 class="account-card__title">Mes informations</h2>
+                    <p class="account-card__lead">Mettez à jour vos informations personnelles.</p>
+                </div>
+            </header>
 
-        <div class="card border-0 shadow-sm rounded-4 mb-4">
-            <div class="card-header bg-white fw-semibold py-2">Mes informations</div>
-            <div class="card-body p-4">
-                <div class="mb-3">
-                    <label class="form-label">E-mail</label>
-                    <input type="email" class="form-control" value="{{ app.user.email }}" disabled>
-                    <div class="form-text">L'adresse e-mail ne peut pas être modifiée ici.</div>
+            {{ form_start(profileForm, {attr: {class: 'account-form', 'data-turbo': 'false'}}) }}
+                <div class="account-field">
+                    <label class="account-field__label" for="account-email">E-mail</label>
+                    <input class="account-input" id="account-email" type="email" value="{{ app.user.email }}" disabled>
+                    <p class="account-field__help">Votre adresse e-mail ne peut pas être modifiée ici.</p>
                 </div>
 
-                {{ form_start(profileForm, { attr: { 'data-turbo': 'false' } }) }}
-                    {{ form_row(profileForm.firstName) }}
-                    {{ form_row(profileForm.lastName) }}
-                    <button type="submit" class="btn btn-primary mt-2">Enregistrer</button>
-                {{ form_end(profileForm) }}
-            </div>
-        </div>
+                <div class="account-field">
+                    {{ form_label(profileForm.firstName, null, {label_attr: {class: 'account-field__label'}}) }}
+                    {{ form_widget(profileForm.firstName, {attr: {class: 'account-input', placeholder: 'Votre prénom', autocomplete: 'given-name'}}) }}
+                    {{ form_errors(profileForm.firstName) }}
+                </div>
 
+                <div class="account-field">
+                    {{ form_label(profileForm.lastName, null, {label_attr: {class: 'account-field__label'}}) }}
+                    {{ form_widget(profileForm.lastName, {attr: {class: 'account-input', placeholder: 'Votre nom', autocomplete: 'family-name'}}) }}
+                    {{ form_errors(profileForm.lastName) }}
+                </div>
 
-        <div class="card border-0 shadow-sm rounded-4">
-            <div class="card-header bg-white fw-semibold py-2">Mot de passe</div>
-            <div class="card-body p-4">
-                {{ form_start(passwordForm, { attr: { 'data-turbo': 'false' } }) }}
-                    {{ form_row(passwordForm.currentPassword) }}
-                    {{ form_row(passwordForm.plainPassword.first) }}
-                    {{ form_row(passwordForm.plainPassword.second) }}
-                    <button type="submit" class="btn btn-primary mt-2">Mettre à jour le mot de passe</button>
-                {{ form_end(passwordForm) }}
-            </div>
-        </div>
+                <button type="submit" class="aq-btn aq-btn--primary aq-btn--block account-form__submit">
+                    Enregistrer mes informations <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            {{ form_end(profileForm) }}
+        </section>
+
+        {# Mot de passe (ProfileChangePasswordType, même règle qu'à l'inscription) #}
+        <section class="account-card">
+            <header class="account-card__head">
+                <span class="account-card__icon" aria-hidden="true"><i class="fa-solid fa-lock"></i></span>
+                <div>
+                    <h2 class="account-card__title">Mot de passe</h2>
+                    <p class="account-card__lead">Sécurisez votre compte en choisissant un mot de passe solide.</p>
+                </div>
+            </header>
+
+            {{ form_start(passwordForm, {attr: {class: 'account-form', 'data-turbo': 'false'}}) }}
+                {{ form_errors(passwordForm) }}
+
+                <div class="account-field">
+                    {{ form_label(passwordForm.currentPassword, null, {label_attr: {class: 'account-field__label'}}) }}
+                    <div class="auth-field__password" data-controller="password-toggle">
+                        {{ form_widget(passwordForm.currentPassword, {attr: {class: 'account-input', autocomplete: 'current-password', 'data-password-toggle-target': 'input'}}) }}
+                        {% include 'security/_password_toggle.html.twig' %}
+                    </div>
+                    {{ form_errors(passwordForm.currentPassword) }}
+                </div>
+
+                <div class="account-field" data-controller="password-rules">
+                    {{ form_label(passwordForm.plainPassword.first, null, {label_attr: {class: 'account-field__label'}}) }}
+                    <div class="auth-field__password" data-controller="password-toggle">
+                        {{ form_widget(passwordForm.plainPassword.first, {attr: {
+                            class: 'account-input', autocomplete: 'new-password', 'aria-describedby': 'password-rules',
+                            'data-password-toggle-target': 'input',
+                            'data-password-rules-target': 'input', 'data-action': 'input->password-rules#check'
+                        }}) }}
+                        {% include 'security/_password_toggle.html.twig' %}
+                    </div>
+                    {% include 'security/_password_rules.html.twig' %}
+                    {{ form_errors(passwordForm.plainPassword) }}
+                    {{ form_errors(passwordForm.plainPassword.first) }}
+                </div>
+
+                <div class="account-field">
+                    {{ form_label(passwordForm.plainPassword.second, null, {label_attr: {class: 'account-field__label'}}) }}
+                    <div class="auth-field__password" data-controller="password-toggle">
+                        {{ form_widget(passwordForm.plainPassword.second, {attr: {class: 'account-input', autocomplete: 'new-password', 'data-password-toggle-target': 'input'}}) }}
+                        {% include 'security/_password_toggle.html.twig' %}
+                    </div>
+                    {{ form_errors(passwordForm.plainPassword.second) }}
+                </div>
+
+                <button type="submit" class="aq-btn aq-btn--primary aq-btn--block account-form__submit">
+                    Mettre à jour le mot de passe <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            {{ form_end(passwordForm) }}
+        </section>
     </div>
-</div>
 {% endblock %}

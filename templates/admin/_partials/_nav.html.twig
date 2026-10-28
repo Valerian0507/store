@@ -1,34 +1,31 @@
+{# templates/admin/_partials/_nav.html.twig - barre latérale de l'administration (adminBase.html.twig) #}
 {% set route = app.request.attributes.get('_route') %}
+{% set items = [
+    {route: 'admin_dashboard', prefix: 'admin_dashboard', icon: 'fa-solid fa-table-cells-large', label: "Vue d'ensemble"},
+    {route: 'admin_products_index', prefix: 'admin_products_', icon: 'fa-solid fa-cube', label: 'Produits'},
+    {route: 'admin_categories_index', prefix: 'admin_categories_', icon: 'fa-regular fa-folder', label: 'Catégories'},
+    {route: 'admin_orders_index', prefix: 'admin_orders_', icon: 'fa-solid fa-cart-shopping', label: 'Commandes'},
+    {route: 'admin_users_index', prefix: 'admin_users_', icon: 'fa-solid fa-user-group', label: 'Utilisateurs'},
+] %}
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-        <a class="navbar-brand" href="{{ path('app_home') }}">
-            <img src="{{ asset('images/icons/logo4.png') }}" alt="Logo" class="logo">
+<aside class="admin-sidebar">
+    <a href="{{ path('admin_dashboard') }}" class="admin-sidebar__brand">
+        {% include '_partials/_logo.html.twig' with {variant: 'light'} %}
+        <span>Administration</span>
+    </a>
+
+    <nav class="admin-sidebar__nav" aria-label="Administration">
+        {% for item in items %}
+            {% set active = route starts with item.prefix %}
+            <a href="{{ path(item.route) }}" class="admin-sidebar__link {{ active ? 'is-active' }}" {% if active %}aria-current="page"{% endif %}>
+                <i class="{{ item.icon }}" aria-hidden="true"></i>
+                <span>{{ item.label }}</span>
+            </a>
+        {% endfor %}
+
+        <a href="{{ path('app_home') }}" class="admin-sidebar__link admin-sidebar__link--shop">
+            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+            <span>Voir la boutique</span>
         </a>
-        <button class="navbar-toggler" type="button"
-            data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link {{ route == 'app_home' ? 'active' : '' }}" href="{{ path('app_home') }}">Accueil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ route starts with 'app_products' ? 'active' : '' }}" href="{{ path('app_products_index') }}">Produit</a>
-                </li>
-                {% if is_granted('ROLE_ADMIN') %}
-              <li class="nav-item">
-                <a class="nav-link {{ route starts with 'admin_' ? 'active' : '' }}" href="{{ path('admin_dashboard') }}">
-                  Admin
-                </a>
-              </li>
-            {% endif %}
-            </ul>
-
-
-        {% include '_partials/_account_nav.html.twig' %}
-        </div>
-    </div>
-</nav>
+    </nav>
+</aside>

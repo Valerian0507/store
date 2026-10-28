@@ -1,58 +1,28 @@
 {% extends 'admin/adminBase.html.twig' %}
 
-{% block title %}Admin · Edit product{% endblock %}
+{% block title %}Modifier le produit{% endblock %}
 
 {% block admin_content %}
-<section class="container py-4">
-    <h1>Modifier le produit #{{ product.id }}</h1>
+    <nav aria-label="Fil d'Ariane">
+        <ol class="admin-breadcrumb">
+            <li><a href="{{ path('admin_dashboard') }}">Administration</a></li>
+            <li><a href="{{ path('admin_products_index') }}">Produits</a></li>
+            <li aria-current="page">{{ product.title }}</li>
+        </ol>
+    </nav>
 
-    {{ form_start(form) }}
-    {{ form_errors(form) }}
-
-    {{ form_row(form.reference) }}
-    {{ form_row(form.category) }}
-    {{ form_row(form.title) }}
-    {{ form_row(form.description) }}
-    {{ form_row(form.replenishable) }}
-    {{ form_row(form.volumeM3) }}
-    {{ form_row(form.weightKg) }}
-    {{ form_row(form.priceCents) }}
-
-    <p class="mb-2"><strong>Stock actuel :</strong> {{ product.stock }}</p>
-    {{ form_row(form.stock) }}
-
-    {% if product.image %}
-        <div class="mb-3">
-            <div class="mb-2">
-                <strong>Image actuelle:</strong> <code>{{ product.image }}</code>
-            </div>
-
-            <img
-                src="{{ asset('uploads/products/' ~ product.image) }}"
-                alt="Current image"
-                style="max-width:240px; height:auto; border:1px solid #ddd; padding:6px; border-radius:8px;"
-                onerror="this.onerror=null;this.src='{{ asset('images/products/no-image.jpg') }}';"
-            >
-
-            <div class="mt-2">
-                <input type="hidden"
-                       name="_token_delete_image"
-                       value="{{ csrf_token('delete_product_image_' ~ product.id) }}">
-
-                <button type="button"
-                        class="btn btn-danger btn-sm js-delete-image"
-                        data-action="{{ path('admin_products_delete_image', {id: product.id}) }}">
-                    Supprimer l'image
-                </button>
-            </div>
+    <header class="admin-page-head admin-page-head--actions">
+        <div>
+            <h1 class="admin-page-head__title">Modifier le produit</h1>
+            <p class="admin-page-head__subtitle">Réf. {{ product.reference }} · n° {{ product.id }}</p>
         </div>
-    {% endif %}
+        <div class="admin-page-head__actions">
+            <a href="{{ path('app_products_show', {id: product.id}) }}" class="admin-back" target="_blank" rel="noopener">
+                <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> Voir sur la boutique
+            </a>
+            <a href="{{ path('admin_products_index') }}" class="admin-back"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Retour aux produits</a>
+        </div>
+    </header>
 
-    {{ form_row(form.image, { help: 'Place pour le message' }) }}
-
-    <button class="btn btn-primary">Modifier</button>
-    <a class="btn btn-link" href="{{ path('admin_products_index') }}">Retour</a>
-
-    {{ form_end(form) }}
-</section>
+    {% include 'admin/products/_form.html.twig' with {submitLabel: 'Enregistrer les modifications'} %}
 {% endblock %}

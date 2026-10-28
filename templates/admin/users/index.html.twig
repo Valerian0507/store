@@ -3,126 +3,94 @@
 {% block title %}Utilisateurs{% endblock %}
 
 {% block admin_content %}
-    <section class="container py-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1 class="h2 fw-bold mb-0">Utilisateurs</h1>
+    {% set filters = {q: search, verified: verifiedFilter}|filter(v => v is not empty) %}
 
-            <a href="{{ path('admin_dashboard') }}" class="btn btn-outline-secondary">
-                Retour au tableau de bord
-            </a>
+    <header class="admin-page-head admin-page-head--actions">
+        <div>
+            <h1 class="admin-page-head__title">Utilisateurs</h1>
+            <p class="admin-page-head__subtitle">Consultez les comptes clients et leurs commandes.</p>
         </div>
-
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <form method="get" action="{{ path('admin_users_index') }}">
-                    <div class="row g-3 align-items-end">
-
-                        <div class="col-12 col-md-2">
-                            <label for="verified" class="form-label">Vérifié</label>
-                            <select id="verified" name="verified" class="form-select">
-                                <option value="" {% if verifiedFilter == '' %}selected{% endif %}>Tous</option>
-                                <option value="yes" {% if verifiedFilter == 'yes' %}selected{% endif %}>Oui</option>
-                                <option value="no" {% if verifiedFilter == 'no' %}selected{% endif %}>Non</option>
-                            </select>
-                        </div>
-
-                        <div class="col-12 col-md">
-                            <label for="q" class="form-label">Recherche par email</label>
-                            <input
-                                type="text"
-                                id="q"
-                                name="q"
-                                class="form-control"
-                                value="{{ search }}"
-                                placeholder="ex. client@email.com"
-                            >
-                        </div>
-
-                        <div class="col-12 col-md-auto d-flex gap-2 ">
-                            <button type="submit" class="btn btn-primary">
-                                Filtrer
-                            </button>
-
-                            <a href="{{ path('admin_users_index') }}" class="btn btn-outline-secondary">
-                                Réinitialiser
-                            </a>
-                        </div>
-                    </div>
-                </form>
-            </div>
+        <div class="admin-page-head__actions">
+            <a href="{{ path('admin_dashboard') }}" class="admin-back"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Retour au tableau de bord</a>
+            <span class="admin-page-head__total">{{ totalUsers }} compte{{ totalUsers > 1 ? 's' }}</span>
         </div>
+    </header>
 
-        {% if users is empty %}
-            <div class="alert alert-info">
-                Aucun utilisateur trouvé.
-            </div>
-        {% else %}
-            <div class="card shadow-sm">
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-striped align-middle mb-0">
-                            <thead>
-                                <tr>
-                                    <th>№</th>
-                                    <th>Adresse email</th>
-                                    <th>Prénom / Nom</th>
-                                    <th>Vérifié</th>
-                                    <th>Rôle</th>
-                                    <th>Créé le</th>
-                                    <th>Mis à jour</th>
-                                    <th class="text-end">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for user in users %}
-                                    {% set displayRole = 'ROLE_ADMIN' in user.roles ? 'Administrateur' : 'Utilisateur' %}
-                                    <tr>
-                                        <td>{{ ((page - 1) * limit) + loop.index }}</td>
-                                        <td>{{ user.email }}</td>
-                                        <td>{{ user.getFullName() ? user.getFullName() : '-' }}</td>
-                                        <td>
-                                            {% if user.verified %}
-                                                <span class="badge bg-success">Oui</span>
-                                            {% else %}
-                                                <span class="badge bg-warning text-dark">Non</span>
-                                            {% endif %}
-                                        </td>
-                                        <td>{{ displayRole }}</td>
-                                        <td>{{ user.createdAt ? user.createdAt|date('d/m/Y H:i') : '-' }}</td>
-                                        <td>{{ user.updatedAt ? user.updatedAt|date('d/m/Y H:i') : '-' }}</td>
-                                        <td class="text-end">
-                                            <a href="{{ path('admin_users_show', { id: user.id }) }}" class="btn btn-sm btn-outline-primary">
-                                                Voir
-                                            </a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+    <form method="get" action="{{ path('admin_users_index') }}" class="admin-panel admin-filters admin-filters--labeled" role="search">
+        <label class="admin-field">
+            <span class="admin-field__label">E-mail vérifié</span>
+            <select name="verified" class="admin-filters__select">
+                <option value="" {{ verifiedFilter == '' ? 'selected' }}>Tous</option>
+                <option value="yes" {{ verifiedFilter == 'yes' ? 'selected' }}>Oui</option>
+                <option value="no" {{ verifiedFilter == 'no' ? 'selected' }}>Non</option>
+            </select>
+        </label>
+        <label class="admin-field admin-field--grow">
+            <span class="admin-field__label">Recherche par e-mail</span>
+            <span class="admin-filters__search">
+                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                <input type="search" name="q" value="{{ search }}" placeholder="client@exemple.fr">
+            </span>
+        </label>
+        <div class="admin-filters__buttons">
+            <button type="submit" class="aq-btn aq-btn--primary">Filtrer</button>
+            <a href="{{ path('admin_users_index') }}" class="aq-btn aq-btn--outline">Réinitialiser</a>
+        </div>
+    </form>
 
-            {% if totalPages > 1 %}
-                <nav class="mt-4" aria-label="Pagination utilisateurs">
-                    <ul class="pagination mb-0">
-                        {% for p in 1..totalPages %}
-                            <li class="page-item {% if p == page %}active{% endif %}">
-                                <a
-                                    class="page-link"
-                                    href="{{ path('admin_users_index', {
-                                        page: p,
-                                        q: search,
-                                        verified: verifiedFilter
-                                    }) }}"
-                                >
-                                    {{ p }}
+    <section class="admin-panel">
+        <div class="admin-table-wrap">
+            <table class="admin-table admin-table--scroll">
+                <thead>
+                    <tr>
+                        <th scope="col">N°</th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">Prénom / Nom</th>
+                        <th scope="col">Vérifié</th>
+                        <th scope="col">Rôle</th>
+                        <th scope="col">Créé le</th>
+                        <th scope="col" class="admin-table__actions">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td class="admin-table__muted">{{ ((page - 1) * limit) + loop.index }}</td>
+                            <td><a href="{{ path('admin_users_show', {id: user.id}) }}" class="admin-table__title admin-table__ellipsis" title="{{ user.email }}">{{ user.email }}</a></td>
+                            <td>{{ user.getFullName() ?: '-' }}</td>
+                            <td>
+                                {% if user.verified %}
+                                    <span class="admin-chip admin-chip--ok">Oui</span>
+                                {% else %}
+                                    <span class="admin-chip admin-chip--warn">Non</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if 'ROLE_ADMIN' in user.roles %}
+                                    <span class="admin-chip admin-chip--info">Administrateur</span>
+                                {% else %}
+                                    <span class="admin-chip admin-chip--muted">Utilisateur</span>
+                                {% endif %}
+                            </td>
+                            <td class="admin-table__muted">{{ user.createdAt ? user.createdAt|date('d/m/Y') : '-' }}</td>
+                            <td class="admin-table__actions">
+                                <a href="{{ path('admin_users_show', {id: user.id}) }}" class="admin-action">
+                                    Voir <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
                                 </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </nav>
-            {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="7" class="admin-table__empty">Aucun utilisateur trouvé.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if totalPages > 1 %}
+            <footer class="admin-panel__foot">
+                <span>{{ totalUsers }} compte{{ totalUsers > 1 ? 's' }}</span>
+                {% include 'admin/_partials/_pagination.html.twig' with {route: 'admin_users_index', params: filters, page: page, pages: totalPages} %}
+            </footer>
         {% endif %}
     </section>
 {% endblock %}

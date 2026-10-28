@@ -1,0 +1,11 @@
+{# Pastille de statut d'une commande - attend : status, statusLabels #}
+{% set statusStyles = {
+    pending: {chip: 'warn', icon: 'fa-regular fa-clock'},
+    paid: {chip: 'ok', icon: 'fa-regular fa-circle-check'},
+    shipped: {chip: 'info', icon: 'fa-solid fa-truck-fast'},
+    cancelled: {chip: 'danger', icon: 'fa-regular fa-circle-xmark'},
+} %}
+{% set style = statusStyles[status] ?? {chip: 'muted', icon: 'fa-regular fa-circle'} %}
+<span class="admin-chip admin-chip--{{ style.chip }}">
+    <i class="{{ style.icon }}" aria-hidden="true"></i> {{ statusLabels[status] ?? status|capitalize }}
+</span>

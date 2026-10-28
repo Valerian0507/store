@@ -1,0 +1,32 @@
+{# Formulaire catégorie (création et modification) - attend : form, submitLabel, submitIcon, note ; productCount (modification) #}
+{% import 'admin/_partials/_fields.html.twig' as fields %}
+
+<div class="admin-narrow">
+    <section class="admin-panel">
+        <header class="admin-panel__head">
+            <span class="admin-category__icon" aria-hidden="true"><i class="fa-regular fa-folder"></i></span>
+            <h2 class="admin-panel__title">Informations de la catégorie</h2>
+        </header>
+
+        {{ form_start(form, {attr: {class: 'admin-form', novalidate: 'novalidate'}}) }}
+            {{ form_errors(form) }}
+            {{ fields.field(form.label, 'Ex. : Piscines', {maxlength: 120, autofocus: 'autofocus'}, 'Choisissez un nom clair pour vos clients. 120 caractères maximum.') }}
+
+            {% if productCount is defined %}
+                <p class="admin-chip admin-chip--ok admin-chip--lg">
+                    <i class="fa-solid fa-cube" aria-hidden="true"></i> {{ productCount }} produit{{ productCount > 1 ? 's' }} associé{{ productCount > 1 ? 's' }}
+                </p>
+            {% endif %}
+
+            <div class="admin-form-actions admin-form-actions--start{{ productCount is defined ? ' admin-form-actions--ruled' }}">
+                <button type="submit" class="aq-btn aq-btn--primary"><i class="{{ submitIcon }}" aria-hidden="true"></i> {{ submitLabel }}</button>
+                <a href="{{ path('admin_categories_index') }}" class="aq-btn aq-btn--outline">Annuler</a>
+            </div>
+        {{ form_end(form) }}
+    </section>
+
+    <p class="admin-note">
+        <i class="{{ noteIcon ?? 'fa-regular fa-folder' }}" aria-hidden="true"></i>
+        <span>{{ note }}</span>
+    </p>
+</div>

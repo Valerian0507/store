@@ -1,10 +1,13 @@
-{% extends 'base.html.twig' %}
-{% block title %}Mes abonnements démo | AquaSphère{% endblock %}
-{% block stylesheets %}<link rel="stylesheet" href="{{ asset('styles/pages/tools.css') }}">{% endblock %}
-{% block body %}
-<main class="aq-container tools-page">
-    <a href="{{ path('app_profile_index') }}" class="aq-link-arrow">Retour à mon compte</a>
-    <header class="tools-heading"><span class="aq-kicker">Mon compte</span><h1>Mes abonnements démo</h1><p>Vos plannings de réapprovisionnement sont enregistrés dans votre compte. Aucune commande, livraison, notification ni prélèvement n’est déclenché.</p></header>
+{% extends 'profile/_layout.html.twig' %}
+
+{% set accountTab = 'plans' %}
+
+{% block title %}Mes abonnements démo - AquaSphère{% endblock %}
+{% block account_stylesheets %}<link rel="stylesheet" href="{{ asset('styles/pages/tools.css') }}">{% endblock %}
+{% block account_title %}Mes abonnements{% endblock %}
+{% block account_subtitle %}Vos plannings de réapprovisionnement. Mode démo : aucune commande, livraison, notification ni prélèvement.{% endblock %}
+
+{% block account_content %}
     <div class="care-plans">
     {% for plan in plans %}
         <article class="tool-panel">
@@ -33,5 +36,4 @@
         <div class="tool-panel"><h2>Aucun planning pour le moment</h2><p>Ouvrez un consommable du catalogue et choisissez son intervalle de réapprovisionnement.</p><a href="{{ path('app_products_index') }}" class="aq-btn aq-btn--primary">Explorer le catalogue</a></div>
     {% endfor %}
     </div>
-</main>
 {% endblock %}

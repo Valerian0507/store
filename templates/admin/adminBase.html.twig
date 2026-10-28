@@ -1,11 +1,11 @@
-{# templates/admin/adminBase.html.twig #}
+{# templates/admin/adminBase.html.twig - en-tête du site + barre latérale d'administration + contenu #}
 
 <!DOCTYPE html>
 <html lang="fr">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{% block title %}Admin{% endblock %}</title>
+        <title>{% block title %}Admin{% endblock %} - AquaSphère</title>
         <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="48x48">
         <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
 
@@ -13,33 +13,32 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=Parisienne&display=swap">
 
-        {% block stylesheets %}{% endblock %}
-
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
             <script src="https://kit.fontawesome.com/bc43524f66.js" crossorigin="anonymous"></script>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         {% endblock %}
+
+        {# Après importmap : le CSS d'administration et de page passe après Bootstrap et app.css #}
+        <link rel="stylesheet" href="{{ asset('styles/pages/admin.css') }}">
+        {% block stylesheets %}{% endblock %}
     </head>
 
     <body class="admin">
-        <header class="admin-header">
-            {% include '_partials/_navbar.html.twig' %}
-        </header>
+        {% include '_partials/_navbar.html.twig' %}
+        {% include '_partials/_flash.html.twig' %}
 
-        <main class="admin-main">
-            {% include '_partials/_flash.html.twig' %}
+        <div class="admin-shell">
+            {% include 'admin/_partials/_nav.html.twig' %}
 
-            {% block body %}
-                <div class="admin-layout">
+            <main class="admin-main">
+                {% block body %}
                     {% block admin_content %}{% endblock %}
-                </div>
-            {% endblock %}
-        </main>
+                {% endblock %}
+            </main>
+        </div>
 
-        <footer class="admin-footer">
-            {% include '_partials/_footer.html.twig' %}
-        </footer>
+        {% include 'admin/_partials/_footer.html.twig' %}
 
         <script>
             document.addEventListener('click', function (e) {

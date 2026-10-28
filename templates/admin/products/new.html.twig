@@ -1,29 +1,25 @@
 {% extends 'admin/adminBase.html.twig' %}
 
-{% block title %}Admin · New product{% endblock %}
+{% block title %}Créer un produit{% endblock %}
 
 {% block admin_content %}
-<div class="container py-4">
-    <h1>Créer un produit</h1>
+    <nav aria-label="Fil d'Ariane">
+        <ol class="admin-breadcrumb">
+            <li><a href="{{ path('admin_dashboard') }}">Administration</a></li>
+            <li><a href="{{ path('admin_products_index') }}">Produits</a></li>
+            <li aria-current="page">Nouveau produit</li>
+        </ol>
+    </nav>
 
-    {# {{ form_start(form) }} #}
-    {{ form_start(form, { attr: { novalidate: 'novalidate' } }) }}
-    {{ form_errors(form) }}
+    <header class="admin-page-head admin-page-head--actions">
+        <div>
+            <h1 class="admin-page-head__title">Créer un produit</h1>
+            <p class="admin-page-head__subtitle">Ajoutez un nouvel article à votre catalogue.</p>
+        </div>
+        <div class="admin-page-head__actions">
+            <a href="{{ path('admin_products_index') }}" class="admin-back"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Retour aux produits</a>
+        </div>
+    </header>
 
-    {{ form_row(form.reference) }}
-    {{ form_row(form.category) }}
-    {{ form_row(form.title) }}
-    {{ form_row(form.description) }}
-    {{ form_row(form.replenishable) }}
-    {{ form_row(form.volumeM3) }}
-    {{ form_row(form.weightKg) }}
-    {{ form_row(form.priceCents) }}
-    {{ form_row(form.stock) }}
-    {{ form_row(form.image, { help: 'Charger image (JPG/PNG/WEBP).' }) }}
-
-    <button class="btn btn-primary">Créer</button>
-    <a class="btn btn-link" href="{{ path('admin_products_index') }}">Retour</a>
-
-    {{ form_end(form) }}
-</div>
+    {% include 'admin/products/_form.html.twig' with {product: null, submitLabel: 'Créer le produit'} %}
 {% endblock %}

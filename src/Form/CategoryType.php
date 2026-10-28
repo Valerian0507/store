@@ -17,6 +17,8 @@ class CategoryType extends AbstractType
         $builder
             ->add('label', TextType::class, [
                 'label' => 'Nom de la catégorie',
+                // Champ vide : chaîne vide (et non null, refusé par setLabel) pour que NotBlank s'applique
+                'empty_data' => '',
                 'constraints' => [
                     new NotBlank(message: 'Champ obligatoire.'),
                     new Length(max: 120, maxMessage: 'Maximum {{ limit }} caractères.'),

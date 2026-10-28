@@ -1,22 +1,29 @@
 {% extends 'admin/adminBase.html.twig' %}
 
-{% block title %}Catégories
-{% endblock %}
+{% block title %}Créer une catégorie{% endblock %}
 
 {% block admin_content %}
-	<section class="container py-4">
-        <div class="mb-2">
-    		<h1>Créer une catégorie</h1>
+    <nav aria-label="Fil d'Ariane">
+        <ol class="admin-breadcrumb">
+            <li><a href="{{ path('admin_dashboard') }}">Administration</a></li>
+            <li><a href="{{ path('admin_categories_index') }}">Catégories</a></li>
+            <li aria-current="page">Nouvelle catégorie</li>
+        </ol>
+    </nav>
 
-            {{ form_start(form) }}
-            {{ form_errors(form) }}
-
-            {{ form_row(form.label) }}
-
-            <button class="btn btn-primary">Créer la catégorie</button>
-            <a class="btn btn-link" href="{{ path('admin_categories_index') }}">Retour</a>
-
-            {{ form_end(form) }}
+    <header class="admin-page-head admin-page-head--actions">
+        <div>
+            <h1 class="admin-page-head__title">Créer une catégorie</h1>
+            <p class="admin-page-head__subtitle">Ajoutez un nouvel univers à votre catalogue.</p>
         </div>
-	</section>
+        <div class="admin-page-head__actions">
+            <a href="{{ path('admin_categories_index') }}" class="admin-back"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Retour aux catégories</a>
+        </div>
+    </header>
+
+    {% include 'admin/categories/_form.html.twig' with {
+        submitLabel: 'Créer la catégorie',
+        submitIcon: 'fa-solid fa-plus',
+        note: 'Vous pourrez ensuite attribuer cette catégorie à vos produits.',
+    } %}
 {% endblock %}

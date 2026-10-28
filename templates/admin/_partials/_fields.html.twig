@@ -1,0 +1,10 @@
+{# Champs de formulaire de l'administration : libellé (astérisque si requis), champ, aide, erreurs #}
+{% macro field(field, placeholder = null, attr = {}, help = null) %}
+    {% set widgetAttr = {class: 'admin-input'}|merge(placeholder ? {placeholder: placeholder} : {})|merge(attr) %}
+    <div class="admin-field">
+        {{ form_label(field, null, {label_attr: {class: 'admin-field__label'}}) }}
+        {{ form_widget(field, {attr: widgetAttr}) }}
+        {% if help %}<p class="admin-field__help">{{ help }}</p>{% endif %}
+        {{ form_errors(field) }}
+    </div>
+{% endmacro %}

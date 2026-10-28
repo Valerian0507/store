@@ -57,6 +57,10 @@ class OrderController extends AbstractController
             'statusLabels' => self::STATUS_LABELS,
             'currentPage' => $page,
             'totalPages' => $totalPages,
+            'totalOrders' => $totalOrders,
+            // En-tête : toutes commandes confondues (indépendant des filtres)
+            'allOrders' => $orderRepository->count([]),
+            'pendingOrders' => $orderRepository->count(['status' => 'pending']),
         ]);
     }
 

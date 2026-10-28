@@ -3,61 +3,79 @@
 {% block title %}Catégories{% endblock %}
 
 {% block admin_content %}
-	<section class="container py-4">
-		<div class="mb-3" >
-			<h1 class="h2 fw-bold mb-0">Catégories</h1>
+    {# Icône SVG par univers (assets/images/admin_categories/<libellé>.svg) ; une nouvelle catégorie garde l'icône par défaut #}
+    {% set categoryIcons = ['piscines', 'spa', 'accessoires', 'entretien', 'matelas'] %}
+    {# Même ordre que le menu du site (NavigationExtension) : piscines, spa, accessoires… #}
+    {% set categories = nav_categories() %}
+    {% set totalProducts = categories|reduce((sum, c) => sum + c.products|length, 0) %}
 
-		</div>
-		<div class="d-flex justify-content-between align-items-center mb-4">
-			<a class="btn btn-primary" href="{{ path('admin_categories_new') }}">Ajouter une catégorie</a>
+    <header class="admin-page-head admin-page-head--actions">
+        <div>
+            <h1 class="admin-page-head__title">Catégories</h1>
+            <p class="admin-page-head__subtitle">Organisez votre catalogue par univers.</p>
+        </div>
+        <div class="admin-page-head__actions">
+            <a href="{{ path('admin_dashboard') }}" class="admin-back"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Retour au tableau de bord</a>
+            <a href="{{ path('admin_categories_new') }}" class="aq-btn aq-btn--primary"><i class="fa-solid fa-plus" aria-hidden="true"></i> Créer une catégorie</a>
+        </div>
+    </header>
 
-            <a href="{{ path('admin_dashboard') }}" class="btn btn-outline-secondary">
-                Retour au tableau de bord
-            </a>
-		</div>
+    <section class="admin-panel">
+        <p class="admin-panel__count">{{ categories|length }} catégorie{{ categories|length > 1 ? 's' }}</p>
 
-		{% if categories is empty %}
-			<div class="alert alert-info">
-				Aucune catégorie trouvée.
-			</div>
-		{% else %}
-			<div class="card shadow-sm">
-				<div class="card-body p-0">
-					<div class="table-responsive">
-						<table class="table table-striped align-middle mb-0">
-							<thead>
-								<tr>
-									<th>№</th>
-									<th>Label</th>
-									<th>Nombre de produits</th>
-									<th class="text-end">Action</th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for category in categories %}
-									<tr>
-										<td>{{ loop.index }}</td>
-										<td>{{ category.label }}</td>
-										<td>{{ category.products|length }}</td>
-										<td class="text-end">
-											<a class="btn btn-sm btn-outline-secondary" href="{{ path('admin_categories_edit', { id: category.id }) }}">Modifier</a>
+        <div class="admin-table-wrap">
+            <table class="admin-table admin-table--scroll">
+                <thead>
+                    <tr>
+                        <th scope="col">N°</th>
+                        <th scope="col">Nom de la catégorie</th>
+                        <th scope="col" class="admin-table__center">Nombre de produits</th>
+                        <th scope="col" class="admin-table__actions">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                        {% set productCount = category.products|length %}
+                        <tr>
+                            <td class="admin-table__muted">{{ loop.index }}</td>
+                            <td>
+                                <span class="admin-category">
+                                    <span class="admin-category__icon" aria-hidden="true">
+                                        {% if category.label|lower in categoryIcons %}
+                                            <img src="{{ asset('images/admin_categories/' ~ category.label|lower ~ '.svg') }}" alt="" width="32" height="32">
+                                        {% else %}
+                                            <i class="fa-solid fa-tag"></i>
+                                        {% endif %}
+                                    </span>
+                                    <a href="{{ path('admin_products_index', {category: category.id}) }}" class="admin-table__title" title="Voir les produits de cette catégorie">
+                                        {{ category.label|capitalize }}
+                                    </a>
+                                </span>
+                            </td>
+                            <td class="admin-table__center"><span class="admin-chip admin-chip--ok admin-chip--count">{{ productCount }}</span></td>
+                            <td class="admin-table__actions">
+                                <a class="admin-action" href="{{ path('admin_categories_edit', {id: category.id}) }}">
+                                    <i class="fa-solid fa-pen" aria-hidden="true"></i> Modifier
+                                </a>
+                                {# Une catégorie qui contient des produits ne peut pas être supprimée (CategoryController::delete) #}
+                                <form method="post" action="{{ path('admin_categories_delete', {id: category.id}) }}"
+                                      onsubmit="return confirm('Supprimer la catégorie « {{ category.label|e('js') }} » ?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete_category_' ~ category.id) }}">
+                                    <button type="submit" class="admin-action admin-action--danger" {% if productCount > 0 %}disabled title="Impossible : la catégorie contient des produits"{% endif %}>
+                                        <i class="fa-regular fa-trash-can" aria-hidden="true"></i> Supprimer
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr><td colspan="4" class="admin-table__empty">Aucune catégorie pour le moment.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-                                            <form method="post"
-                                                  action="{{ path('admin_categories_delete', {id: category.id}) }}"
-                                                  style="display:inline"
-                                                  onsubmit="return confirm('Supprimer cette catégorie ?')" >
-                                                  <input type="hidden" name="_token" value="{{ csrf_token('delete_category_' ~ category.id) }}">
-                                                  <button type="submit" class="btn btn-sm btn-outline-danger">Supprimer</button>
-                                            </form>
-										</td>
-									</tr>
-								{% endfor %}
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		{% endif %}
-	</section>
-
+        <footer class="admin-panel__foot">
+            <span>{{ categories|length }} catégorie{{ categories|length > 1 ? 's' }} · {{ totalProducts }} produit{{ totalProducts > 1 ? 's' }} au total</span>
+        </footer>
+    </section>
 {% endblock %}

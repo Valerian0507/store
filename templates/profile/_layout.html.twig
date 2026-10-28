@@ -1,0 +1,64 @@
+{# Pages internes de "Mon compte" : fil d'Ariane, bandeau, onglets, aide.
+   Variable accountTab (onglet actif : profile, orders, addresses, plans), définie en tête du template enfant.
+   Blocs : account_title, account_subtitle, account_content, account_help #}
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/pages/profile.css') }}">
+    {% block account_stylesheets %}{% endblock %}
+{% endblock %}
+
+{% block body %}
+    {% set activeTab = accountTab ?? null %}
+    {% set tabs = [
+        {key: 'profile', route: 'app_profile_edit', icon: 'fa-regular fa-user', label: 'Mon profil'},
+        {key: 'orders', route: 'app_profile_orders', icon: 'fa-solid fa-box-open', label: 'Mes commandes'},
+        {key: 'addresses', route: 'app_profile_addresses', icon: 'fa-solid fa-location-dot', label: 'Mes adresses'},
+        {key: 'plans', route: 'app_care_plans', icon: 'fa-solid fa-rotate', label: 'Mes abonnements', badge: 'Démo'},
+    ] %}
+
+    <div class="aq-container account account--inner">
+        <nav aria-label="Fil d'Ariane">
+            <ol class="account-breadcrumb">
+                <li><a href="{{ path('app_home') }}">Accueil</a></li>
+                <li><a href="{{ path('app_profile_index') }}">Mon compte</a></li>
+                {% block account_breadcrumb %}<li aria-current="page">{{ block('account_title') }}</li>{% endblock %}
+            </ol>
+        </nav>
+
+        <header class="account-hero account-hero--compact">
+            <img class="account-hero__image" src="{{ asset('images/profil/mon-compte-olive-background.webp') }}" alt="" width="1800" height="607">
+            <div class="account-hero__text">
+                <p class="aq-kicker">Votre espace personnel</p>
+                <h1 class="account-hero__title">{% block account_title %}{% endblock %}</h1>
+                <p class="account-hero__subtitle">{% block account_subtitle %}{% endblock %}</p>
+            </div>
+            {% block account_back %}
+                <a href="{{ path('app_profile_index') }}" class="account-hero__back">
+                    <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Retour à mon compte
+                </a>
+            {% endblock %}
+        </header>
+
+        <nav class="account-tabs" aria-label="Mon compte">
+            {% for tab in tabs %}
+                <a href="{{ path(tab.route) }}" class="account-tabs__link {{ tab.key == activeTab ? 'is-active' }}" {% if tab.key == activeTab %}aria-current="page"{% endif %}>
+                    <i class="{{ tab.icon }}" aria-hidden="true"></i>
+                    {{ tab.label }}
+                    {% if tab.badge is defined %}<span class="account-tabs__badge">{{ tab.badge }}</span>{% endif %}
+                </a>
+            {% endfor %}
+        </nav>
+
+        {% block account_content %}{% endblock %}
+
+        {# Bandeau du bas : aide par défaut, remplaçable par une page (ex. adresses) #}
+        {% block account_aside %}
+            <aside class="account-help">
+                <i class="fa-solid fa-headset account-help__icon" aria-hidden="true"></i>
+                <p>{% block account_help %}Besoin d’aide ? Notre équipe est là pour vous.{% endblock %}</p>
+                <a href="mailto:alex.shaginyan0507@gmail.com" class="account-help__link">Contactez-nous <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+            </aside>
+        {% endblock %}
+    </div>
+{% endblock %}

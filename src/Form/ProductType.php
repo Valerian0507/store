@@ -24,59 +24,62 @@ class ProductType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            // Champ vide : chaîne vide (et non null) pour que le NotBlank de l'entité Product s'applique
             ->add('reference', TextType::class, [
+                'label' => 'Référence',
+                'empty_data' => '',
                 'constraints' => [
-                    new NotBlank(message: 'Champ obligatoire.'),
                     new Length(max: 64, maxMessage: 'Maximum {{ limit }} caractères.'),
                 ],
             ])
+            // Obligatoire : Assert\NotNull de l'entité Product
             ->add('category', EntityType::class, [
+                'label' => 'Catégorie',
                 'class' => Category::class,
-                'choice_label' => 'label',
-                'placeholder' => 'Choisissez une catégorie',
+                'choice_label' => fn (Category $category) => ucfirst((string) $category->getLabel()),
+                'placeholder' => 'Sélectionnez une catégorie',
                 'required' => true,
-                'constraints' => [
-                    new NotBlank(message: 'Champ obligatoire.'),
-                ],
             ])
             ->add('title', TextType::class, [
+                'label' => 'Nom du produit',
+                'empty_data' => '',
                 'constraints' => [
-                    new NotBlank(message: 'Champ obligatoire.'),
                     new Length(max: 128, maxMessage: 'Maximum {{ limit }} caractères.'),
-
                 ]
             ])
             ->add('description', TextareaType::class, [
+                'label' => 'Description',
                 'required' => false,
             ])
             ->add('replenishable', CheckboxType::class, [
-                'label' => 'Consommable : autoriser un planning de réapprovisionnement (démo)',
+                'label' => 'Autoriser un planning de réapprovisionnement (démo)',
+                'help' => 'Pour les consommables uniquement. Sans paiement ni livraison automatique.',
                 'required' => false,
             ])
             ->add('volumeM3', NumberType::class, [
+                'label' => 'Volume du colis (m³)',
                 'required' => true,
                 'scale' => 3,
-                'invalid_message' => 'Renseignez un nombre (ex. 1.25).',
+                'invalid_message' => 'Renseignez un nombre (ex. 0,25).',
                 'constraints' => [
                     new NotBlank(message: 'Mettez le volume.'),
                     new PositiveOrZero(message: 'Le volume ne peut pas être négatif.'),
                 ],
             ])
             ->add('weightKg', NumberType::class, [
+                'label' => 'Poids (kg)',
                 'required' => true,
                 'scale' => 3,
-                'invalid_message' => 'Renseignez un nombre (ex. 2.5).',
+                'invalid_message' => 'Renseignez un nombre (ex. 2,5).',
                 'constraints' => [
                     new NotBlank(message: 'Mettez le poids.'),
                     new PositiveOrZero(message: 'Le poids ne peut pas être négatif.'),
                 ],
             ])
             ->add('priceCents', IntegerType::class, [
-                'constraints' => [
-                    new NotBlank(message: 'Mettez le prix en centimes.'),
-                    new PositiveOrZero(message: 'Le prix ne peut pas être négatif.'),
-                ],
-                'help' => 'Price in cents (e.g. 1299 = 12.99)',
+                'label' => 'Prix (centimes)',
+                // Obligatoire et positif : contraintes de l'entité Product
+                'invalid_message' => 'Renseignez un nombre entier de centimes (ex. 49900).',
             ])
             ->add('stock', IntegerType::class, [
                 'label' => 'Quantité à ajouter au stock',
