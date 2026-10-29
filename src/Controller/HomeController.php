@@ -13,12 +13,12 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(ProductRepository $products): Response
     {
-        // Formulaire affiché ici, traité par NewsletterController
+        // Form shown here, handled by NewsletterController
         $newsletterForm = $this->createForm(NewsletterType::class, null, [
             'action' => $this->generateUrl('app_newsletter_subscribe'),
         ]);
 
-        // "Notre sélection" : un produit par catégorie
+        // "Notre sélection": one product per category
         return $this->render('home/index.html.twig', [
             'featured' => $products->findHomeSelection(4),
             'newsletterForm' => $newsletterForm,

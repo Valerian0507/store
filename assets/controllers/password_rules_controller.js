@@ -1,8 +1,8 @@
 import { Controller } from '@hotwired/stimulus';
 
 /*
- * Règles du mot de passe cochées en direct pendant la saisie.
- * Mêmes règles que côté serveur : src/Validator/StrongPassword.php (qui reste la vraie vérification).
+ * Password rules ticked live while typing.
+ * Same rules as the server: src/Validator/StrongPassword.php (which remains the real check).
  */
 const RULES = {
     length: (value) => [...value].length >= 8,

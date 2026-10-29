@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block body %}
-    {# Image de chaque univers, par libellé de catégorie #}
+    {# Image of each universe, by category label #}
     {% set universeImages = {
         piscines: 'images/home/intex-pool-garden.jpg',
         spa: 'images/home/spa-daytime.webp',
@@ -49,9 +49,9 @@
         </div>
     </section>
 
-    {# Univers = catégories #}
+    {# Universes = categories #}
     <section class="home-section" id="home-universes">
-        {# Carrousel : 4 catégories visibles, flèches si davantage (assets/controllers/carousel_controller.js) #}
+        {# Carousel: 4 categories visible, arrows when there are more (assets/controllers/carousel_controller.js) #}
         <div class="aq-container" data-controller="carousel">
             <div class="aq-section-head">
                 <h2 class="aq-section-title">Explorez nos univers</h2>
@@ -82,7 +82,7 @@
         </div>
     </section>
 
-    {# Sélection produits #}
+    {# Product selection #}
     {% if featured is not empty %}
         <section class="home-section">
             <div class="aq-container">
@@ -100,7 +100,7 @@
         </section>
     {% endif %}
 
-    {# Bannière spa pleine largeur #}
+    {# Full-width spa banner #}
     <section class="home-banner">
         <img class="home-banner__image" src="{{ asset('images/home/spa-sunset-banner.webp') }}" alt="" loading="lazy">
         <div class="aq-container home-banner__content">
@@ -154,7 +154,7 @@
         </div>
     </section>
 
-    {# Conseils : chaque carte ouvre son guide dédié #}
+    {# Advice: each card opens its own guide #}
     <section class="home-section" id="home-advice">
         <div class="aq-container">
             <div class="aq-section-head">
@@ -213,7 +213,7 @@
         </div>
     </section>
 
-    {# Newsletter (traitée par NewsletterController) #}
+    {# Newsletter (handled by NewsletterController) #}
     <section class="home-section" id="newsletter">
         <div class="aq-container">
             <div class="home-newsletter">

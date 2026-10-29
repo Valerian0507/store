@@ -1,4 +1,4 @@
-{# Formulaire produit (création et modification) - attend : form, product (null en création), submitLabel #}
+{# Product form (create and edit) - expects: form, product (null when creating), submitLabel #}
 {% import 'admin/_partials/_fields.html.twig' as fields %}
 {% set isEdit = product is not null and product.id is not null %}
 {% set currentImage = isEdit and product.image ? asset('uploads/products/' ~ product.image) : null %}
@@ -25,7 +25,7 @@
                     {{ fields.field(form.weightKg, 'Ex. 12,5', {inputmode: 'decimal'}) }}
                 </div>
                 <div class="admin-form-row">
-                    {# Équivalent en euros affiché en direct (price_preview_controller.js) #}
+                    {# Amount in euros shown live (price_preview_controller.js) #}
                     <div class="admin-field" data-controller="price-preview">
                         {{ form_label(form.priceCents, null, {label_attr: {class: 'admin-field__label'}}) }}
                         {{ form_widget(form.priceCents, {attr: {class: 'admin-input', placeholder: 'Ex. 49900', min: 0,
@@ -36,7 +36,7 @@
                     {{ fields.field(form.stock, 'Ex. 10', {min: 0}, isEdit ? 'Stock actuel : ' ~ product.stock ~ '. La quantité saisie s’ajoute au stock.' : null) }}
                 </div>
 
-                {# Case écrite à la main (le thème Bootstrap ajoute son propre libellé) #}
+                {# Hand-written checkbox (the Bootstrap theme adds its own label) #}
                 {% set repl = form.replenishable.vars %}
                 <label class="admin-check">
                     <input type="checkbox" id="{{ repl.id }}" name="{{ repl.full_name }}" value="{{ repl.value }}" {{ repl.checked ? 'checked' }}>
@@ -50,7 +50,7 @@
         </div>
 
         <aside class="admin-form-side">
-            {# Aperçu avant envoi (image_preview_controller.js) #}
+            {# Preview before upload (image_preview_controller.js) #}
             <section class="admin-panel" data-controller="image-preview">
                 <h2 class="admin-panel__title">Image du produit</h2>
 

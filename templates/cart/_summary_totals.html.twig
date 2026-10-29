@@ -1,0 +1,13 @@
+{# Subtotal, delivery, total incl. VAT - expects: itemsCount, subtotalCents, totalCents #}
+{% set shippingCents = totalCents - subtotalCents %}
+<dl class="cart-totals">
+    <dt>Sous-total ({{ itemsCount }} article{{ itemsCount > 1 ? 's' }})</dt>
+    <dd>{{ (subtotalCents / 100)|number_format(2, ',', ' ') }} €</dd>
+    <dt>Livraison</dt>
+    <dd class="{{ shippingCents <= 0 ? 'cart-totals__free' }}">{{ shippingCents > 0 ? (shippingCents / 100)|number_format(2, ',', ' ') ~ ' €' : 'Offerte' }}</dd>
+</dl>
+<div class="cart-totals__grand">
+    <span>Total TTC</span>
+    <strong>{{ (totalCents / 100)|number_format(2, ',', ' ') }} €</strong>
+    <small>TVA incluse</small>
+</div>

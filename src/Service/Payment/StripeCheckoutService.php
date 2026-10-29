@@ -6,7 +6,8 @@ use App\Entity\Order;
 use Stripe\Checkout\Session;
 use Stripe\StripeClient;
 
-final class StripeCheckoutService
+// Not final: tests replace it with a fake to avoid calling the Stripe API (tests/Controller/CheckoutConfirmTest.php)
+class StripeCheckoutService
 {
     private StripeClient $stripeClient;
 

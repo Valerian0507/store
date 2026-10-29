@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
 
 /*
- * Bouton "œil" d'un champ mot de passe : affiche / masque la saisie.
+ * "Eye" button of a password field: shows / hides the typed value.
  */
 export default class extends Controller {
     static targets = ['input', 'button', 'icon'];

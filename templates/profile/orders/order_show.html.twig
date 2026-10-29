@@ -3,7 +3,7 @@
 {% set accountTab = 'orders' %}
 {% set noImage = asset('images/products/no-image.jpg') %}
 {% set itemCount = order.items|reduce((sum, item) => sum + item.quantity, 0) %}
-{# Prix TTC, TVA française à 20 % : part de TVA = total / 6 #}
+{# Prices include VAT, French VAT at 20 %: VAT part = total / 6 #}
 {% set vatCents = (order.totalCents / 6)|round %}
 
 {% block title %}Commande {{ order.reference }} - AquaSphère{% endblock %}
@@ -24,7 +24,6 @@
         <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Retour à mes commandes
     </a>
 {% endblock %}
-{% block account_help %}Une question sur cette commande ?{% endblock %}
 
 {% block account_content %}
     {% if order.status == 'pending' %}
@@ -37,7 +36,7 @@
 
     <div class="account-order-detail">
         <section class="account-card">
-            <h2 class="account-card__title">Articles</h2>
+            <h2 class="account-card__title">Articles de votre commande</h2>
             <p class="account-card__lead">{{ itemCount }} article{{ itemCount > 1 ? 's' }}</p>
 
             <div class="account-items" role="table" aria-label="Articles de la commande">
@@ -69,7 +68,7 @@
                     <dt>Sous-total ({{ itemCount }} article{{ itemCount > 1 ? 's' }})</dt>
                     <dd>{{ (order.subtotalCents / 100)|number_format(2, ',', ' ') }} €</dd>
                     <dt>Livraison</dt>
-                    <dd>{{ order.shippingCents > 0 ? (order.shippingCents / 100)|number_format(2, ',', ' ') ~ ' €' : 'Offerte' }}</dd>
+                    <dd class="{{ order.shippingCents > 0 ? '' : 'account-summary__free' }}">{{ order.shippingCents > 0 ? (order.shippingCents / 100)|number_format(2, ',', ' ') ~ ' €' : 'Offerte' }}</dd>
                 </dl>
                 <div class="account-summary__total">
                     <span>Total TTC</span>
@@ -92,6 +91,17 @@
                     </div>
                 </div>
             </section>
+
+            <aside class="account-help account-help--card">
+                <i class="fa-regular fa-comment account-help__icon" aria-hidden="true"></i>
+                <div>
+                    <p>Une question sur cette commande ?</p>
+                    <a href="mailto:alex.shaginyan0507@gmail.com?subject={{ ('Commande ' ~ order.reference)|url_encode }}" class="account-help__link">Contactez-nous <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                </div>
+            </aside>
         </div>
     </div>
 {% endblock %}
+
+{# Help already in the right column #}
+{% block account_aside %}{% endblock %}

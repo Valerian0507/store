@@ -8,11 +8,11 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 /**
- * Fournit les catégories au menu principal et au footer (présents sur toutes les pages).
+ * Provides the categories to the main menu and the footer (present on every page).
  */
 class NavigationExtension extends AbstractExtension
 {
-    // Ordre d'affichage souhaité ; les catégories inconnues passent à la fin
+    // Desired display order; unknown categories go last
     private const ORDER = ['piscines', 'spa', 'accessoires', 'entretien', 'matelas'];
 
     /** @var Category[]|null */
@@ -32,7 +32,7 @@ class NavigationExtension extends AbstractExtension
     /** @return Category[] */
     public function getNavCategories(): array
     {
-        // Une seule requête par page, même si le menu et le footer l'appellent
+        // A single query per page, even if both the menu and the footer call it
         if ($this->categories === null) {
             $categories = $this->categoryRepository->findAllOrdered();
 

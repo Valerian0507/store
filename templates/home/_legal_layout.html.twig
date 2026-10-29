@@ -1,0 +1,69 @@
+{# Legal pages (legal notice, terms of sale, privacy): breadcrumb, header, table of contents, numbered sections.
+   Child template variables:
+     legalPage     (mentions, cgv, privacy)
+     legalSections list of {id, title} - content in the "section_<id>" block (dashes of the id -> "_")
+     legalNumbers  'large' (big 01, 02…) or 'circle' (default)
+   Blocks: legal_title, legal_intro, legal_badge (right of the header), legal_notice (box at the top of the text) #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ block('legal_title') }} - AquaSphère{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/pages/legal.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% set crumbs = {mentions: 'Mentions légales', cgv: 'CGV', privacy: 'Confidentialité'} %}
+    {% set largeNumbers = (legalNumbers ?? 'circle') == 'large' %}
+    {% set numFormat = largeNumbers ? '%02d' : '%d' %}
+
+    <div class="aq-container legal {{ largeNumbers ? 'legal--large-numbers' }}">
+        <nav aria-label="Fil d'Ariane">
+            <ol class="legal-breadcrumb">
+                <li><a href="{{ path('app_home') }}">Accueil</a></li>
+                <li aria-current="page">{{ crumbs[legalPage] }}</li>
+            </ol>
+        </nav>
+
+        <header class="legal-head">
+            <div>
+                <p class="aq-kicker">Informations</p>
+                <h1 class="legal-head__title">{% block legal_title %}{% endblock %}</h1>
+                <p class="legal-head__intro">{% block legal_intro %}{% endblock %}</p>
+            </div>
+            {% block legal_badge %}
+                <p class="legal-badge"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Projet pédagogique</p>
+            {% endblock %}
+        </header>
+
+        <div class="legal-layout" data-controller="legal-toc">
+            <nav class="legal-toc" aria-labelledby="legal-toc-title">
+                <h2 class="legal-toc__title" id="legal-toc-title">Sommaire</h2>
+                <ol class="legal-toc__list">
+                    {% for section in legalSections %}
+                        <li>
+                            <a href="#{{ section.id }}" class="legal-toc__link" data-legal-toc-target="link" data-action="legal-toc#select">
+                                <span class="legal-toc__num">{{ numFormat|format(loop.index) }}</span>
+                                <span class="legal-toc__label">{{ section.title }}</span>
+                                <i class="fa-solid fa-chevron-right legal-toc__chevron" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ol>
+            </nav>
+
+            <article class="legal-content">
+                {% block legal_notice %}{% endblock %}
+                {% for section in legalSections %}
+                    <section class="legal-section" id="{{ section.id }}" aria-labelledby="{{ section.id }}-title">
+                        <span class="legal-section__num" aria-hidden="true">{{ numFormat|format(loop.index) }}</span>
+                        <div class="legal-section__body">
+                            <h2 id="{{ section.id }}-title">{{ section.title }}</h2>
+                            {{ block('section_' ~ section.id|replace({'-': '_'})) }}
+                        </div>
+                    </section>
+                {% endfor %}
+            </article>
+        </div>
+    </div>
+{% endblock %}

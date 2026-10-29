@@ -31,9 +31,14 @@
 			<div>
 				<h2 class="site-footer__title">Nos univers</h2>
 				<ul class="site-footer__links">
-					{% for category in nav_categories() %}
+					{# 5xx error page (errorSafeMode): no database query #}
+					{% for category in (errorSafeMode ?? false) ? [] : nav_categories() %}
 						<li>
 							<a href="{{ path('app_products_index', {category: category.id}) }}">{{ category.label|capitalize }}</a>
+						</li>
+					{% else %}
+						<li>
+							<a href="{{ path('app_products_index') }}">Catalogue</a>
 						</li>
 					{% endfor %}
 				</ul>
@@ -78,7 +83,7 @@
 				</ul>
 			</div>
 
-			{# Olivier + devise (image décorative, le texte reste lisible) #}
+			{# Olive tree + motto (decorative image, the text stays readable) #}
 			<div class="site-footer__signature">
 				<img class="site-footer__tree" src="{{ asset('images/icons/olive-tree-footer.webp') }}"
 					 alt="" width="433" height="420" loading="lazy">

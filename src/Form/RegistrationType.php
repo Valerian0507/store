@@ -40,7 +40,7 @@ class RegistrationType extends AbstractType
                     ]),
                 ],
             ])
-            // Mot de passe saisi deux fois (les deux champs doivent être identiques)
+            // Password typed twice (both fields must match)
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 // instead of being set onto the object directly,
@@ -55,7 +55,7 @@ class RegistrationType extends AbstractType
                     'label' => 'Confirmer le mot de passe',
                     'attr' => ['autocomplete' => 'new-password'],
                 ],
-                // 8 caractères min., une majuscule, un chiffre, un caractère spécial
+                // 8 characters min., an uppercase letter, a digit, a special character
                 'constraints' => [
                     new StrongPassword(),
                 ],

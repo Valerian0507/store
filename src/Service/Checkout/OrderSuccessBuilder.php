@@ -38,6 +38,7 @@ final class OrderSuccessBuilder
                 unitPriceCents: $unitPriceCents,
                 lineTotalCents: $lineTotalCents,
                 imagePath: $item->getProductImage(), // snapshot image
+                reference: $item->getProduct()?->getReference(),
             );
         }
 

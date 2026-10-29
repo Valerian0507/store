@@ -1,34 +1,63 @@
-{% extends 'base.html.twig' %}
+{% extends 'home/_legal_layout.html.twig' %}
 
-{% block title %}Mentions légales
+{% set legalPage = 'mentions' %}
+{% set legalNumbers = 'large' %}
+{% set legalSections = [
+    {id: 'editeur', title: 'Éditeur du site'},
+    {id: 'hebergement', title: 'Hébergement'},
+    {id: 'propriete', title: 'Propriété intellectuelle'},
+    {id: 'contact', title: 'Contact'},
+] %}
+
+{% block legal_title %}Mentions légales{% endblock %}
+{% block legal_intro %}Les informations relatives au site AquaSphère.{% endblock %}
+
+{% block section_editeur %}
+    <dl class="legal-facts">
+        <dt>Éditeur :</dt>
+        <dd>Oleksii Chahinian</dd>
+        <dt>Coordonnées :</dt>
+        <dd><a href="mailto:alex.shaginyan0507@gmail.com">alex.shaginyan0507@gmail.com</a> - 07 78 64 57 15</dd>
+        <dt>Directeur de la publication :</dt>
+        <dd>Oleksii Chahinian</dd>
+    </dl>
+    <p>
+        Le site AquaSphère est un projet personnel réalisé pendant la formation
+        Développeur Web et Web Mobile (TP DWWM).
+    </p>
 {% endblock %}
 
-{% block body %}
-	<div class="container py-4">
-		<h1 class="h3 mb-4">Mentions légales</h1>
+{# TO FILL IN at deployment (art. 6 of French law n° 2004-575 of 21 June 2004, LCEN):
+   name or company name of the hosting provider, postal address, phone number (+ website recommended) #}
+{% block section_hebergement %}
+    <dl class="legal-facts">
+        <dt>Hébergeur :</dt>
+        <dd><mark class="legal-todo">[nom ou raison sociale de l'hébergeur]</mark></dd>
+        <dt>Adresse :</dt>
+        <dd><mark class="legal-todo">[adresse postale complète de l'hébergeur]</mark></dd>
+        <dt>Téléphone :</dt>
+        <dd><mark class="legal-todo">[numéro de téléphone de l'hébergeur]</mark></dd>
+        <dt>Site web :</dt>
+        <dd><mark class="legal-todo">[site web de l'hébergeur]</mark></dd>
+    </dl>
+{% endblock %}
 
-		<h2 class="h5 mt-4">Éditeur du site</h2>
-		<p>
-			Le site
-			<strong>AquaSphère</strong>
-			est édité par :<br>
-			Oleksii Chahinian<br>
-			Statut : Etudient <br>
-			E-mail : alex.shaginyan0507@gmail.com<br>
-			Téléphone : 07 78 64 57 15<br>
-		</p>
+{% block section_propriete %}
+    <p>
+        L'ensemble des contenus présents sur le site AquaSphère (textes, images, logos, éléments graphiques)
+        est protégé par le droit de la propriété intellectuelle. Toute reproduction, totale ou partielle,
+        sans autorisation préalable est interdite.
+    </p>
+{% endblock %}
 
-		<h2 class="h5 mt-4">Propriété intellectuelle</h2>
-		<p>
-			L'ensemble des contenus présents sur le site AquaSphère (textes, images, logos, éléments graphiques) est protégé par le droit de la propriété intellectuelle. <br>
-			Toute reproduction, totale ou partielle, sans autorisation préalable est interdite.
-		</p>
-
-		<h2 class="h5 mt-4">Contact</h2>
-		<p>
-			Pour toute question relative au site, vous pouvez nous écrire à : alex.shaginyan0507@gmail.com .
-		</p>
-	</div>
-
-
+{% block section_contact %}
+    <p>Pour toute question concernant le site, vous pouvez nous contacter à l'adresse suivante :</p>
+    <a href="mailto:alex.shaginyan0507@gmail.com" class="legal-mail">
+        <i class="fa-regular fa-envelope" aria-hidden="true"></i> alex.shaginyan0507@gmail.com
+    </a>
+    <p>
+        Le traitement de vos données personnelles est décrit dans notre
+        <a href="{{ path('app_politique_confidentialite') }}">politique de confidentialité</a>.
+    </p>
+    <p class="legal-muted">Site réalisé à des fins pédagogiques.</p>
 {% endblock %}

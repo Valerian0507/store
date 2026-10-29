@@ -1,5 +1,5 @@
-{# templates/_partials/_product_card.html.twig - attend la variable "product"
-   catalog: true -> catégorie + référence, titre sur deux lignes (page catalogue) #}
+{# templates/_partials/_product_card.html.twig - expects the "product" variable
+   catalog: true -> category + reference, title on two lines (catalogue page) #}
 {% set catalog = catalog ?? false %}
 {% set productUrl = path('app_products_show', {id: product.id}) %}
 {% set noImage = asset('images/products/no-image.jpg') %}
@@ -16,7 +16,7 @@
             <p class="aq-product-card__category">{{ product.category.label }}</p>
         {% endif %}
 
-        {# Catalogue : les cartes suivent directement le h1, d'où un h2 (titleTag pour forcer un autre niveau) #}
+        {# Catalogue: the cards come right after the h1, hence an h2 (titleTag to force another level) #}
         {% set titleTag = titleTag ?? (catalog ? 'h2' : 'h3') %}
         <{{ titleTag }} class="aq-product-card__title">
             <a href="{{ productUrl }}" title="{{ product.title }}">{{ product.title }}</a>

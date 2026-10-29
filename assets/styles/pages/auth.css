@@ -1,5 +1,5 @@
 /* =========================================================
-   Pages de compte : connexion, inscription, mot de passe oublié
+   Account pages: login, registration, forgotten password
    (templates/security/_auth_layout.html.twig)
    ========================================================= */
 
@@ -36,7 +36,7 @@
     z-index: -2;
 }
 
-/* Voile : lisibilité du logo (haut) et de la devise (bas) */
+/* Overlay: keeps the logo (top) and the motto (bottom) readable */
 .auth__visual::after {
     content: "";
     position: absolute;
@@ -57,7 +57,7 @@
     line-height: 1.02;
 }
 
-/* Petit trait bronze sous la devise */
+/* Small bronze line under the motto */
 .auth__tagline::after {
     content: "";
     position: absolute;
@@ -153,9 +153,9 @@
 
 .auth-field__help { display: block; margin-top: 0.35rem; font-size: 0.8rem; color: var(--aq-muted); }
 
-/* Règles du mot de passe et bouton œil : app.css (partagés avec Mon compte) */
+/* Password rules and eye button: app.css (shared with the account pages) */
 
-/* Case à cocher */
+/* Checkbox */
 .auth-check {
     display: inline-flex;
     align-items: center;
@@ -203,11 +203,11 @@
     color: var(--aq-text);
 }
 
-/* Erreur globale du formulaire (thème Bootstrap) */
+/* Global form error (Bootstrap theme) */
 .auth-form > .alert { border-radius: var(--aq-radius); font-size: 0.9rem; }
 
 /* =========================================================
-   Tablette : photo plus étroite
+   Tablet: narrower photo
    ========================================================= */
 @media (max-width: 991.98px) {
     .auth__card { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); min-height: 0; }
@@ -216,7 +216,7 @@
 }
 
 /* =========================================================
-   Mobile : bandeau photo au-dessus du formulaire
+   Mobile: photo strip above the form
    ========================================================= */
 @media (max-width: 767.98px) {
     .auth { padding-top: 1rem; }
@@ -224,7 +224,7 @@
     .auth__card { grid-template-columns: 1fr; border-radius: var(--aq-radius-card); }
 
     .auth__visual { min-height: 170px; justify-content: flex-end; padding: 1.25rem 1.5rem 1.5rem; }
-    .auth__brand { display: none; } /* déjà dans l'en-tête */
+    .auth__brand { display: none; } /* already in the header */
     .auth__tagline { font-size: 2rem; padding-bottom: 0.9rem; }
 
     .auth__content { padding: 1.75rem 1.25rem 2rem; }

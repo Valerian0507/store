@@ -10,6 +10,7 @@ final readonly class OrderSuccessItemViewModel
         public int $unitPriceCents,
         public int $lineTotalCents,
         public ?string $imagePath,
+        public ?string $reference = null, // null when the product was deleted from the catalogue
     ) {
     }
 }

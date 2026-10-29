@@ -1,0 +1,37 @@
+{% extends 'email/_layout.html.twig' %}
+
+{# Sent after the email address is confirmed (RegistrationController::verifyUserEmail) - expects: firstName #}
+{% set icon = 'user-check' %}
+
+{% block title %}Bienvenue chez AquaSphère{% endblock %}
+{% block preheader %}Votre compte est activé : retrouvez vos commandes et vos adresses dans votre espace.{% endblock %}
+
+{% block content %}
+    <p style="margin: 0 0 12px; font-size: 18px; color: #0E3A3F;">Bonjour{{ firstName|default('') ? ' ' ~ firstName }},</p>
+    <p style="margin: 0 0 24px; color: #3D4C4A;">
+        Votre compte a été créé avec succès. Retrouvez vos commandes, vos adresses et vos informations
+        personnelles dans votre espace.
+    </p>
+
+    {# Raccourcis vers Mon compte #}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background: #EEF2EC; border-radius: 12px;">
+        <tr>
+            {% for link in [
+                {icon: 'user', label: 'Mon profil', route: 'app_profile_edit'},
+                {icon: 'box', label: 'Mes commandes', route: 'app_profile_orders'},
+                {icon: 'location', label: 'Mes adresses', route: 'app_profile_addresses'},
+            ] %}
+                <td align="center" width="33%" style="padding: 18px 6px; {{ not loop.first ? 'border-left: 1px solid #CFD9CB;' }}">
+                    <a href="{{ url(link.route) }}" style="color: #0E3A3F; text-decoration: none; font-size: 14px;">
+                        <img src="{{ absolute_url(asset('images/email/' ~ link.icon ~ '.png')) }}" width="36" height="36" alt="" style="display: block; margin: 0 auto 8px; border: 0;">
+                        {{ link.label }}
+                    </a>
+                </td>
+            {% endfor %}
+        </tr>
+    </table>
+
+    {% include 'email/_button.html.twig' with {url: url('app_profile_index'), label: 'Accéder à mon compte', showLink: false} %}
+{% endblock %}
+
+{% block signature %}Les beaux jours se préparent ici.<br>L'équipe AquaSphère{% endblock %}

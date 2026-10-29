@@ -1,84 +1,107 @@
-{% extends 'base.html.twig' %}
+{% extends 'home/_legal_layout.html.twig' %}
 
-{% block title %}Politique de confidentialité{% endblock %}
+{% set legalPage = 'privacy' %}
+{% set legalSections = [
+    {id: 'presentation', title: 'Présentation'},
+    {id: 'donnees', title: 'Données collectées'},
+    {id: 'utilisation', title: 'Utilisation des données'},
+    {id: 'newsletter', title: 'Newsletter'},
+    {id: 'droits', title: 'Vos droits'},
+    {id: 'cookies', title: 'Cookies'},
+    {id: 'contact', title: 'Contact'},
+] %}
 
-{% block body %}
-	<div class="container py-4">
-    <h1 class="h3 mb-4">Politique de confidentialité</h1>
+{% block legal_title %}Politique de confidentialité{% endblock %}
+{% block legal_intro %}Comprendre l'utilisation de vos données personnelles.{% endblock %}
 
+{% block legal_badge %}
+    <div class="legal-head__aside">
+        <span class="legal-head__shield" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></span>
+        <p class="legal-badge legal-badge--card">
+            <strong>Projet pédagogique</strong>
+            Ce site est un projet pédagogique de démonstration.
+        </p>
+    </div>
+{% endblock %}
+
+{% block section_presentation %}
     <p>
-        AquaSphère accorde une grande importance à la protection de vos données personnelles.
-        La présente politique explique quelles données sont collectées, pourquoi, et quels sont vos droits.
+        Cette page a pour objectif de vous informer sur la manière dont AquaSphère collecte, utilise et protège
+        vos données personnelles lorsque vous utilisez notre site.
     </p>
-
-    <h2 class="h5 mt-4">Avertissement</h2>
     <p>
-        Ce site est un projet réalisé à des fins pédagogiques dans le cadre de la formation
-        Développeur Web et Web Mobile (TP DWWM). Il ne constitue pas un site marchand réel :
-        aucune commande, aucun paiement et aucune livraison ne sont réellement traités.
-        Les produits, prix et informations présentés sont fictifs et fournis uniquement à
-        titre de démonstration. Les paiements éventuels sont effectués via Stripe en
-        <strong>mode test</strong>, sans transaction réelle.
+        Responsable du traitement : Oleksii Chahinian -
+        <a href="mailto:alex.shaginyan0507@gmail.com">alex.shaginyan0507@gmail.com</a>.
     </p>
+{% endblock %}
 
-    <h2 class="h5 mt-4">Responsable du traitement</h2>
-    <p>[Prénom NOM / Raison sociale] - [adresse e-mail de contact]</p>
+{% block section_donnees %}
+    <p>Nous pouvons être amenés à collecter différentes catégories de données personnelles, notamment :</p>
+    <dl class="legal-data">
+        {% for row in [
+            {icon: 'fa-regular fa-user', label: 'Compte', text: 'Prénom, nom, adresse e-mail et mot de passe (stocké haché, jamais en clair).'},
+            {icon: 'fa-solid fa-location-dot', label: 'Adresse de livraison', text: 'Nom du destinataire, adresse postale, pays.'},
+            {icon: 'fa-solid fa-cart-shopping', label: 'Commandes', text: 'Produits commandés, montants, historique et statut de paiement.'},
+            {icon: 'fa-regular fa-envelope', label: 'Newsletter', text: "Adresse e-mail d'inscription."},
+        ] %}
+            <div class="legal-data__row">
+                <dt><i class="{{ row.icon }}" aria-hidden="true"></i> {{ row.label }}</dt>
+                <dd>{{ row.text }}</dd>
+            </div>
+        {% endfor %}
+    </dl>
+{% endblock %}
 
-    <h2 class="h5 mt-4">Données collectées</h2>
-    <p>Dans le cadre de l'utilisation du site, nous collectons les données suivantes :</p>
-    <ul>
-        <li>identité : prénom, nom ;</li>
-        <li>coordonnées : adresse e-mail, adresse de livraison ;</li>
-        <li>données de commande : produits commandés, montant, historique ;</li>
-        <li>données de connexion (compte utilisateur) ;</li>
-        <li>adresse e-mail d'inscription à la newsletter.</li>
-    </ul>
-
-    <h2 class="h5 mt-4">Finalités</h2>
+{% block section_utilisation %}
+    <p>Vos données personnelles sont utilisées pour le bon fonctionnement du site et la gestion de nos services :</p>
     <ul>
         <li>gestion du compte utilisateur et de l'authentification ;</li>
         <li>traitement et suivi des commandes ;</li>
-        <li>envoi des e-mails liés au compte (vérification, réinitialisation du mot de passe) ;</li>
-        <li>envoi de la newsletter aux personnes qui s'y sont inscrites ;</li>
+        <li>envoi des e-mails liés au compte et aux commandes (vérification, réinitialisation du mot de passe, confirmation de commande) ;</li>
         <li>respect de nos obligations légales et comptables.</li>
     </ul>
-
-    <h2 class="h5 mt-4">Base légale</h2>
     <p>
-        Le traitement repose sur l'exécution du contrat (commande), votre consentement
-        (création de compte, inscription à la newsletter) et le respect d'obligations légales.
+        Ces traitements reposent sur l'exécution du contrat (commande), votre consentement (création de compte,
+        newsletter) et le respect d'obligations légales. Les données sont conservées le temps nécessaire à la
+        finalité poursuivie, puis archivées ou supprimées conformément aux délais légaux (notamment comptables).
     </p>
-
-    <h2 class="h5 mt-4">Durée de conservation</h2>
     <p>
-        Vos données sont conservées le temps nécessaire à la finalité poursuivie, puis
-        archivées ou supprimées conformément aux délais légaux (notamment comptables).
-        L'adresse e-mail de la newsletter est conservée jusqu'à votre désinscription, possible
-        à tout moment grâce au lien présent dans chaque e-mail ou depuis votre espace « Mon compte ».
+        Elles sont destinées uniquement à AquaSphère et à ses prestataires techniques nécessaires au fonctionnement
+        du service (hébergement, paiement via Stripe, envoi d'e-mails). Elles ne sont jamais revendues.
     </p>
+{% endblock %}
 
-    <h2 class="h5 mt-4">Destinataires</h2>
+{% block section_newsletter %}
     <p>
-        Vos données sont destinées uniquement à AquaSphère et à ses prestataires techniques
-        nécessaires au fonctionnement du service (hébergement, paiement via Stripe, envoi d'e-mails).
-        Elles ne sont jamais revendues.
+        Si vous êtes inscrit à notre newsletter, nous utilisons votre adresse e-mail pour vous envoyer nos actualités.
+        Elle est conservée jusqu'à votre désinscription, possible à tout moment grâce au lien présent dans chaque
+        e-mail ou depuis votre espace « Mon compte ».
     </p>
+    <a href="{{ path('app_profile_index') }}#newsletter" class="legal-link-arrow">Gérer mes préférences <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+{% endblock %}
 
-    <h2 class="h5 mt-4">Vos droits</h2>
+{% block section_droits %}
     <p>
         Conformément au RGPD, vous disposez d'un droit d'accès, de rectification, d'effacement,
-        de limitation et d'opposition concernant vos données. Pour les exercer, contactez-nous à : alex.shaginyan0507@gmail.com.
+        de limitation et d'opposition concernant vos données. Pour les exercer, contactez-nous à
+        <a href="mailto:alex.shaginyan0507@gmail.com">alex.shaginyan0507@gmail.com</a>.
     </p>
     <p>
-        Vous pouvez également introduire une réclamation auprès de la CNIL (www.cnil.fr).
+        Vous pouvez également introduire une réclamation auprès de la CNIL
+        (<a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a>).
     </p>
+{% endblock %}
 
-    <h2 class="h5 mt-4">Cookies</h2>
+{% block section_cookies %}
     <p>
-        Le site utilise des cookies strictement nécessaires à son fonctionnement
-        (session, authentification). Aucun cookie publicitaire n'est utilisé.
+        Le site utilise uniquement des cookies strictement nécessaires à son fonctionnement
+        (session, authentification, panier). Aucun cookie publicitaire ni de mesure d'audience n'est utilisé.
     </p>
-</div>
+{% endblock %}
 
-
+{% block section_contact %}
+    <p>Pour toute question concernant cette politique de confidentialité, vous pouvez nous contacter à l'adresse suivante :</p>
+    <a href="mailto:alex.shaginyan0507@gmail.com" class="legal-mail">
+        <i class="fa-regular fa-envelope" aria-hidden="true"></i> alex.shaginyan0507@gmail.com
+    </a>
 {% endblock %}

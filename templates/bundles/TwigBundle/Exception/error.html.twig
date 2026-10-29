@@ -1,41 +1,58 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Erreur {{ status_code }}</title>
-    <style>
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: system-ui, sans-serif;
-            color: grey;
-            background: #fff;
-        }
-        .error {
-            text-align: center;
-        }
-        .error__code {
-            font-size: 2rem;
-            font-weight: 700;
-            line-height: 1;
-        }
-        .error__label {
-            font-size: 0.8rem;
-            color: grey;
-            margin-top: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-    </style>
-</head>
-<body>
-    <div class="error">
-        <div class="error__code">{{ status_code }}</div>
-        <div class="error__label">Erreur</div>
-    </div>
-</body>
-</html>
+{# Error page (prod). Preview in dev: /_error/404, /_error/500…
+   Server errors (5xx): errorSafeMode -> the header and the footer do not query the database
+   (categories, cart), so the page renders even when the error comes from the database. #}
+{% extends 'base.html.twig' %}
+
+{% set errorSafeMode = status_code >= 500 %}
+{% set messages = {
+    403: {title: 'Accès refusé', text: "Vous n'avez pas les droits nécessaires pour afficher cette page."},
+    404: {title: 'Cette page est introuvable', text: "Le lien a peut-être changé ou la page n'existe plus."},
+    405: {title: 'Action non autorisée', text: "Cette action n'est pas possible depuis cette page."},
+    429: {title: 'Trop de tentatives', text: 'Merci de patienter quelques instants avant de réessayer.'},
+    500: {title: 'Un petit contretemps', text: 'Une erreur est survenue. Veuillez réessayer dans quelques instants.'},
+    503: {title: 'Site en maintenance', text: 'AquaSphère revient très vite. Merci de votre patience.'},
+} %}
+{% set message = messages[status_code] ?? (errorSafeMode ? messages[500] : {title: 'Oups…', text: 'Cette page ne peut pas être affichée.'}) %}
+{% set contactUrl = 'mailto:alex.shaginyan0507@gmail.com' %}
+
+{% block title %}{{ message.title }} - AquaSphère{% endblock %}
+
+{% block stylesheets %}
+    <meta name="robots" content="noindex">
+    <link rel="stylesheet" href="{{ asset('styles/pages/error.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% if errorSafeMode %}
+        {# 5xx: centered, gear, button to reload the page #}
+        <main class="error-page error-page--server">
+            <p class="error-page__code">{{ status_code }}</p>
+            <img class="error-page__gear" src="{{ asset('images/errors/gear-ripple.webp') }}" alt="" width="334" height="142">
+            <h1 class="error-page__title">{{ message.title }}</h1>
+            <p class="error-page__text">{{ message.text }}</p>
+            <div class="error-page__actions error-page__actions--stack">
+                <a href="{{ app.request.requestUri }}" class="aq-btn aq-btn--primary">Réessayer <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                <a href="{{ path('app_home') }}" class="aq-btn aq-btn--outline">Retour à l'accueil</a>
+            </div>
+            <p class="error-page__help">Si le problème persiste, <a href="{{ contactUrl }}">contactez-nous.</a></p>
+        </main>
+    {% else %}
+        {# 4xx: illustration on the left, text on the right #}
+        <main class="error-page error-page--client">
+            <div class="error-page__art">
+                <img src="{{ asset('images/errors/olive-ripple.webp') }}" alt="" width="734" height="544">
+            </div>
+            <div class="error-page__body">
+                <p class="error-page__code">{{ status_code }}</p>
+                <span class="error-page__rule" aria-hidden="true"></span>
+                <h1 class="error-page__title">{{ message.title }}</h1>
+                <p class="error-page__text">{{ message.text }}</p>
+                <div class="error-page__actions">
+                    <a href="{{ path('app_home') }}" class="aq-btn aq-btn--primary">Retour à l'accueil <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                    <a href="{{ path('app_products_index') }}" class="aq-btn aq-btn--outline">Découvrir le catalogue <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                </div>
+                <p class="error-page__help">Besoin d'aide ? <a href="{{ contactUrl }}">Contactez-nous</a></p>
+            </div>
+        </main>
+    {% endif %}
+{% endblock %}

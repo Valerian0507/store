@@ -1,0 +1,123 @@
+{# Shared email layout: tables and inline styles (email clients), images as absolute URLs (PNG).
+   Child template variables: icon, noteIcon (names of a PNG in assets/images/email).
+   Blocks: preheader (inbox preview), title, hero, content, note (information box), signature #}
+{% macro img(name) %}{{ absolute_url(asset('images/email/' ~ name ~ '.png')) }}{% endmacro %}
+{% import _self as m %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}AquaSphère{% endblock %}</title>
+</head>
+<body style="margin: 0; padding: 0; background: #F7F3EC; font-family: Arial, Helvetica, sans-serif; color: #16201F;">
+    <div style="display: none; max-height: 0; overflow: hidden;">{% block preheader %}{% endblock %}</div>
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background: #F7F3EC;">
+        <tr>
+            <td align="center" style="padding: 28px 12px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px;">
+                    {# Logo + filet bronze #}
+                    <tr>
+                        <td align="center" style="padding: 0 0 24px;">
+                            <a href="{{ url('app_home') }}"><img src="{{ absolute_url(asset('images/icons/aquasphere-logo.png')) }}" width="230" alt="AquaSphère" style="display: block; width: 230px; height: auto; border: 0;"></a>
+                            <div style="width: 200px; height: 2px; margin: 18px auto 0; background: #C08A4E; line-height: 2px; font-size: 0;">&nbsp;</div>
+                        </td>
+                    </tr>
+
+                    {# Carte de contenu #}
+                    <tr>
+                        <td style="padding: 36px 32px 28px; background: #ffffff; border-radius: 16px 16px 0 0;">
+                            {% block hero %}
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td align="center">
+                                            <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                                                <td align="center" valign="middle" width="96" height="96" style="width: 96px; height: 96px; border-radius: 48px; background: #E1E8DD;">
+                                                    <img src="{{ m.img(icon ?? 'check') }}" width="48" height="48" alt="" style="display: block; margin: 0 auto; border: 0;">
+                                                </td>
+                                            </tr></table>
+                                            <h1 style="margin: 22px 0 18px; font-family: Georgia, 'Times New Roman', serif; font-size: 30px; font-weight: normal; line-height: 1.2; color: #0E3A3F;">{{ block('title') }}</h1>
+                                        </td>
+                                    </tr>
+                                </table>
+                            {% endblock %}
+
+                            <div style="font-size: 16px; line-height: 1.6; color: #16201F;">
+                                {% block content %}{% endblock %}
+                            </div>
+
+                            {% if block('note') is defined %}
+                                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top: 28px; border-top: 1px solid #ECE6DA;">
+                                    <tr>
+                                        <td style="padding-top: 24px;">
+                                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background: #EEF2EC; border-radius: 12px;">
+                                                <tr>
+                                                    <td width="72" align="center" valign="middle" style="padding: 18px 0 18px 12px;">
+                                                        <img src="{{ m.img(noteIcon ?? 'question') }}" width="34" height="34" alt="" style="display: block; border: 0;">
+                                                    </td>
+                                                    <td valign="middle" style="padding: 18px 20px 18px 16px; border-left: 1px solid #CFD9CB; font-size: 14px; line-height: 1.55; color: #0E3A3F;">
+                                                        {{ block('note') }}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    {# Signature + branche d'olivier #}
+                    <tr>
+                        <td style="padding: 0 32px 28px; background: #ffffff; border-radius: 0 0 16px 16px;">
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td valign="bottom" style="padding-top: 20px; font-size: 16px; line-height: 1.6; color: #16201F;">
+                                        {% block signature %}À bientôt,<br>L'équipe AquaSphère{% endblock %}
+                                    </td>
+                                    <td align="right" valign="bottom" width="150">
+                                        <img src="{{ m.img('olive-branch') }}" width="130" alt="" style="display: block; border: 0;">
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    {# Dark footer #}
+                    <tr>
+                        <td style="padding-top: 16px;">
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background: #0E3A3F; border-radius: 16px;">
+                                <tr>
+                                    <td align="center" style="padding: 28px 24px 24px; color: #F7F3EC;">
+                                        <img src="{{ absolute_url(asset('images/icons/aquasphere-logo-light.png')) }}" width="190" alt="AquaSphère" style="display: block; width: 190px; height: auto; margin: 0 auto; border: 0;">
+                                        <p style="margin: 14px 0 0; font-size: 13px; line-height: 1.6; color: rgba(247, 243, 236, 0.8);">
+                                            Des piscines, des spas et des équipements pour profiter pleinement de votre extérieur.
+                                        </p>
+                                        <div style="width: 120px; height: 1px; margin: 18px auto; background: #C08A4E; line-height: 1px; font-size: 0;">&nbsp;</div>
+                                        <p style="margin: 0 0 12px; font-size: 14px;">
+                                            <img src="{{ m.img('mail-light') }}" width="16" height="16" alt="" style="vertical-align: middle; border: 0;">
+                                            <a href="mailto:alex.shaginyan0507@gmail.com" style="color: #F7F3EC; text-decoration: none;">alex.shaginyan0507@gmail.com</a>
+                                        </p>
+                                        <p style="margin: 0; font-size: 13px; color: rgba(247, 243, 236, 0.85);">
+                                            <a href="{{ url('app_mentions_legales') }}" style="color: #F7F3EC; text-decoration: none;">Mentions légales</a>
+                                            &nbsp;|&nbsp;
+                                            <a href="{{ url('app_politique_confidentialite') }}" style="color: #F7F3EC; text-decoration: none;">Politique de confidentialité</a>
+                                            &nbsp;|&nbsp;
+                                            <a href="mailto:alex.shaginyan0507@gmail.com" style="color: #F7F3EC; text-decoration: none;">Nous contacter</a>
+                                        </p>
+                                        {% block footer_note %}{% endblock %}
+                                        <p style="margin: 16px 0 0; font-size: 11px; line-height: 1.5; color: rgba(247, 243, 236, 0.6);">
+                                            © {{ "now"|date("Y") }} AquaSphère - projet réalisé à des fins pédagogiques (formation TP DWWM). Aucune vente réelle.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

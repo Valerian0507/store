@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\CategoryRepository;
+use App\Repository\OrderItemRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,7 +37,7 @@ class ProductController extends AbstractController
         $result = $productRepository->findForAdmin($page, self::PER_PAGE, $categoryId, $q);
         $pages = max(1, (int) ceil($result['total'] / self::PER_PAGE));
 
-        // Page demandée au-delà de la dernière (ex. après une suppression) : on revient à la dernière
+        // Requested page beyond the last one (e.g. after a deletion): go back to the last page
         if ($page > $pages) {
             $page = $pages;
             $result = $productRepository->findForAdmin($page, self::PER_PAGE, $categoryId, $q);
@@ -90,7 +91,7 @@ class ProductController extends AbstractController
 
 
     #[Route('/{id}/edit', name: 'edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    public function edit(Product $product, Request $request, EntityManagerInterface $em, FileUploader $fileUploader): Response
+    public function edit(Product $product, Request $request, EntityManagerInterface $em, FileUploader $fileUploader, OrderItemRepository $orderItems): Response
     {
         $oldImage = $product->getImage();
 
@@ -108,12 +109,6 @@ class ProductController extends AbstractController
                 $newFilename = $fileUploader->upload($imageFile, $product->getReference());
                 $product->setImage($newFilename);
 
-                if ($oldImage) {
-                    $oldPath = $fileUploader->getTargetDirectory() . DIRECTORY_SEPARATOR . $oldImage;
-                    if (is_file($oldPath)) {
-                        @unlink($oldPath);
-                    }
-                }
             }
 
             $addStock = (int) $form->get('stock')->getData();
@@ -123,10 +118,14 @@ class ProductController extends AbstractController
 
             $em->flush();
 
+            if ($imageFile && $oldImage && $oldImage !== $product->getImage()) {
+                $this->removeImageIfUnused($oldImage, $fileUploader, $orderItems);
+            }
+
             $this->addFlash('success', 'Produit mis à jour.');
             return $this->redirectToRoute('admin_products_index');
         }
-        // 422 si le formulaire est invalide : Turbo n'affiche les erreurs qu'avec un code 4xx
+        // 422 when the form is invalid: Turbo only renders the errors with a 4xx status
         return $this->render('admin/products/edit.html.twig', [
             'product' => $product,
             'form' => $form->createView(),
@@ -139,26 +138,22 @@ class ProductController extends AbstractController
             Product $product,
             Request $request,
             EntityManagerInterface $em,
-            FileUploader $fileUploader
+            FileUploader $fileUploader,
+            OrderItemRepository $orderItems,
         ): Response {
             $token = (string) $request->request->get('_token_delete_image');
 
             if (!$this->isCsrfTokenValid('delete_product_image_'.$product->getId(), $token)) {
-                $this->addFlash('danger', 'Invalid CSRF token.');
+                $this->addFlash('danger', 'Jeton de sécurité invalide, veuillez réessayer.');
                 return $this->redirectToRoute('admin_products_edit', ['id' => $product->getId()]);
             }
 
             $image = $product->getImage();
 
             if ($image) {
-                $path = $fileUploader->getTargetDirectory() . DIRECTORY_SEPARATOR . $image;
-
-                if (is_file($path)) {
-                    unlink($path);
-                }
-
                 $product->setImage(null);
                 $em->flush();
+                $this->removeImageIfUnused($image, $fileUploader, $orderItems);
 
                 $this->addFlash('success', 'Image supprimée.');
             }
@@ -168,19 +163,33 @@ class ProductController extends AbstractController
 
 
     #[Route('/{id}', name: 'delete', requirements: ['id' => '\d+'], methods: ['POST'])]
-    public function delete(Product $product, Request $request, EntityManagerInterface $em, FileUploader $fileUploader): Response
+    public function delete(Product $product, Request $request, EntityManagerInterface $em, FileUploader $fileUploader, OrderItemRepository $orderItems): Response
     {
         $token = (string) $request->request->get('_token');
 
         if (!$this->isCsrfTokenValid('delete_product_'.$product->getId(), $token)) {
-            $this->addFlash('danger', 'Invalid CSRF token.');
+            $this->addFlash('danger', 'Jeton de sécurité invalide, veuillez réessayer.');
             return $this->redirectToRoute('admin_products_index');
         }
+
+        $image = $product->getImage();
 
         $em->remove($product);
         $em->flush();
 
-        $this->addFlash('success', 'Produit supprimé');
+        if ($image) {
+            $this->removeImageIfUnused($image, $fileUploader, $orderItems);
+        }
+
+        $this->addFlash('success', 'Produit supprimé.');
         return $this->redirectToRoute('admin_products_index');
+    }
+
+    // Past orders keep the image name (order history, confirmation emails): the file is kept while an order uses it
+    private function removeImageIfUnused(string $image, FileUploader $fileUploader, OrderItemRepository $orderItems): void
+    {
+        if ($orderItems->count(['productImage' => $image]) === 0) {
+            $fileUploader->remove($image);
+        }
     }
 }

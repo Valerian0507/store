@@ -1,8 +1,8 @@
 import { Controller } from '@hotwired/stimulus';
 
 /*
- * Sélecteur de quantité − / + (fiche produit).
- * Reste entre min et max (max = stock disponible) ; le champ reste saisissable au clavier.
+ * Quantity selector − / + (product page).
+ * Stays between min and max (max = available stock); the field can still be typed in.
  */
 export default class extends Controller {
     static targets = ['input', 'decrement', 'increment'];
@@ -19,7 +19,7 @@ export default class extends Controller {
         this.set(this.value + 1);
     }
 
-    // Saisie au clavier : on corrige les valeurs hors limites
+    // Typed value: out-of-range values are corrected
     clamp() {
         this.set(this.value);
     }

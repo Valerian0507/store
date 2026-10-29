@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
 
 /*
- * Prix saisi en centimes (admin produit) : affiche l'équivalent en euros, ex. "49900 = 499,00 €".
+ * Price typed in cents (admin product): shows the amount in euros, e.g. "49900 = 499,00 €".
  */
 export default class extends Controller {
     static targets = ['input', 'output'];

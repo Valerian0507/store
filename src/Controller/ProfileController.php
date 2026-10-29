@@ -65,7 +65,7 @@ final class ProfileController extends AbstractController
         $orderViewModel = $orderSuccessBuilder->buildForUser($id, $user);
 
         if ($orderViewModel === null) {
-            throw $this->createNotFoundException('Commande non trouvée.');
+            throw $this->createNotFoundException('Order not found.');
         }
 
         return $this->render('profile/orders/order_show.html.twig', [
@@ -92,9 +92,9 @@ final class ProfileController extends AbstractController
             throw $this->createAccessDeniedException('Invalid CSRF token.');
         }
 
-        // On n'annule que les commandes en attente de paiement
+        // Only orders awaiting payment can be cancelled
         if ($order->getStatus() === 'pending') {
-            // Remet les quantités dans le stock
+            // Put the quantities back in stock
             foreach ($order->getItems() as $item) {
                 $product = $item->getProduct();
                 if ($product !== null) {
@@ -150,17 +150,18 @@ final class ProfileController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $addressManager->createForUser($user, $address);
 
-            $this->addFlash('success', 'Adresse ajouté');
+            $this->addFlash('success', 'Adresse ajoutée.');
 
             return $this->redirectToRoute('app_profile_addresses');
         }
 
+        // 422 when the form is invalid: Turbo only renders the errors with a 4xx status
         return $this->render('profile/addresses/address_form.html.twig', [
             'form' => $form->createView(),
             'pageTitle' => 'Nouvelle adresse',
-            'submitLabel' => 'Sauvegarder l\'adresse',
-
-        ]);
+            'pageSubtitle' => 'Ajoutez une adresse de livraison à votre compte.',
+            'submitLabel' => 'Enregistrer l\'adresse',
+        ], new Response(null, $form->isSubmitted() && !$form->isValid() ? 422 : 200));
 
     }
 
@@ -193,11 +194,12 @@ final class ProfileController extends AbstractController
             return $this->redirectToRoute('app_profile_addresses');
         }
 
-            return $this->render('profile/addresses/address_form.html.twig', [
+        return $this->render('profile/addresses/address_form.html.twig', [
             'form' => $form->createView(),
             'pageTitle' => 'Modifier l\'adresse',
-            'submitLabel' => 'Mettre à jour',
-        ]);
+            'pageSubtitle' => 'Mettez à jour votre adresse de livraison.',
+            'submitLabel' => 'Enregistrer les modifications',
+        ], new Response(null, $form->isSubmitted() && !$form->isValid() ? 422 : 200));
     }
 
 

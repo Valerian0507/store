@@ -1,5 +1,5 @@
 /* =========================================================
-   Administration : barre latérale + contenu (admin/adminBase.html.twig)
+   Administration: sidebar + content (admin/adminBase.html.twig)
    ========================================================= */
 
 .admin-shell {
@@ -7,14 +7,14 @@
     display: grid;
     grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
     min-height: calc(100vh - 72px);
-    /* La colonne reste foncée sur toute la hauteur (la barre latérale est collante) */
+    /* The column stays dark over the full height (the sidebar is sticky) */
     background: linear-gradient(90deg, var(--aq-ink) var(--sidebar-width), transparent var(--sidebar-width));
 }
 
-/* Barre latérale */
+/* Sidebar */
 .admin-sidebar {
     position: sticky;
-    top: 72px; /* sous l'en-tête du site */
+    top: 72px; /* below the site header */
     align-self: start;
     height: calc(100vh - 72px);
     overflow-y: auto;
@@ -79,7 +79,7 @@
     padding: 2.5rem clamp(1rem, 3vw, 3rem) 3rem;
 }
 
-/* Les pages internes utilisent encore .container Bootstrap : pleine largeur dans la colonne */
+/* Inner pages still use the Bootstrap .container: full width in the column */
 .admin-main > .container,
 .admin-main > section.container { max-width: none; padding-inline: 0; }
 
@@ -94,7 +94,7 @@
 
 .admin-page-head__subtitle { margin: 0; font-size: 1.15rem; color: var(--aq-muted); }
 
-/* En-tête de page avec actions (listes : produits, commandes…) */
+/* Page header with actions (lists: products, orders…) */
 .admin-page-head--actions {
     display: flex;
     flex-wrap: wrap;
@@ -119,7 +119,7 @@
 
 .admin-back:hover { color: var(--aq-link); }
 
-/* Compteurs sous le titre (commandes) et total à droite (utilisateurs) */
+/* Counters under the title (orders) and total on the right (users) */
 .admin-page-head__counts {
     display: flex;
     flex-wrap: wrap;
@@ -141,7 +141,7 @@
 
 .admin-page-head__total { font-size: 1.05rem; color: var(--aq-ink); }
 
-/* Panneau blanc : filtres + tableau + pied */
+/* White panel: filters + table + footer */
 .admin-panel {
     padding: 1.5rem;
     border: 1px solid var(--aq-border-soft);
@@ -153,7 +153,7 @@
 
 .admin-panel__count { margin: 0 0 1rem; font-size: 1.05rem; color: var(--aq-ink); }
 
-/* Filtres avec libellés au-dessus (commandes, utilisateurs) */
+/* Filters with labels above (orders, users) */
 .admin-filters--labeled { align-items: flex-end; margin-bottom: 0; }
 
 .admin-field { display: flex; flex-direction: column; gap: 0.45rem; }
@@ -164,7 +164,7 @@
 .admin-filters__buttons { display: flex; gap: 0.75rem; }
 .admin-filters__buttons .aq-btn { min-height: 46px; padding-block: 0; padding-inline: 2rem; }
 
-/* Pastilles (statuts, oui/non, rôles, nombres) */
+/* Pills (statuses, yes/no, roles, counts) */
 .admin-chip {
     display: inline-flex;
     align-items: center;
@@ -183,7 +183,7 @@
 .admin-chip--muted { background: #ece9e3; color: var(--aq-text); }
 .admin-chip--count { min-width: 3rem; justify-content: center; font-weight: 600; }
 
-/* Catégorie : icône + nom */
+/* Category: icon + name */
 .admin-category { display: inline-flex; align-items: center; gap: 1rem; }
 
 .admin-category__icon {
@@ -285,7 +285,7 @@
 .admin-table__center { text-align: center !important; }
 .admin-table__nowrap { white-space: nowrap; }
 
-/* Tableaux sans vue "cartes" : défilement horizontal sur petit écran */
+/* Tables without a "cards" view: horizontal scrolling on small screens */
 .admin-table--scroll { min-width: 720px; }
 
 .admin-table__thumb { width: 104px; padding-right: 0 !important; }
@@ -309,11 +309,11 @@
 
 .admin-table__empty { padding: 2.5rem 1rem !important; text-align: center; color: var(--aq-muted); }
 
-/* Boutons d'action des lignes */
+/* Row action buttons */
 .admin-table__actions form { display: inline; margin: 0; }
 
 .admin-action {
-    position: relative; /* repère des libellés masqués (.admin-action__label, __more) */
+    position: relative; /* anchor for the hidden labels (.admin-action__label, __more) */
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -337,7 +337,7 @@
 .admin-action:disabled { opacity: 0.4; cursor: not-allowed; }
 .admin-action:disabled:hover { background: #fff; color: #b13a2e; }
 
-/* Pied du panneau : total + pagination */
+/* Panel footer: total + pagination */
 .admin-panel__foot {
     display: flex;
     flex-wrap: wrap;
@@ -372,7 +372,7 @@
 .admin-pagination__dots { color: var(--aq-muted); }
 
 /* =========================================================
-   Formulaires (produit, catégorie)
+   Forms (product, category)
    ========================================================= */
 .admin-breadcrumb {
     display: flex;
@@ -422,7 +422,7 @@
 
 .admin-form .admin-field { margin-bottom: 1.1rem; }
 
-/* Astérisque des champs obligatoires (classe "required" posée par Symfony) */
+/* Asterisk on required fields ("required" class set by Symfony) */
 .admin-field__label.required::after { content: " *"; color: #c4483b; }
 
 .admin-input,
@@ -448,7 +448,7 @@ textarea.admin-input { min-height: 7rem; resize: vertical; }
 }
 
 .admin-input.is-invalid { border-color: #c4483b; }
-/* Pas d'icône d'erreur Bootstrap dans les champs (la flèche des listes est conservée) */
+/* No Bootstrap error icon in the fields (the select arrow is kept) */
 input.admin-input.is-invalid,
 textarea.admin-input.is-invalid { background-image: none; }
 
@@ -458,7 +458,7 @@ textarea.admin-input.is-invalid { background-image: none; }
 
 .admin-field .invalid-feedback { margin-top: 0.35rem; font-size: 0.82rem; color: #b13a2e; }
 
-/* Case à cocher avec texte d'aide */
+/* Checkbox with help text */
 .admin-check {
     display: flex;
     align-items: flex-start;
@@ -471,7 +471,7 @@ textarea.admin-input.is-invalid { background-image: none; }
 .admin-check input { flex-shrink: 0; width: 20px; height: 20px; margin-top: 0.1rem; accent-color: var(--aq-ink); }
 .admin-check small { display: block; margin-top: 0.15rem; font-size: 0.8rem; color: var(--aq-muted); }
 
-/* Zone de dépôt d'image + aperçu */
+/* Image drop zone + preview */
 .admin-dropzone {
     display: flex;
     flex-direction: column;
@@ -492,7 +492,7 @@ textarea.admin-input.is-invalid { background-image: none; }
 .admin-dropzone strong { font-size: 1.05rem; font-weight: 600; }
 .admin-dropzone small { color: var(--aq-muted); }
 
-/* Le vrai champ fichier reste accessible au clavier mais invisible */
+/* The real file input stays keyboard-accessible but invisible */
 .admin-dropzone__input {
     position: absolute;
     width: 1px;
@@ -531,7 +531,7 @@ textarea.admin-input.is-invalid { background-image: none; }
 .admin-form-actions--start { justify-content: flex-start; padding-top: 0.5rem; border-top: 0; }
 .admin-form-actions .aq-btn { min-height: 48px; padding-inline: 2rem; }
 
-/* Formulaire étroit (catégorie) + note */
+/* Narrow form (category) + note */
 .admin-narrow { max-width: 760px; }
 
 .admin-note {
@@ -548,7 +548,7 @@ textarea.admin-input.is-invalid { background-image: none; }
 .admin-note i { font-size: 1.3rem; }
 
 /* =========================================================
-   Pages de détail (commande, utilisateur)
+   Detail pages (order, user)
    ========================================================= */
 .admin-page-head__titled { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.25rem; }
 .admin-page-head__titled .admin-page-head__title { margin: 0; }
@@ -564,7 +564,7 @@ textarea.admin-input.is-invalid { background-image: none; }
 .admin-panel--spaced { margin-top: 1.25rem; }
 .admin-panel__title--tight { margin-bottom: 0.2rem; }
 
-/* Liste libellé / valeur */
+/* Label / value list */
 .admin-dl {
     display: grid;
     grid-template-columns: minmax(9rem, auto) minmax(0, 1fr);
@@ -582,7 +582,7 @@ textarea.admin-input.is-invalid { background-image: none; }
 .admin-chip i.fa-circle { font-size: 0.5rem; }
 .admin-chip--lg { margin: 0.25rem 0 1.25rem; padding: 0.55rem 1.1rem; font-size: 0.9rem; }
 
-/* Formulaire en ligne (statut de commande) */
+/* Inline form (order status) */
 .admin-inline-form {
     display: grid;
     grid-template-columns: auto minmax(10rem, 1fr) auto;
@@ -676,7 +676,7 @@ dd.admin-totals__grand { font-size: 1.3rem; }
 .admin-form-actions--ruled { padding-top: 1.25rem; border-top: 1px solid var(--aq-border-soft); }
 .aq-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
-/* Cartes du tableau de bord */
+/* Dashboard cards */
 .admin-tiles {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -740,7 +740,7 @@ dd.admin-totals__grand { font-size: 1.3rem; }
 .admin-tile:hover .admin-tile__cta i { transform: translateX(3px); }
 .admin-tile__cta i { transition: transform 0.18s ease; }
 
-/* Accès rapides */
+/* Quick actions */
 .admin-quick {
     padding: 1.75rem 2rem 2rem;
     border: 1px solid var(--aq-border-soft);
@@ -796,7 +796,7 @@ dd.admin-totals__grand { font-size: 1.3rem; }
 .admin-quick__item small { display: block; color: var(--aq-muted); font-size: 0.85rem; }
 .admin-quick__chevron { margin-left: auto; color: var(--aq-ink); }
 
-/* Pied de page réduit */
+/* Compact footer */
 .admin-footer {
     display: flex;
     flex-wrap: wrap;
@@ -818,7 +818,7 @@ dd.admin-totals__grand { font-size: 1.3rem; }
 .admin-footer__copy { margin: 0 0 0 auto; color: var(--aq-muted); }
 
 /* =========================================================
-   Tablette / mobile : barre latérale -> bandeau défilant sous l'en-tête
+   Tablet / mobile: sidebar -> scrolling strip under the header
    ========================================================= */
 @media (max-width: 1199.98px) {
     .admin-sidebar { top: 64px; height: calc(100vh - 64px); }
@@ -831,7 +831,7 @@ dd.admin-totals__grand { font-size: 1.3rem; }
 }
 
 @media (max-width: 991.98px) {
-    /* minmax(0, …) : le bandeau de liens défilant ne doit pas élargir la page */
+    /* minmax(0, …): the scrolling link strip must not widen the page */
     .admin-shell { grid-template-columns: minmax(0, 1fr); min-height: 0; background: none; }
 
     .admin-sidebar {
@@ -865,8 +865,8 @@ dd.admin-totals__grand { font-size: 1.3rem; }
     .admin-form-grid { grid-template-columns: 1fr; }
 }
 
-/* < 1400 px : tableaux plus compacts à côté de la barre latérale
-   (heure masquée, e-mail tronqué avec infobulle, "Voir les détails" -> "Voir") */
+/* < 1400 px: more compact tables next to the sidebar
+   (time hidden, email truncated with a tooltip, "Voir les détails" -> "Voir") */
 @media (max-width: 1399.98px) {
     .admin-table--scroll th,
     .admin-table--scroll td { padding-inline: 0.6rem; }
@@ -891,7 +891,7 @@ dd.admin-totals__grand { font-size: 1.3rem; }
     }
 }
 
-/* 1200–1399 px : colonne étroite à côté de la barre latérale -> sans ID, boutons en icônes seules */
+/* 1200–1399 px: narrow column next to the sidebar -> no ID, icon-only buttons */
 @media (min-width: 1200px) and (max-width: 1399.98px) {
     .admin-table--cards .admin-table__id { display: none; }
     .admin-table--cards .admin-action { padding: 0.5rem 0.7rem; }
@@ -906,7 +906,7 @@ dd.admin-totals__grand { font-size: 1.3rem; }
     }
 }
 
-/* < 1200 px : chaque ligne devient une carte (photo à gauche, infos à droite, actions dessous) */
+/* < 1200 px: each row becomes a card (photo on the left, details on the right, actions below) */
 @media (max-width: 1199.98px) {
     .admin-table--cards,
     .admin-table--cards tbody { display: block; }
@@ -950,7 +950,7 @@ dd.admin-totals__grand { font-size: 1.3rem; }
     .admin-table--cards .admin-action { justify-content: center; width: 100%; margin: 0; }
 }
 
-/* Tablette : cartes sur deux colonnes */
+/* Tablet: cards on two columns */
 @media (min-width: 576px) and (max-width: 1199.98px) {
     .admin-table--cards tbody {
         display: grid;

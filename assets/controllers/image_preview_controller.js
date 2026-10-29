@@ -1,8 +1,8 @@
 import { Controller } from '@hotwired/stimulus';
 
 /*
- * Champ image (admin produit) : aperçu de l'image choisie avant l'envoi + nom et poids du fichier.
- * La vraie vérification (type, 2 Mo max) reste côté serveur (ProductType).
+ * Image field (admin product): preview of the chosen image before upload + file name and size.
+ * The real check (type, 2 MB max) stays on the server (ProductType).
  */
 const MAX_BYTES = 2 * 1024 * 1024;
 

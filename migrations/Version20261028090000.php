@@ -8,8 +8,8 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 /**
- * Migration de données : la catégorie "entretien" mélangeait produits d'entretien et accessoires.
- * - bouées, fauteuils, canapés, gilets, échelles -> nouvelle catégorie "accessoires"
+ * Data migration: the "entretien" category mixed pool care products and accessories.
+ * - floats, armchairs, sofas, vests, ladders -> new "accessoires" category
  * - matelas gonflables doubles -> "matelas"
  */
 final class Version20261028090000 extends AbstractMigration

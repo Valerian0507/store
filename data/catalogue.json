@@ -1,0 +1,918 @@
+{
+    "catalogue": [
+        {
+            "reference": "P10-1236",
+            "category": "piscines",
+            "title": "Piscine gonflable 366x91 cm",
+            "volume_m3": 0.047,
+            "weight_kg": 12.27,
+            "price_eur": 130.07,
+            "image": "P10-1236.jpg",
+            "description": "Piscine gonflable de 366x91 cm à montage rapide : on gonfle le boudin supérieur, la paroi se redresse en même temps que le remplissage. Une solution simple pour profiter de l'eau au jardin, sans travaux."
+        },
+        {
+            "reference": "P20-0830",
+            "category": "piscines",
+            "title": "Piscine tubulaire 244x76 cm",
+            "volume_m3": 0.07,
+            "weight_kg": 15.81,
+            "price_eur": 170.7,
+            "image": "P20-0830.jpg",
+            "description": "Piscine hors-sol tubulaire de 244x76 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison."
+        },
+        {
+            "reference": "P20-1252-B",
+            "category": "piscines",
+            "title": "Kit Piscine tubulaire 366x132 cm (pompe 3m³/h, échelle, bâche, tapis de sol)",
+            "volume_m3": 0.3464,
+            "weight_kg": 66.84,
+            "price_eur": 772.11,
+            "image": "P20-1252-B.jpg",
+            "description": "Piscine hors-sol tubulaire de 366x132 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison. Livrée en kit (pompe 3m³/h, échelle, bâche, tapis de sol) : tout le nécessaire pour démarrer la saison."
+        },
+        {
+            "reference": "P20-1252-S",
+            "category": "piscines",
+            "title": "Kit Piscine tubulaire 366x132 cm (pompe à sable 4,1m³/h, échelle, bâche, tapis de sol)",
+            "volume_m3": 0.4283,
+            "weight_kg": 75.59,
+            "price_eur": 1033.7,
+            "image": "P20-1252-S.jpg",
+            "description": "Piscine hors-sol tubulaire de 366x132 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison. Livrée en kit (pompe à sable 4,1m³/h, échelle, bâche, tapis de sol) : tout le nécessaire pour démarrer la saison."
+        },
+        {
+            "reference": "P20-1552-Z",
+            "category": "piscines",
+            "title": "Kit Piscine tubulaire 457x132 cm (échelle, bâche, tapis de sol)",
+            "volume_m3": 0.33,
+            "weight_kg": 74.6,
+            "price_eur": 811.71,
+            "image": "P20-1552-Z.jpg",
+            "description": "Piscine hors-sol tubulaire de 457x132 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison. Livrée en kit (échelle, bâche, tapis de sol) : tout le nécessaire pour démarrer la saison."
+        },
+        {
+            "reference": "P20-2052-B",
+            "category": "piscines",
+            "title": "Kit Piscine tubulaire 549x274x132 cm (pompe, échelle, bâche, tapis de sol, kit nettoyage, skimmer)",
+            "volume_m3": 0.592,
+            "weight_kg": 116.92,
+            "price_eur": 1517.91,
+            "image": "P20-2052-B.jpg",
+            "description": "Piscine hors-sol tubulaire de 549x274x132 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison. Livrée en kit (pompe, échelle, bâche, tapis de sol, kit nettoyage, skimmer) : tout le nécessaire pour démarrer la saison."
+        },
+        {
+            "reference": "P20-1852-B",
+            "category": "piscines",
+            "title": "Kit Piscine tubulaire 549x132 cm (pompe 5,7m³/h, échelle, bâche, tapis de sol)",
+            "volume_m3": 0.4157,
+            "weight_kg": 113.3,
+            "price_eur": 1266.39,
+            "image": "P20-1852-B.jpg",
+            "description": "Piscine hors-sol tubulaire de 549x132 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison. Livrée en kit (pompe 5,7m³/h, échelle, bâche, tapis de sol) : tout le nécessaire pour démarrer la saison."
+        },
+        {
+            "reference": "57173",
+            "category": "piscines",
+            "title": "Piscine tubulaire 122x122x30 cm, bleue, à partir de 2 ans",
+            "volume_m3": 0.0172,
+            "weight_kg": 4.317,
+            "price_eur": 56.19,
+            "image": "57173.jpg",
+            "description": "Piscine hors-sol tubulaire de 122x122x30 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison. Conseillée à partir de 2 ans ; la baignade des enfants se fait toujours sous la surveillance d'un adulte."
+        },
+        {
+            "reference": "56452",
+            "category": "piscines",
+            "title": "Piscine gonflable 457x84 cm",
+            "volume_m3": 0.038,
+            "weight_kg": 10.96,
+            "price_eur": 208.9,
+            "image": "56452.jpg",
+            "description": "Piscine gonflable de 457x84 cm à montage rapide : on gonfle le boudin supérieur, la paroi se redresse en même temps que le remplissage. Une solution simple pour profiter de l'eau au jardin, sans travaux."
+        },
+        {
+            "reference": "58472",
+            "category": "piscines",
+            "title": "Piscine gonflable 549x107 cm",
+            "volume_m3": 0.071,
+            "weight_kg": 18.23,
+            "price_eur": 380.7,
+            "image": "58472.jpg",
+            "description": "Piscine gonflable de 549x107 cm à montage rapide : on gonfle le boudin supérieur, la paroi se redresse en même temps que le remplissage. Une solution simple pour profiter de l'eau au jardin, sans travaux."
+        },
+        {
+            "reference": "57190",
+            "category": "piscines",
+            "title": "Piscine familiale 229x66 cm, à partir de 6 ans",
+            "volume_m3": 0.0195,
+            "weight_kg": 5.4,
+            "price_eur": 76.04,
+            "image": "57190.jpg",
+            "description": "Piscine familiale gonflable de 229x66 cm, idéale pour les jeux d'eau au jardin. Elle se gonfle rapidement et se range facilement en fin de saison. Conseillée à partir de 6 ans ; la baignade des enfants se fait toujours sous la surveillance d'un adulte."
+        },
+        {
+            "reference": "56490",
+            "category": "piscines",
+            "title": "Kit Piscine gonflable 549x122 cm (avec pompe 3m³/h)",
+            "volume_m3": 0.256,
+            "weight_kg": 36.6,
+            "price_eur": 591.89,
+            "image": "56490.jpg",
+            "description": "Piscine gonflable de 549x122 cm à montage rapide : on gonfle le boudin supérieur, la paroi se redresse en même temps que le remplissage. Une solution simple pour profiter de l'eau au jardin, sans travaux. Livrée en kit (avec pompe 3m³/h) : tout le nécessaire pour démarrer la saison."
+        },
+        {
+            "reference": "58485",
+            "category": "piscines",
+            "title": "Piscine familiale 262x175x51 cm, à partir de 6 ans",
+            "volume_m3": 0.015,
+            "weight_kg": 4.95,
+            "price_eur": 62.65,
+            "image": "58485.jpg",
+            "description": "Piscine familiale gonflable de 262x175x51 cm, idéale pour les jeux d'eau au jardin. Elle se gonfle rapidement et se range facilement en fin de saison. Conseillée à partir de 6 ans ; la baignade des enfants se fait toujours sous la surveillance d'un adulte."
+        },
+        {
+            "reference": "57183",
+            "category": "piscines",
+            "title": "Piscine familiale 305x183x56 cm, à partir de 6 ans",
+            "volume_m3": 0.024,
+            "weight_kg": 7.32,
+            "price_eur": 82.17,
+            "image": "57183.jpg",
+            "description": "Piscine familiale gonflable de 305x183x56 cm, idéale pour les jeux d'eau au jardin. Elle se gonfle rapidement et se range facilement en fin de saison. Conseillée à partir de 6 ans ; la baignade des enfants se fait toujours sous la surveillance d'un adulte."
+        },
+        {
+            "reference": "28272",
+            "category": "piscines",
+            "title": "Piscine tubulaire 400x200x100 cm",
+            "volume_m3": 0.125,
+            "weight_kg": 41.5,
+            "price_eur": 349.18,
+            "image": "28272.jpg",
+            "description": "Piscine hors-sol tubulaire de 400x200x100 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison."
+        },
+        {
+            "reference": "28273",
+            "category": "piscines",
+            "title": "Piscine tubulaire 450x220x84 cm, à partir de 6 ans",
+            "volume_m3": 0.121,
+            "weight_kg": 39.2,
+            "price_eur": 335.67,
+            "image": "28273.jpg",
+            "description": "Piscine hors-sol tubulaire de 450x220x84 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison. Conseillée à partir de 6 ans ; la baignade des enfants se fait toujours sous la surveillance d'un adulte."
+        },
+        {
+            "reference": "28101",
+            "category": "piscines",
+            "title": "Piscine gonflable 183x51 cm, à partir de 3 ans",
+            "volume_m3": 0.0123,
+            "weight_kg": 3.35,
+            "price_eur": 42.16,
+            "image": "28101.jpg",
+            "description": "Piscine gonflable de 183x51 cm à montage rapide : on gonfle le boudin supérieur, la paroi se redresse en même temps que le remplissage. Une solution simple pour profiter de l'eau au jardin, sans travaux. Conseillée à partir de 3 ans ; la baignade des enfants se fait toujours sous la surveillance d'un adulte."
+        },
+        {
+            "reference": "28106",
+            "category": "piscines",
+            "title": "Piscine gonflable 244x61 cm",
+            "volume_m3": 0.0177,
+            "weight_kg": 5.25,
+            "price_eur": 55.28,
+            "image": "28106.jpg",
+            "description": "Piscine gonflable de 244x61 cm à montage rapide : on gonfle le boudin supérieur, la paroi se redresse en même temps que le remplissage. Une solution simple pour profiter de l'eau au jardin, sans travaux."
+        },
+        {
+            "reference": "28200",
+            "category": "piscines",
+            "title": "Piscine tubulaire 220x150x60 cm, à partir de 6 ans",
+            "volume_m3": 0.05,
+            "weight_kg": 15.6,
+            "price_eur": 186.76,
+            "image": "28200.jpg",
+            "description": "Piscine hors-sol tubulaire de 220x150x60 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison. Conseillée à partir de 6 ans ; la baignade des enfants se fait toujours sous la surveillance d'un adulte."
+        },
+        {
+            "reference": "28242",
+            "category": "piscines",
+            "title": "Piscine tubulaire 549x274x122 cm",
+            "volume_m3": 0.316,
+            "weight_kg": 68.6,
+            "price_eur": 622.63,
+            "image": "28242.jpg",
+            "description": "Piscine hors-sol tubulaire de 549x274x122 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison."
+        },
+        {
+            "reference": "26700",
+            "category": "piscines",
+            "title": "Piscine tubulaire 732x366x132 cm (Ultra Frame)",
+            "volume_m3": 0.584,
+            "weight_kg": 139.7,
+            "price_eur": 1216.87,
+            "image": "26700.jpg",
+            "description": "Piscine hors-sol tubulaire de 732x366x132 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison. Gamme Ultra : liner renforcé et armature robuste pour une utilisation prolongée."
+        },
+        {
+            "reference": "28208",
+            "category": "piscines",
+            "title": "Piscine tubulaire 300x200x75 cm",
+            "volume_m3": 0.073,
+            "weight_kg": 21.6,
+            "price_eur": 253.99,
+            "image": "28208.jpg",
+            "description": "Piscine hors-sol tubulaire de 300x200x75 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison."
+        },
+        {
+            "reference": "26784",
+            "category": "piscines",
+            "title": "Piscine tubulaire 400x200x122 cm (Ultra Frame)",
+            "volume_m3": 0.179,
+            "weight_kg": 58.7,
+            "price_eur": 588.36,
+            "image": "26784.jpg",
+            "description": "Piscine hors-sol tubulaire de 400x200x122 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison. Gamme Ultra : liner renforcé et armature robuste pour une utilisation prolongée."
+        },
+        {
+            "reference": "26742",
+            "category": "piscines",
+            "title": "Piscine tubulaire 400x200x100 cm (Ultra Frame)",
+            "volume_m3": 0.13,
+            "weight_kg": 44.4,
+            "price_eur": 465.15,
+            "image": "26742.jpg",
+            "description": "Piscine hors-sol tubulaire de 400x200x100 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison. Gamme Ultra : liner renforcé et armature robuste pour une utilisation prolongée."
+        },
+        {
+            "reference": "26384",
+            "category": "piscines",
+            "title": "Piscine tubulaire 488x122 cm (Ultra Frame)",
+            "volume_m3": 0.231,
+            "weight_kg": 70.3,
+            "price_eur": 625.42,
+            "image": "26384.jpg",
+            "description": "Piscine hors-sol tubulaire de 488x122 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison. Gamme Ultra : liner renforcé et armature robuste pour une utilisation prolongée."
+        },
+        {
+            "reference": "26340",
+            "category": "piscines",
+            "title": "Piscine tubulaire 457x122 cm (Ultra Frame)",
+            "volume_m3": 0.186,
+            "weight_kg": 61.1,
+            "price_eur": 549.32,
+            "image": "26340.jpg",
+            "description": "Piscine hors-sol tubulaire de 457x122 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison. Gamme Ultra : liner renforcé et armature robuste pour une utilisation prolongée."
+        },
+        {
+            "reference": "26374",
+            "category": "piscines",
+            "title": "Piscine tubulaire 457x107 cm (Ultra Frame)",
+            "volume_m3": 0.154,
+            "weight_kg": 54.3,
+            "price_eur": 509.17,
+            "image": "26374.jpg",
+            "description": "Piscine hors-sol tubulaire de 457x107 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison. Gamme Ultra : liner renforcé et armature robuste pour une utilisation prolongée."
+        },
+        {
+            "reference": "56629",
+            "category": "piscines",
+            "title": "Piscine tubulaire 457x122 cm",
+            "volume_m3": 0.174,
+            "weight_kg": 50.8,
+            "price_eur": 419.28,
+            "image": "56629.jpg",
+            "description": "Piscine hors-sol tubulaire de 457x122 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison."
+        },
+        {
+            "reference": "5614A",
+            "category": "piscines",
+            "title": "Kit Piscine tubulaire 488x244x107 cm (Ultra) (pompe 3,8 m³/h, échelle)",
+            "volume_m3": 0.264,
+            "weight_kg": 75.2,
+            "price_eur": 858.12,
+            "image": "5614A.jpg",
+            "description": "Piscine hors-sol tubulaire de 488x244x107 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison. Gamme Ultra : liner renforcé et armature robuste pour une utilisation prolongée. Livrée en kit (pompe 3,8 m³/h, échelle) : tout le nécessaire pour démarrer la saison."
+        },
+        {
+            "reference": "5614X",
+            "category": "piscines",
+            "title": "Kit Piscine tubulaire 549x274x122 cm (Ultra) (pompe 5,7 m³/h, échelle, bâche, tapis de sol)",
+            "volume_m3": 0.384,
+            "weight_kg": 105.1,
+            "price_eur": 1405.92,
+            "image": "5614X.jpg",
+            "description": "Piscine hors-sol tubulaire de 549x274x122 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison. Gamme Ultra : liner renforcé et armature robuste pour une utilisation prolongée. Livrée en kit (pompe 5,7 m³/h, échelle, bâche, tapis de sol) : tout le nécessaire pour démarrer la saison."
+        },
+        {
+            "reference": "561CS",
+            "category": "piscines",
+            "title": "Kit Piscine tubulaire 732x366x132 cm (Ultra) (pompe 7,9 m³/h, échelle, bâche, tapis de sol)",
+            "volume_m3": 0.584,
+            "weight_kg": 161.4,
+            "price_eur": 2093.26,
+            "image": "561CS.jpg",
+            "description": "Piscine hors-sol tubulaire de 732x366x132 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison. Gamme Ultra : liner renforcé et armature robuste pour une utilisation prolongée. Livrée en kit (pompe 7,9 m³/h, échelle, bâche, tapis de sol) : tout le nécessaire pour démarrer la saison."
+        },
+        {
+            "reference": "561CW",
+            "category": "piscines",
+            "title": "Kit Piscine tubulaire 975x488x132 cm (Ultra) (pompe 10 m³/h, échelle, bâche, tapis de sol)",
+            "volume_m3": 0.706,
+            "weight_kg": 204.4,
+            "price_eur": 2677.24,
+            "image": "561CW.jpg",
+            "description": "Piscine hors-sol tubulaire de 975x488x132 cm. Sa structure en acier assure une bonne stabilité ; elle se monte sans outils et se démonte en fin de saison. Gamme Ultra : liner renforcé et armature robuste pour une utilisation prolongée. Livrée en kit (pompe 10 m³/h, échelle, bâche, tapis de sol) : tout le nécessaire pour démarrer la saison."
+        },
+        {
+            "reference": "57100",
+            "category": "piscines",
+            "title": "Piscine fond gonflable 85x85x23 cm, 2 couleurs, 1-3 ans",
+            "volume_m3": 0.0036,
+            "weight_kg": 1.08,
+            "price_eur": 13.91,
+            "image": "57100.jpg",
+            "description": "Petite piscine à fond gonflable de 85x85x23 cm : le fond rembourré rend les jeux d'eau plus confortables pour les plus jeunes. Conseillée pour les enfants de 1 à 3 ans, toujours sous la surveillance d'un adulte."
+        },
+        {
+            "reference": "58924",
+            "category": "piscines",
+            "title": "Piscine fond gonflable 86x25 cm, 1-3 ans",
+            "volume_m3": 0.0024,
+            "weight_kg": 0.682,
+            "price_eur": 9.54,
+            "image": "58924.jpg",
+            "description": "Petite piscine à fond gonflable de 86x25 cm : le fond rembourré rend les jeux d'eau plus confortables pour les plus jeunes. Conseillée pour les enfants de 1 à 3 ans, toujours sous la surveillance d'un adulte."
+        },
+        {
+            "reference": "57403",
+            "category": "piscines",
+            "title": "Piscine fond gonflable 166x100x28 cm, à partir de 2 ans",
+            "volume_m3": 0.0058,
+            "weight_kg": 1.81,
+            "price_eur": 20.18,
+            "image": "57403.jpg",
+            "description": "Petite piscine à fond gonflable de 166x100x28 cm : le fond rembourré rend les jeux d'eau plus confortables pour les plus jeunes. Conseillée à partir de 2 ans ; la baignade des enfants se fait toujours sous la surveillance d'un adulte."
+        },
+        {
+            "reference": "58426",
+            "category": "piscines",
+            "title": "Piscine fond gonflable 147x33 cm, à partir de 2 ans",
+            "volume_m3": 0.0052,
+            "weight_kg": 1.444,
+            "price_eur": 16.34,
+            "image": "58426.jpg",
+            "description": "Petite piscine à fond gonflable de 147x33 cm : le fond rembourré rend les jeux d'eau plus confortables pour les plus jeunes. Conseillée à partir de 2 ans ; la baignade des enfants se fait toujours sous la surveillance d'un adulte."
+        },
+        {
+            "reference": "57180",
+            "category": "piscines",
+            "title": "Piscine familiale 203x152x48 cm, à partir de 3 ans",
+            "volume_m3": 0.014,
+            "weight_kg": 3.734,
+            "price_eur": 46.48,
+            "image": "57180.jpg",
+            "description": "Piscine familiale gonflable de 203x152x48 cm, idéale pour les jeux d'eau au jardin. Elle se gonfle rapidement et se range facilement en fin de saison. Conseillée à partir de 3 ans ; la baignade des enfants se fait toujours sous la surveillance d'un adulte."
+        },
+        {
+            "reference": "58484",
+            "category": "piscines",
+            "title": "Piscine familiale 305x183x56 cm, bleue, à partir de 6 ans",
+            "volume_m3": 0.0227,
+            "weight_kg": 7.32,
+            "price_eur": 80.13,
+            "image": "58484.jpg",
+            "description": "Piscine familiale gonflable de 305x183x56 cm, idéale pour les jeux d'eau au jardin. Elle se gonfle rapidement et se range facilement en fin de saison. Conseillée à partir de 6 ans ; la baignade des enfants se fait toujours sous la surveillance d'un adulte."
+        },
+        {
+            "reference": "58417",
+            "category": "piscines",
+            "title": "Piscine gonflable 305x76 cm, à partir de 3 ans",
+            "volume_m3": 0.0286,
+            "weight_kg": 7.8,
+            "price_eur": 72.5,
+            "image": "58417.jpg",
+            "description": "Piscine gonflable de 305x76 cm à montage rapide : on gonfle le boudin supérieur, la paroi se redresse en même temps que le remplissage. Une solution simple pour profiter de l'eau au jardin, sans travaux. Conseillée à partir de 3 ans ; la baignade des enfants se fait toujours sous la surveillance d'un adulte."
+        },
+        {
+            "reference": "60001",
+            "category": "spa",
+            "title": "Jacuzzi gonflable Miami 180x66cm",
+            "volume_m3": 0.225,
+            "weight_kg": 33.93,
+            "price_eur": 918.19,
+            "image": "60001.jpg",
+            "description": "Spa gonflable Miami de 180x66 cm pour se détendre à la maison. Il s'installe sur une surface plane, se gonfle avec son unité de contrôle et se range facilement hors saison. Pensez à la couverture et aux produits d'entretien pour garder une eau saine."
+        },
+        {
+            "reference": "60005",
+            "category": "spa",
+            "title": "Jacuzzi gonflable Lay-Z-Spa Vegas 196x61cm",
+            "volume_m3": 0.235,
+            "weight_kg": 34.33,
+            "price_eur": 973.24,
+            "image": "60005.jpg",
+            "description": "Spa gonflable Lay-Z-Spa Vegas de 196x61 cm pour se détendre à la maison. Il s'installe sur une surface plane, se gonfle avec son unité de contrôle et se range facilement hors saison. Pensez à la couverture et aux produits d'entretien pour garder une eau saine."
+        },
+        {
+            "reference": "60059",
+            "category": "spa",
+            "title": "Jacuzzi gonflable Lay-Z-Spa Helsinki 180x66cm",
+            "volume_m3": 0.21,
+            "weight_kg": 35.15,
+            "price_eur": 995.51,
+            "image": "60059.jpg",
+            "description": "Spa gonflable Lay-Z-Spa Helsinki de 180x66 cm pour se détendre à la maison. Il s'installe sur une surface plane, se gonfle avec son unité de contrôle et se range facilement hors saison. Pensez à la couverture et aux produits d'entretien pour garder une eau saine."
+        },
+        {
+            "reference": "28442",
+            "category": "spa",
+            "title": "Jacuzzi gonflable Simple-Spa 280x180x71cm",
+            "volume_m3": 0.254,
+            "weight_kg": 35.84,
+            "price_eur": 1175.65,
+            "image": "28442.jpg",
+            "description": "Spa gonflable Simple-Spa 280x de 280x180x71 cm pour se détendre à la maison. Il s'installe sur une surface plane, se gonfle avec son unité de contrôle et se range facilement hors saison. Pensez à la couverture et aux produits d'entretien pour garder une eau saine."
+        },
+        {
+            "reference": "28458",
+            "category": "spa",
+            "title": "Jacuzzi gonflable Pure-Spa Jet Massage 201x71cm",
+            "volume_m3": 0.231,
+            "weight_kg": 35.34,
+            "price_eur": 1300.75,
+            "image": "28458.jpg",
+            "description": "Spa gonflable Pure-Spa Jet Massage de 201x71 cm pour se détendre à la maison. Il s'installe sur une surface plane, se gonfle avec son unité de contrôle et se range facilement hors saison. Pensez à la couverture et aux produits d'entretien pour garder une eau saine."
+        },
+        {
+            "reference": "28428",
+            "category": "spa",
+            "title": "Jacuzzi gonflable Pure-Spa Bubble Massage 216x71cm",
+            "volume_m3": 0.253,
+            "weight_kg": 41.5,
+            "price_eur": 1127.64,
+            "image": "28428.jpg",
+            "description": "Spa gonflable Pure-Spa Bubble Massage de 216x71 cm pour se détendre à la maison. Il s'installe sur une surface plane, se gonfle avec son unité de contrôle et se range facilement hors saison. Pensez à la couverture et aux produits d'entretien pour garder une eau saine."
+        },
+        {
+            "reference": "67998",
+            "category": "matelas",
+            "title": "Matelas gonflable 183x76x22 cm",
+            "volume_m3": 0.003,
+            "weight_kg": 1.7,
+            "price_eur": 16.27,
+            "image": "67998.jpg",
+            "description": "Matelas gonflable de 183x76x22 cm pour recevoir des invités ou partir en camping. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "64448",
+            "category": "matelas",
+            "title": "Lit gonflable 191x99x46 cm avec pompe électrique",
+            "volume_m3": 0.026,
+            "weight_kg": 5.4,
+            "price_eur": 61.12,
+            "image": "64448.jpg",
+            "description": "Lit gonflable de 191x99x46 cm pour recevoir des invités ou partir en camping. Sa pompe électrique intégrée le gonfle en quelques minutes. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "64428",
+            "category": "matelas",
+            "title": "Lit gonflable 203x152x46 cm avec pompe électrique",
+            "volume_m3": 0.038,
+            "weight_kg": 7.4,
+            "price_eur": 86.84,
+            "image": "64428.jpg",
+            "description": "Lit gonflable de 203x152x46 cm pour recevoir des invités ou partir en camping. Sa pompe électrique intégrée le gonfle en quelques minutes. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "64488",
+            "category": "matelas",
+            "title": "Lit gonflable 203x152x51 cm avec pompe électrique et sac de rangement",
+            "volume_m3": 0.046,
+            "weight_kg": 8.7,
+            "price_eur": 118.04,
+            "image": "64488.jpg",
+            "description": "Lit gonflable de 203x152x51 cm pour recevoir des invités ou partir en camping. Sa pompe électrique intégrée le gonfle en quelques minutes. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "64412",
+            "category": "matelas",
+            "title": "Lit gonflable 191x99x25 cm avec pompe à pied",
+            "volume_m3": 0.013,
+            "weight_kg": 3.2,
+            "price_eur": 32.76,
+            "image": "64412.jpg",
+            "description": "Lit gonflable de 191x99x25 cm pour recevoir des invités ou partir en camping. Sa pompe à pied intégrée permet de le gonfler sans électricité. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "64414",
+            "category": "matelas",
+            "title": "Lit gonflable 203x152x25 cm avec pompe à pied",
+            "volume_m3": 0.02,
+            "weight_kg": 4.8,
+            "price_eur": 49.38,
+            "image": "64414.jpg",
+            "description": "Lit gonflable de 203x152x25 cm pour recevoir des invités ou partir en camping. Sa pompe à pied intégrée permet de le gonfler sans électricité. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "67768",
+            "category": "matelas",
+            "title": "Matelas gonflable (2 pièces) 191x99x22 cm",
+            "volume_m3": 0.004,
+            "weight_kg": 2.2,
+            "price_eur": 23.33,
+            "image": "67768.jpg",
+            "description": "Matelas gonflable de 191x99x22 cm pour recevoir des invités ou partir en camping. Livré en deux pièces. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "64126",
+            "category": "matelas",
+            "title": "Matelas/Lit gonflable 191x99x25 cm",
+            "volume_m3": 0.005,
+            "weight_kg": 2.4,
+            "price_eur": 24.35,
+            "image": "64126.jpg",
+            "description": "Matelas gonflable de 191x99x25 cm pour recevoir des invités ou partir en camping. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "64162",
+            "category": "matelas",
+            "title": "Matelas/Lit gonflable 203x183x25 cm",
+            "volume_m3": 0.009,
+            "weight_kg": 4.5,
+            "price_eur": 45.43,
+            "image": "64162.jpg",
+            "description": "Matelas gonflable de 203x183x25 cm pour recevoir des invités ou partir en camping. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "64124",
+            "category": "matelas",
+            "title": "Matelas/Lit gonflable 183x76x25 cm",
+            "volume_m3": 0.004,
+            "weight_kg": 1.8,
+            "price_eur": 17.87,
+            "image": "64124.jpg",
+            "description": "Matelas gonflable de 183x76x25 cm pour recevoir des invités ou partir en camping. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "64132",
+            "category": "matelas",
+            "title": "Matelas/Lit gonflable 191x137x25 cm",
+            "volume_m3": 0.006,
+            "weight_kg": 3.3,
+            "price_eur": 33.82,
+            "image": "64132.jpg",
+            "description": "Matelas gonflable de 191x137x25 cm pour recevoir des invités ou partir en camping. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "64118",
+            "category": "matelas",
+            "title": "Matelas/Lit gonflable 203x183x22 cm",
+            "volume_m3": 0.007,
+            "weight_kg": 4.1,
+            "price_eur": 41.59,
+            "image": "64118.jpg",
+            "description": "Matelas gonflable de 203x183x22 cm pour recevoir des invités ou partir en camping. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "64157",
+            "category": "matelas",
+            "title": "Matelas/Lit gonflable 191x99x22 cm",
+            "volume_m3": 0.004,
+            "weight_kg": 2.2,
+            "price_eur": 23.33,
+            "image": "64157.jpg",
+            "description": "Matelas gonflable de 191x99x22 cm pour recevoir des invités ou partir en camping. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "64146",
+            "category": "matelas",
+            "title": "Matelas/Lit gonflable 203x152x22 cm",
+            "volume_m3": 0.006,
+            "weight_kg": 3.4,
+            "price_eur": 34.9,
+            "image": "64146.jpg",
+            "description": "Matelas gonflable de 203x152x22 cm pour recevoir des invités ou partir en camping. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "64103",
+            "category": "matelas",
+            "title": "Matelas gonflable 185x76x22 cm (avec oreiller)",
+            "volume_m3": 0.003,
+            "weight_kg": 1.7,
+            "price_eur": 16.27,
+            "image": "64103.jpg",
+            "description": "Matelas gonflable de 185x76x22 cm pour recevoir des invités ou partir en camping. Un oreiller intégré apporte un confort supplémentaire. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "64114",
+            "category": "matelas",
+            "title": "Matelas gonflable 191x99x22 cm (avec oreiller)",
+            "volume_m3": 0.004,
+            "weight_kg": 2.2,
+            "price_eur": 23.33,
+            "image": "64114.jpg",
+            "description": "Matelas gonflable de 191x99x22 cm pour recevoir des invités ou partir en camping. Un oreiller intégré apporte un confort supplémentaire. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "64109",
+            "category": "matelas",
+            "title": "Matelas gonflable 203x152x22 cm (avec oreiller)",
+            "volume_m3": 0.006,
+            "weight_kg": 3.4,
+            "price_eur": 34.9,
+            "image": "64109.jpg",
+            "description": "Matelas gonflable de 203x152x22 cm pour recevoir des invités ou partir en camping. Un oreiller intégré apporte un confort supplémentaire. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "64760",
+            "category": "matelas",
+            "title": "Matelas gonflable 203x152x22 cm",
+            "volume_m3": 0.007,
+            "weight_kg": 3.7,
+            "price_eur": 37.6,
+            "image": "64760.jpg",
+            "description": "Matelas gonflable de 203x152x22 cm pour recevoir des invités ou partir en camping. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "64755",
+            "category": "matelas",
+            "title": "Matelas gonflable 191x99x22 cm",
+            "volume_m3": 0.004,
+            "weight_kg": 2.3,
+            "price_eur": 24.35,
+            "image": "64755.jpg",
+            "description": "Matelas gonflable de 191x99x22 cm pour recevoir des invités ou partir en camping. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "64106",
+            "category": "matelas",
+            "title": "Matelas gonflable 191x137x22 cm (avec oreiller)",
+            "volume_m3": 0.005,
+            "weight_kg": 3.0,
+            "price_eur": 30.78,
+            "image": "64106.jpg",
+            "description": "Matelas gonflable de 191x137x22 cm pour recevoir des invités ou partir en camping. Un oreiller intégré apporte un confort supplémentaire. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "64759",
+            "category": "matelas",
+            "title": "Matelas gonflable 203x183x22 cm",
+            "volume_m3": 0.008,
+            "weight_kg": 4.6,
+            "price_eur": 46.52,
+            "image": "64759.jpg",
+            "description": "Matelas gonflable de 203x183x22 cm pour recevoir des invités ou partir en camping. Se dégonfle et se range facilement."
+        },
+        {
+            "reference": "28005",
+            "category": "entretien",
+            "title": "Nettoyeur automatique de piscine ZX300",
+            "volume_m3": 0.077,
+            "weight_kg": 7.46,
+            "price_eur": 235.65,
+            "image": "28005.jpg",
+            "description": "Robot nettoyeur automatique ZX300 : il parcourt le fond du bassin et aspire les dépôts, raccordé au circuit de filtration."
+        },
+        {
+            "reference": "28004",
+            "category": "entretien",
+            "title": "Kit d'entretien pour spa",
+            "price_eur": 24.9,
+            "image": "28004.jpg",
+            "description": "Kit de nettoyage pour spa gonflable : brosse, épuisette et embout d'aspiration. Pratique pour retirer feuilles et dépôts et garder une eau propre entre deux vidanges."
+        },
+        {
+            "reference": "29000",
+            "category": "entretien",
+            "title": "Cartouche de filtration (type A)",
+            "price_eur": 12.37,
+            "image": "29000.jpg",
+            "description": "Cartouche de filtration de rechange (type A) pour les pompes de filtration à cartouche. Un nettoyage régulier au jet d'eau prolonge sa durée de vie."
+        },
+        {
+            "reference": "29044",
+            "category": "entretien",
+            "title": "Diffuseur flottant pour spa",
+            "price_eur": 9.9,
+            "image": "29044.jpg",
+            "description": "Diffuseur flottant pour spa : il libère progressivement le produit de traitement dans l'eau. Respectez le dosage indiqué sur l'emballage du produit utilisé."
+        },
+        {
+            "reference": "58237",
+            "category": "entretien",
+            "title": "Kit de nettoyage de piscine DELUXE",
+            "volume_m3": 0.078,
+            "weight_kg": 6.42,
+            "price_eur": 94.67,
+            "image": "58237.jpg",
+            "description": "Kit de nettoyage complet pour piscine hors-sol : manche, épuisette, tête de balai et tuyau d'aspiration."
+        },
+        {
+            "reference": "58233",
+            "category": "accessoires",
+            "title": "Skimmer de surface pour piscine hors-sol",
+            "price_eur": 34.9,
+            "image": "58233.jpg",
+            "description": "Skimmer de surface pour piscine hors-sol : il récupère les impuretés flottantes avant qu'elles ne tombent au fond. Se raccorde au circuit de filtration."
+        },
+        {
+            "reference": "58665",
+            "category": "entretien",
+            "title": "Aspirateur de piscine AquaDrift",
+            "volume_m3": 0.066,
+            "weight_kg": 6.3,
+            "price_eur": 144.52,
+            "image": "58665.jpg",
+            "description": "Aspirateur de piscine AquaDrift pour nettoyer le fond des piscines hors-sol, raccordé au circuit de filtration."
+        },
+        {
+            "reference": "58282",
+            "category": "entretien",
+            "title": "Tête de brosse d'aspirateur",
+            "volume_m3": 0.00458,
+            "weight_kg": 0.792,
+            "price_eur": 15.12,
+            "image": "58282.jpg",
+            "description": "Tête de balai d'aspiration pour piscine, à monter sur un manche télescopique et à raccorder au tuyau d'aspiration."
+        },
+        {
+            "reference": "26666",
+            "category": "accessoires",
+            "title": "Générateur de chlore avec ozonateur",
+            "volume_m3": 0.0512,
+            "weight_kg": 11.215,
+            "price_eur": 420.62,
+            "image": "26666.jpg",
+            "description": "Générateur de chlore au sel avec ozonateur. Il produit le chlore à partir du sel dissous dans l'eau et complète la désinfection par ozonation."
+        },
+        {
+            "reference": "26652",
+            "category": "accessoires",
+            "title": "Filtre à sable avec pompe",
+            "price_eur": 185.74,
+            "image": "26652.jpg",
+            "description": "Groupe de filtration à sable avec pompe et vanne multivoies. Le sable retient les fines particules pour une eau limpide ; adapté aux piscines hors-sol."
+        },
+        {
+            "reference": "28523",
+            "category": "accessoires",
+            "title": "Couverture pour spa gonflable",
+            "price_eur": 44.9,
+            "image": "28523.jpg",
+            "description": "Couverture de protection pour spa gonflable. Elle limite les pertes de chaleur et protège l'eau des feuilles et des poussières lorsque le spa n'est pas utilisé."
+        },
+        {
+            "reference": "10",
+            "category": "entretien",
+            "title": "Chlore (comprimés), disponible en 0,5 kg, 1 kg, 2 kg, 3 kg, 5 kg, 25 kg.",
+            "volume_m3": 0.0017,
+            "weight_kg": 0.6,
+            "price_eur": 13.91,
+            "image": "10.jpg",
+            "description": "Chlore en comprimés pour la désinfection de l'eau de la piscine, à utiliser dans un diffuseur flottant ou le skimmer. Respectez le dosage indiqué sur l'emballage. Conditionnements : 0,5 kg, 1 kg, 2 kg, 3 kg, 5 kg, 25 kg."
+        },
+        {
+            "reference": "16",
+            "category": "entretien",
+            "title": "Chlore (granulés), disponible en 0,5 kg, 1 kg, 2 kg, 3 kg, 5 kg, 25 kg.",
+            "volume_m3": 0.0017,
+            "weight_kg": 0.6,
+            "price_eur": 13.91,
+            "image": "16.jpg",
+            "description": "Chlore en granulés à dissolution rapide, pour les traitements ponctuels de l'eau. Respectez le dosage indiqué sur l'emballage. Conditionnements : 0,5 kg, 1 kg, 2 kg, 3 kg, 5 kg, 25 kg."
+        },
+        {
+            "reference": "22",
+            "category": "entretien",
+            "title": "Algicide (liquide), disponible en 1 L, 3 L, 20 L, 30 L, 200 L.",
+            "volume_m3": 0.0018,
+            "weight_kg": 1.1,
+            "price_eur": 6.76,
+            "image": "22.jpg",
+            "description": "Algicide liquide qui prévient l'apparition des algues et le verdissement de l'eau. Respectez le dosage indiqué sur l'emballage. Conditionnements : 1 L, 3 L, 20 L, 30 L, 200 L."
+        },
+        {
+            "reference": "28",
+            "category": "entretien",
+            "title": "Émovex (liquide), disponible en 1 L, 3 L, 20 L, 30 L, 200 L.",
+            "volume_m3": 0.0018,
+            "weight_kg": 1.1,
+            "price_eur": 6.76,
+            "image": "28.jpg",
+            "description": "Produit de traitement de l'eau pour piscine. Lisez attentivement l'étiquette et respectez le dosage indiqué avant utilisation. Conditionnements : 1 L, 3 L, 20 L, 30 L, 200 L."
+        },
+        {
+            "reference": "34",
+            "category": "entretien",
+            "title": "Équitalle (comprimés), disponible en 0,5 kg, 1 kg, 2 kg, 25 kg.",
+            "volume_m3": 0.0017,
+            "weight_kg": 0.6,
+            "price_eur": 7.91,
+            "image": "34.jpg",
+            "description": "Produit de traitement de l'eau pour piscine. Lisez attentivement l'étiquette et respectez le dosage indiqué avant utilisation. Conditionnements : 0,5 kg, 1 kg, 2 kg, 25 kg."
+        },
+        {
+            "reference": "39",
+            "category": "entretien",
+            "title": "Équitalle (liquide), disponible en 1 L, 3 L, 20 L, 30 L.",
+            "volume_m3": 0.0018,
+            "weight_kg": 1.0,
+            "price_eur": 3.61,
+            "image": "39.jpg",
+            "description": "Produit de traitement de l'eau pour piscine. Lisez attentivement l'étiquette et respectez le dosage indiqué avant utilisation. Conditionnements : 1 L, 3 L, 20 L, 30 L."
+        },
+        {
+            "reference": "60310",
+            "category": "entretien",
+            "title": "Kit de nettoyage pour spa",
+            "price_eur": 19.33,
+            "image": "60310.jpg",
+            "description": "Kit de nettoyage pour spa : épuisette, brosse et gant. Idéal pour l'entretien courant de la cuve et de la ligne d'eau."
+        },
+        {
+            "reference": "60311",
+            "category": "entretien",
+            "title": "Cartouche de filtration pour spa",
+            "price_eur": 14.9,
+            "image": "60311.jpg",
+            "description": "Cartouche de filtration de rechange pour spa gonflable. Rincez-la régulièrement et remplacez-la dès qu'elle reste encrassée pour conserver une bonne filtration."
+        },
+        {
+            "reference": "58142",
+            "category": "entretien",
+            "title": "Bandelettes d'analyse piscine et spa",
+            "price_eur": 13.56,
+            "image": "58142.jpg",
+            "description": "Bandelettes d'analyse pour contrôler rapidement l'eau de la piscine ou du spa. Comparez la couleur obtenue au nuancier du flacon, puis vérifiez vos mesures avec notre outil d'analyse de l'eau."
+        },
+        {
+            "reference": "60327",
+            "category": "entretien",
+            "title": "Aspirateur sans fil à manche télescopique",
+            "price_eur": 89.9,
+            "image": "60327.jpg",
+            "description": "Aspirateur rechargeable à manche télescopique pour piscine et spa. Sans branchement à la filtration, il aspire les dépôts du fond en quelques passages."
+        },
+        {
+            "reference": "58210",
+            "category": "entretien",
+            "title": "Diffuseur flottant de chlore",
+            "price_eur": 9.9,
+            "image": "58210.jpg",
+            "description": "Diffuseur flottant pour pastilles de chlore. Il répartit le produit en douceur dans le bassin ; réglez l'ouverture selon le volume d'eau."
+        },
+        {
+            "reference": "58668",
+            "category": "entretien",
+            "title": "Diffuseur flottant de chlore, petit modèle",
+            "price_eur": 7.9,
+            "image": "58668.jpg",
+            "description": "Petit diffuseur flottant adapté aux spas et aux petites piscines. Il diffuse progressivement le produit de traitement dans l'eau."
+        },
+        {
+            "reference": "58678",
+            "category": "accessoires",
+            "title": "Électrolyseur au sel pour piscine hors-sol",
+            "price_eur": 249.0,
+            "image": "58678.jpg",
+            "description": "Électrolyseur au sel pour piscine hors-sol : il produit le chlore à partir du sel dissous dans l'eau, pour un traitement plus régulier. Se raccorde au circuit de filtration."
+        },
+        {
+            "reference": "58230",
+            "category": "accessoires",
+            "title": "Pompe de vidange submersible",
+            "price_eur": 69.9,
+            "image": "58230.jpg",
+            "description": "Pompe de vidange submersible avec adaptateurs de raccordement. Pratique pour vider une piscine hors-sol ou un spa en fin de saison."
+        },
+        {
+            "reference": "58259",
+            "category": "accessoires",
+            "title": "Réchauffeur électrique pour piscine",
+            "price_eur": 179.0,
+            "image": "58259.jpg",
+            "description": "Réchauffeur électrique à raccorder au circuit de filtration d'une piscine hors-sol. Il permet de gagner quelques degrés et de profiter du bassin plus longtemps dans la saison."
+        },
+        {
+            "reference": "58635",
+            "category": "entretien",
+            "title": "Épuisette de surface",
+            "price_eur": 13.91,
+            "image": "58635.jpg",
+            "description": "Épuisette de surface à fixer sur un manche télescopique. Indispensable pour retirer feuilles et insectes avant qu'ils ne tombent au fond."
+        },
+        {
+            "reference": "58702",
+            "category": "entretien",
+            "title": "Manche télescopique en aluminium",
+            "price_eur": 19.9,
+            "image": "58702.jpg",
+            "description": "Manche télescopique en aluminium, compatible avec épuisettes, brosses et têtes d'aspiration. Léger et réglable pour atteindre tout le bassin."
+        },
+        {
+            "reference": "29083",
+            "category": "entretien",
+            "title": "Tuyau d'aspiration pour piscine",
+            "price_eur": 29.9,
+            "image": "29083.jpg",
+            "description": "Tuyau d'aspiration flexible pour relier une tête de balai ou un aspirateur au skimmer de la piscine."
+        }
+    ]
+}

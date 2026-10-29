@@ -28,7 +28,7 @@ class ResetPasswordControllerTest extends WebTestCase
 
         $this->userRepository = $container->get(UserRepository::class);
 
-        // Nettoie les demandes de réinitialisation (clé étrangère vers user)
+        // Clean the reset requests (foreign key to user)
         $this->em->createQuery('DELETE FROM App\Entity\ResetPasswordRequest')->execute();
 
         foreach ($this->userRepository->findAll() as $user) {
@@ -68,7 +68,8 @@ class ResetPasswordControllerTest extends WebTestCase
 
         self::assertEmailAddressContains($messages[0], 'from', 'no-reply@store.com');
         self::assertEmailAddressContains($messages[0], 'to', 'me@example.com');
-        self::assertEmailHtmlBodyContains($messages[0], 'Pour réinitialiser votre mot de passe');
+        self::assertEmailSubjectContains($messages[0], 'Réinitialisation de votre mot de passe');
+        self::assertEmailHtmlBodyContains($messages[0], 'Choisir un nouveau mot de passe');
 
         self::assertResponseRedirects('/reset-password/check-email');
 
@@ -89,7 +90,7 @@ class ResetPasswordControllerTest extends WebTestCase
         $this->client->followRedirect();
 
         // Test we can set a new password
-        $this->client->submitForm('Réinitialiser', [
+        $this->client->submitForm('Enregistrer', [
             'change_password_form[plainPassword][first]' => 'Zt7&qLm9!xVr2Wp',
             'change_password_form[plainPassword][second]' => 'Zt7&qLm9!xVr2Wp',
         ]);

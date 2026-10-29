@@ -1,5 +1,5 @@
 {# Pages internes de "Mon compte" : fil d'Ariane, bandeau, onglets, aide.
-   Variable accountTab (onglet actif : profile, orders, addresses, plans), définie en tête du template enfant.
+   accountTab variable (active tab: profile, orders, addresses, plans), set at the top of the child template.
    Blocs : account_title, account_subtitle, account_content, account_help #}
 {% extends 'base.html.twig' %}
 
@@ -52,7 +52,7 @@
 
         {% block account_content %}{% endblock %}
 
-        {# Bandeau du bas : aide par défaut, remplaçable par une page (ex. adresses) #}
+        {# Bottom strip: help by default, can be replaced by a page (e.g. addresses) #}
         {% block account_aside %}
             <aside class="account-help">
                 <i class="fa-solid fa-headset account-help__icon" aria-hidden="true"></i>

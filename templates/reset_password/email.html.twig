@@ -1,9 +1,23 @@
-<h1>Bonjour !</h1>
+{% extends 'email/_layout.html.twig' %}
 
-<p>Pour réinitialiser votre mot de passe, cliquez sur le lien suivant :</p>
+{% set icon = 'lock' %}
+{% set noteIcon = 'shield' %}
 
-<a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+{% block title %}Réinitialiser votre mot de passe{% endblock %}
+{% block preheader %}Choisissez un nouveau mot de passe pour votre compte AquaSphère.{% endblock %}
 
-<p>Ce lien expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.</p>
+{% block content %}
+    <p style="margin: 0 0 12px;">Bonjour,</p>
+    <p style="margin: 0;">Vous avez demandé à modifier votre mot de passe AquaSphère.</p>
 
-<p>À bientôt !</p>
+    {% include 'email/_button.html.twig' with {url: url('app_reset_password', {token: resetToken.token}), label: 'Choisir un nouveau mot de passe'} %}
+
+    <p style="margin: 16px 0 0; text-align: center; font-size: 13px; color: #566461;">
+        Ce lien est temporaire (valable {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}) et ne peut être utilisé qu'une seule fois.
+    </p>
+{% endblock %}
+
+{% block note %}
+    <strong>Si vous n'avez pas effectué cette demande,</strong><br>
+    ignorez cet e-mail. Votre mot de passe reste inchangé.
+{% endblock %}

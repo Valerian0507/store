@@ -4,7 +4,7 @@
 {% set categoryUrl = product.category ? path('app_products_index', {category: product.category.id}) : path('app_products_index') %}
 {% set noImage = asset('images/products/no-image.jpg') %}
 
-{# Guide de conseils et outil adaptés à la catégorie (AdviceController, PoolToolsController) #}
+{# Advice guide and tool matching the category (AdviceController, PoolToolsController) #}
 {% set adviceByCategory = {
     piscines: {slug: 'choisir-sa-piscine', title: 'Choisir sa piscine', text: 'Hors-sol, tubulaire ou gonflable : nos repères pour choisir le bassin adapté à votre espace.'},
     spa: {slug: 'creer-son-espace-detente', title: 'Créer son espace détente', text: 'Spa, transats et accessoires : nos idées pour aménager un coin bien-être chez vous.'},
@@ -77,7 +77,7 @@
                 </p>
 
                 {% if product.stock > 0 %}
-                    {# Ajout sans rechargement (cart_add_controller.js), quantité limitée au stock #}
+                    {# Add without reload (cart_add_controller.js), quantity limited to the stock #}
                     <form method="post" action="{{ path('app_cart_add', {id: product.id}) }}" class="product-buy"
                           data-controller="cart-add" data-action="cart-add#submit">
                         <input type="hidden" name="_token" value="{{ csrf_token('cart_add_' ~ product.id) }}">
@@ -133,7 +133,7 @@
             </div>
         </div>
 
-        {# Description (ou, à défaut, un guide de conseils) + caractéristiques #}
+        {# Description (or, failing that, an advice guide) + specifications #}
         <div class="product-details">
             {% if product.description %}
                 <section class="product-box">
@@ -171,7 +171,7 @@
 
         {% if suggestions is not empty %}
             <section class="product-suggestions">
-                {# Piscine / spa : produits complémentaires ; sinon, même catégorie (ProductRepository::findComplements) #}
+                {# Pool / spa: complementary products; otherwise the same category (ProductRepository::findComplements) #}
                 <h2 class="aq-section-title">{{ categoryLabel in ['piscines', 'spa'] ? 'Complétez votre installation' : 'Vous aimerez aussi' }}</h2>
                 <div class="product-suggestions__grid">
                     {% for suggestion in suggestions %}

@@ -1,314 +1,282 @@
-# AquaWorld
+# AquaSphère
 
-Application e-commerce développée avec Symfony dans le cadre de la formation **Développeur Web et Web Mobile (TP DWWM)**.
+E-commerce demo shop (pools, spas and pool care) built with Symfony for the **Développeur Web et Web Mobile (TP DWWM)** certification.
 
-Le projet couvre un parcours complet de boutique en ligne avec catalogue public, panier, compte utilisateur, tunnel de commande et espace d'administration.
+The site itself is in French (it targets French customers); the code, comments and documentation are in English.
 
-## Fonctionnalités
+> Educational project: no real sale is made. Payments go through Stripe in **test mode**.
 
-### Partie publique
+## Features
 
-- page d'accueil
-- catalogue produits avec recherche, tri, filtre par catégorie et pagination
-- fiche détail d'un produit
-- ajout au panier
-- gestion du panier
-- pages légales
+### Public site
 
-### Authentification et sécurité
+- home page: product universes, spa banner, advice articles, pool tools, newsletter sign-up
+- catalogue with search, sorting, category filter and pagination
+- product page (stock status, specifications, add to cart without page reload)
+- pool tools: pool volume calculator and water test comparison (`/outils/...`, see [docs/pool-tools.md](docs/pool-tools.md))
+- advice articles
+- newsletter: sign-up with welcome email, one-click unsubscribe link (confirmed by a POST)
+- legal pages (legal notice, terms of sale, privacy policy) with a scroll-spy table of contents
+- custom error pages (404, 500…); 5xx pages render without any database query
 
-- inscription (avec prénom et nom)
-- connexion / déconnexion
-- vérification d'email
-- renvoi du lien de vérification
-- réinitialisation du mot de passe (mot de passe oublié)
-- blocage de la connexion si le compte n'est pas vérifié
-- protection CSRF sur les actions sensibles
-- validation des données côté serveur (contraintes `Assert` sur les entités)
-- gestion des rôles `ROLE_USER` et `ROLE_ADMIN`
+### Authentication and security
 
-### Espace utilisateur
+- registration (first and last name) with email verification and a welcome email once verified
+- login / logout, login blocked until the email address is verified
+- password reset by email
+- shared password rule: 8+ characters, an uppercase letter, a digit and a special character (`StrongPassword`), shown live in the forms
+- CSRF protection on every state-changing action
+- server-side validation (`Assert` constraints on entities and forms)
+- roles `ROLE_USER` and `ROLE_ADMIN`
 
-- tableau de bord profil
-- consultation des commandes
-- détail d'une commande
-- gestion des adresses
-- définition d'une adresse par défaut
+### Customer account
 
-### Checkout
+- dashboard, profile and password change
+- order history and order detail (cancel a pending order)
+- address book with a default address
+- newsletter switch
+- demo replenishment plans for consumables (no payment or delivery is triggered)
 
-- panier en session pour les visiteurs
-- panier persistant en base pour les utilisateurs connectés
-- fusion du panier visiteur vers le panier utilisateur après connexion
-- contrôle du stock à l'ajout au panier et à la validation de la commande
-- récapitulatif de commande
-- création de commande et décrémentation du stock
-- paiement en ligne via Stripe Checkout (mode test)
-- mise à jour du statut de commande (`pending` → `paid`) après paiement
-- page de confirmation basée sur des ViewModels
+### Cart and checkout
+
+- session cart for visitors, persistent cart for logged-in users, merged at login
+- stock checks when adding, updating (quantity capped at the stock) and ordering
+- delivery step with a saved or a new address
+- order creation with stock decrement, then payment with Stripe Checkout (test mode)
+- order status `pending` → `paid` on return from Stripe, confirmation email sent once
+- confirmation page built from ViewModels
 
 ### Administration
 
-- gestion des produits
-- gestion du stock (réapprovisionnement : ajout au stock existant)
-- upload et suppression d'image produit
-- import initial du catalogue depuis un fichier JSON
-- gestion des catégories
-- gestion des commandes avec recherche, filtres, pagination et mise à jour du statut
-- gestion des utilisateurs avec recherche, filtres, pagination, détail et changement de rôle
+- dashboard
+- products: search, category filter, image upload, stock replenishment
+- categories
+- orders: search, status filter, pagination, status update
+- users: search, verification filter, detail, role change
 
-## Stack technique
+## Tech stack
 
-- PHP 8.2+
-- Symfony 7.4
-- Doctrine ORM
-- Doctrine Migrations
-- MySQL 8
-- Twig
-- AssetMapper
-- Stimulus (Symfony UX)
-- Bootstrap
-- Stripe (paiement en ligne, mode test)
-- PHPUnit (tests automatisés)
-- PHPStan (analyse statique, niveau 6)
-- Docker Compose
-- Mailpit
-- phpMyAdmin
+- PHP 8.2+, Symfony 7.4, Doctrine ORM and Migrations, MySQL 8
+- Twig, AssetMapper (no Node build), Stimulus and Turbo (Symfony UX), Bootstrap 5
+- Stripe Checkout (test mode)
+- Symfony Mailer (Mailpit in development)
+- PHPUnit, PHPStan (level 6), Node test runner for the pool tools JavaScript
+- Docker Compose (MySQL, phpMyAdmin, Mailpit)
 
 ## Architecture
 
-Le projet est organisé autour de trois zones principales :
-
-- partie publique
-- espace profil utilisateur
-- espace administration
-
-Organisation générale :
-
 - `Controller -> Repository / Service -> Twig`
+- business logic in services (`CartManager`, `CheckoutService`, `StripeCheckoutService`, `FileUploader`)
+- ViewModels for the checkout summary and the confirmation page
+- ownership checks on customer data (orders, addresses)
+- `UserChecker` blocks unverified accounts; a login subscriber merges the session cart
+- dedicated exception for stock errors (`InsufficientStockException`)
+- Stimulus controllers for the interactive parts (address choice, add to cart, quantity, password rules, pool tools, table of contents)
+- shared email layout (`templates/email/_layout.html.twig`): table-based HTML with inline styles and PNG icons, for email clients
 
-Choix techniques principaux :
+## Requirements
 
-- logique métier extraite dans des services
-- utilisation de ViewModels pour le checkout et la page de succès
-- contrôle de propriété sur les données utilisateur
-- `UserChecker` pour empêcher la connexion d'un compte non vérifié
-- subscriber de connexion pour fusionner le panier session et le panier persistant
-- intégration du paiement dans un service dédié (`StripeCheckoutService`)
-- exception métier dédiée (`InsufficientStockException`) pour le contrôle du stock
-- contrôleur Stimulus pour la sélection d'adresse au checkout
-
-## Prérequis
-
-- PHP 8.2 ou supérieur
-- Composer
-- Docker et Docker Compose
-- Symfony CLI (optionnel, pour lancer le serveur de dev)
+- PHP 8.2 or higher, Composer
+- Docker and Docker Compose
+- Symfony CLI (optional, to run the dev server)
+- Node.js 18+ (optional, only for the JavaScript tests)
 
 ## Installation
 
-### 1. Cloner le projet
+### 1. Clone the project
 
 ```bash
 git clone https://github.com/Valerian0507/store.git
 cd store
 ```
 
-### 2. Installer les dépendances PHP
+### 2. Install PHP dependencies
 
 ```bash
 composer install
 ```
 
-### 3. Démarrer les services Docker
+### 3. Start the Docker services
 
 ```bash
 docker compose up -d
 ```
 
-Services fournis par `compose.yaml` :
+Services from `compose.yaml`:
 
-- MySQL sur `127.0.0.1:3307`
-- phpMyAdmin sur `http://127.0.0.1:8080`
-- Mailpit sur `http://127.0.0.1:8025`
+- MySQL on `127.0.0.1:3307` (user `store_user`, database `store_db`)
+- phpMyAdmin on `http://127.0.0.1:8080`
+- Mailpit on `http://127.0.0.1:8025` (every email sent in development lands here)
 
-### 4. Configurer l'environnement local
+### 4. Configure the local environment
 
-Créer un fichier `.env.local` avec une configuration adaptée à votre machine. Exemple :
+Create a `.env.local` file (never committed):
 
 ```env
-DATABASE_URL="mysql://store_user:mot_de_passe@127.0.0.1:3307/store_db?serverVersion=8.0&charset=utf8mb4"
+DATABASE_URL="mysql://store_user:your_password@127.0.0.1:3307/store_db?serverVersion=8.0&charset=utf8mb4"
 MAILER_DSN=smtp://localhost:1025
-APP_URL=http://127.0.0.1:8000
-STRIPE_SECRET_KEY=sk_test_votre_cle_secrete_stripe
+STRIPE_SECRET_KEY=sk_test_your_stripe_test_key
 ```
 
-> La clé Stripe de test se récupère gratuitement sur le tableau de bord Stripe (mode Test) : [https://dashboard.stripe.com/test/apikeys](https://dashboard.stripe.com/test/apikeys). Ne jamais committer la vraie clé : elle doit rester uniquement dans `.env.local`.
+The Stripe test key is free from the Stripe dashboard (test mode): <https://dashboard.stripe.com/test/apikeys>.
 
-Les valeurs par défaut définies dans `compose.yaml` sont :
-
-```md
-utilisateur : `store_user`
-base de données: `store_db`
-port : `3307`
-```
-
-Si vous utilisez les valeurs par défaut du `docker compose`, adaptez simplement le mot de passe a votre configuration locale
-
-### 5. Créer la base de données
+### 5. Create the database and run the migrations
 
 ```bash
 php bin/console doctrine:database:create
-```
-
-### 6. Exécuter les migrations
-
-```bash
 php bin/console doctrine:migrations:migrate
 ```
 
-### 7. Charger les fixtures utilisateur
+### 6. Load the demo users
 
 ```bash
 php bin/console doctrine:fixtures:load
 ```
 
-### 8. Importer le catalogue produits
-
-Le projet fournit un importeur JSON via la commande suivante :
+### 7. Import the catalogue
 
 ```bash
 php bin/console app:import-products
 ```
 
-Par défaut, le fichier attendu est :
+The command reads `data/catalogue.json` and copies the product photos from `data/products/` to `public/uploads/products/`.
+Running it again updates the products by reference (title, price, description, category) but keeps the stock and any photo uploaded from the admin.
 
-```text
-var/data/catalogue.json
-```
+Another file can be given as argument: `php bin/console app:import-products path/to/file.json`.
 
-Il est aussi possible de fournir un autre fichier :
-
-```bash
-php bin/console app:import-products chemin/vers/mon-fichier.json
-```
-
-### 9. Lancer l'application
-
-Avec Symfony CLI :
+### 8. Start the application
 
 ```bash
 symfony server:start
 ```
 
-Application disponible ensuite sur :
+The site is available at <http://127.0.0.1:8000>.
 
-```text
-http://127.0.0.1:8000
-```
+## Demo accounts
 
-## Comptes de démonstration
+After loading the fixtures:
 
-Après chargement des fixtures :
+| Role | Email | Password |
+| --- | --- | --- |
+| Administrator | `admin@store.com` | `password` |
+| Customer | `user@store.com` | `password` |
 
-### Administrateur
+Stripe test card: `4242 4242 4242 4242`, any future expiry date, any CVC.
 
-- email : `admin@store.com`
-- mot de passe : `password`
+## Product photos
 
-### Utilisateur
+- photos uploaded from the admin are stored in `public/uploads/products/` as `<reference>-<random>.<ext>` (this folder is not versioned)
+- replacing or deleting a photo, or deleting the product, removes the file, **unless a past order still shows it** (order history and confirmation emails keep the image name)
+- the versioned catalogue photos live in `data/products/` and are copied by `app:import-products`
 
-- email : `user@store.com`
-- mot de passe : `password`
+## Tests and code quality
 
-## Tests et qualité du code
+### PHPUnit
 
-### Tests automatisés (PHPUnit)
-
-Le projet contient des tests unitaires (entités) et fonctionnels (contrôle d'accès).
-
-Les tests utilisent une base dédiée `store_db_test`. Préparation :
+The tests use a dedicated database, `store_db_test`, which is **emptied before each functional test**. One-time setup (the MySQL user needs rights on the test database):
 
 ```bash
-php bin/console --env=test doctrine:database:create
+docker exec store-database sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE IF NOT EXISTS store_db_test; GRANT ALL PRIVILEGES ON store_db_test.* TO \"store_user\"@\"%\";"'
 php bin/console --env=test doctrine:migrations:migrate -n
 ```
 
-Lancement de la suite :
+Run the suite:
 
 ```bash
 php bin/phpunit
 ```
 
-### Analyse statique (PHPStan)
+Covered: entities, access control, password rule, cart (JSON add, stock limits, quantity capped at the stock), newsletter (sign-up, duplicates, unsubscribe, account switch), admin (403 for customers, list filters, photo deletion), Stripe return and confirmation email (Stripe replaced by a fake service), legal and error pages, catalogue import, password reset.
 
-Le code passe **PHPStan au niveau 6** sans erreur :
+### JavaScript (pool tools)
+
+```bash
+node --test tests/JavaScript/pool_tools.test.mjs
+```
+
+### PHPStan
 
 ```bash
 php -d memory_limit=512M vendor/bin/phpstan analyse
 ```
 
-## Entités principales
+The code passes **PHPStan level 6** with no error.
 
-- `User`
-- `Product`
-- `Category`
-- `Address`
-- `Order`
-- `OrderItem`
-- `Cart`
-- `CartItem`
+## Main entities
 
-## Captures d'écran
+`User`, `Address`, `Product`, `Category`, `Cart`, `CartItem`, `Order`, `OrderItem`, `NewsletterSubscriber`, `CarePlan`, `ResetPasswordRequest`
 
-### Page d'accueil
+## Screenshots
 
-![Page d'accueil 1](docs/screenshots/page-d'accueil1.png)
+### Home page
 
-![Page d'accueil 2](docs/screenshots/page-d'accueil2.png)
+Header and product universes:
 
-### Catalogue produits
+![Home page - header and universes](docs/screenshots/home-hero.png)
 
-![Catalogue produits](docs/screenshots/catalogue.png)
+Spa banner, product selection and advice:
 
-### Fiche produit
+![Home page - spa, selection and advice](docs/screenshots/home-sections.png)
 
-![Fiche produit](docs/screenshots/product-show.png)
+Pool tools, newsletter and footer:
 
-### Panier
+![Home page - tools, newsletter and footer](docs/screenshots/home-tools-newsletter.png)
 
-![Panier](docs/screenshots/cart.png)
+### Pool tools
+
+Pool volume calculator:
+
+![Pool volume calculator](docs/screenshots/tool-pool-volume.png)
+
+Water test comparison:
+
+![Water test comparison](docs/screenshots/tool-water-analysis.png)
+
+### Catalogue
+
+![Catalogue](docs/screenshots/catalogue.png)
+
+### Cart
+
+![Cart](docs/screenshots/cart.png)
 
 ### Checkout
 
-![Checkout](docs/screenshots/checkout.png)
+![Checkout - delivery address](docs/screenshots/checkout.png)
 
-### Connexion
+### Customer account
 
-![Connexion](docs/screenshots/login.png)
+![Customer account](docs/screenshots/account.png)
 
-### Inscription
+Profile and password:
 
-![Inscription](docs/screenshots/register.png)
+![Profile](docs/screenshots/account-profile.png)
 
-### Administration des produits
+Order history:
 
-![Administration des produits](docs/screenshots/admin-products.png)
+![Orders](docs/screenshots/account-orders.png)
 
-### Administration des commandes
+### Administration
 
-![Administration des commandes](docs/screenshots/admin-orders.png)
+Dashboard:
 
-### Administration des utilisateurs
+![Admin - dashboard](docs/screenshots/admin-dashboard.png)
 
-![Administration des utilisateurs](docs/screenshots/admin-users.png)
+Products:
 
-## Limites actuelles
+![Admin - products](docs/screenshots/admin-products.png)
 
-- paiement Stripe en mode test uniquement (pas de mode production)
-- confirmation du paiement via l'URL de retour (pas encore de webhook Stripe)
-- pas de gestion des frais de livraison
+Categories:
 
-## Auteur
+![Admin - categories](docs/screenshots/admin-categories.png)
 
-Projet réalisé par **O. Chahinian** dans le cadre de la formation **TP DWWM**.
+## Known limitations
+
+- Stripe in test mode only; the payment is confirmed on the return URL (no Stripe webhook yet)
+- emails are sent synchronously (no Messenger worker needed)
+- free delivery, no shipping cost calculation
+- the hosting section of the legal notice must be filled in at deployment
+
+## Author
+
+Project by **O. Chahinian** for the **TP DWWM** training.

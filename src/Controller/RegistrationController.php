@@ -6,6 +6,8 @@ use App\Entity\User;
 use App\Form\RegistrationType;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -43,7 +45,7 @@ class RegistrationController extends AbstractController
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 
-            // Hashage du mot de passe avant persistance
+            // Hash the password before persisting
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
             $user->setRoles(['ROLE_USER']);
             $user->setIsVerified(false);
@@ -51,16 +53,17 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // générez une URL signée et envoyez-la par e-mail à l'utilisateur
+            // generate a signed URL and email it to the user
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
-                    ->from(new Address('no-reply@store.com', 'Store'))
+                    ->from(new Address('no-reply@store.com', 'AquaSphère'))
                     ->to((string) $user->getEmail())
-                    ->subject('Please Confirm your Email')
+                    ->subject('Confirmez votre adresse e-mail - AquaSphère')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
+                    ->context(['firstName' => $user->getFirstName()])
             );
 
-            // faites tout ce dont vous avez besoin ici, comme envoyer un e-mail
+            // do anything else you need here, like send an email
             $this->addFlash('success', 'Compte créé. Vérifiez votre e-mail pour activer le compte.');
             return $this->redirectToRoute('app_login');
         }
@@ -71,7 +74,7 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/verify/email', name: 'app_verify_email')]
-    public function verifyUserEmail(Request $request, UserRepository $userRepository, TranslatorInterface $translator): Response
+    public function verifyUserEmail(Request $request, UserRepository $userRepository, TranslatorInterface $translator, LoggerInterface $logger): Response
     {
         $id = $request->query->get('id');
 
@@ -86,12 +89,28 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
+        $wasVerified = $user->isVerified();
+
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $user);
         } catch (VerifyEmailExceptionInterface $exception) {
-            $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
+            $this->addFlash('danger', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
             return $this->redirectToRoute('app_register');
+        }
+
+        // Welcome email, only once (not when the link is clicked again)
+        if (!$wasVerified) {
+            try {
+                $this->mailer->send((new TemplatedEmail())
+                    ->from(new Address('no-reply@store.com', 'AquaSphère'))
+                    ->to((string) $user->getEmail())
+                    ->subject('Bienvenue chez AquaSphère')
+                    ->htmlTemplate('email/account_welcome.html.twig')
+                    ->context(['firstName' => $user->getFirstName()]));
+            } catch (TransportExceptionInterface $e) {
+                $logger->error('Registration: the welcome email could not be sent.', ['exception' => $e]);
+            }
         }
 
         $this->addFlash('success', 'Votre adresse e-mail a été vérifiée. Vous pouvez maintenant vous connecter.');
@@ -118,8 +137,8 @@ class RegistrationController extends AbstractController
             $user = $userRepository->findOneBy(['email' => $email]);
 
             if($user && !$user->isVerified()){
-                $this->sendVerificationEmail($user); // on fait appel à la fonction qui envoie le mail de renvoie
-                // d'un lien de confirmation uniquement si l'user n'a pas de compte vérifié
+                $this->sendVerificationEmail($user); // resends the confirmation link
+                // only when the user's account is not verified yet
             }
 
             $this->addFlash('success', 'Si cette adresse e-mail est associé à un compte non vérifié, un nouveau lien de confirmation a été envoyé');
@@ -137,20 +156,21 @@ class RegistrationController extends AbstractController
             'app_verify_email',
             (string) $user->getId(),
             $user->getEmail(),
-            ['id' => $user->getId()] // Permet la validation pour un utilisateur non connecté
+            ['id' => $user->getId()] // allows verification for a user who is not logged in
         );
 
         $email = (new TemplatedEmail())
-            ->from(new Address('no-reply@store.com', 'Store'))
+            ->from(new Address('no-reply@store.com', 'AquaSphère'))
             ->to($user->getEmail())
-            ->subject('Merci de confirmer votre adresse email : nouveau lien de vérification')
+            ->subject('Nouveau lien de confirmation de votre adresse e-mail - AquaSphère')
             ->htmlTemplate('registration/confirmation_email.html.twig')
             ->context([
+                'firstName' => $user->getFirstName(),
                 'signedUrl' => $signatureComponents->getSignedUrl(),
                 'expiresAtMessageKey' => $signatureComponents->getExpirationMessageKey(),
                 'expiresAtMessageData' => $signatureComponents->getExpirationMessageData(),
             ]);
 
-        $this->mailer->send($email); // C'est cette ligne qui envoie le mail
+        $this->mailer->send($email);
     }
 }

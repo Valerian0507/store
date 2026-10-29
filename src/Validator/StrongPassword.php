@@ -8,9 +8,9 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 
 /**
- * Règle de mot de passe commune (inscription, mot de passe oublié, profil) :
- * au moins 8 caractères, dont une majuscule, un chiffre et un caractère spécial.
- * Les mêmes règles sont affichées en direct par assets/controllers/password_rules_controller.js.
+ * Shared password rule (registration, forgotten password, profile):
+ * at least 8 characters, including an uppercase letter, a digit and a special character.
+ * The same rules are shown live by assets/controllers/password_rules_controller.js.
  */
 #[\Attribute]
 class StrongPassword extends Compound
@@ -23,7 +23,7 @@ class StrongPassword extends Compound
             new NotBlank(message: 'Veuillez saisir un mot de passe.'),
             new Length(
                 min: self::MIN_LENGTH,
-                // longueur maximale autorisée par Symfony pour des raisons de sécurité
+                // maximum length allowed by Symfony for security reasons
                 max: 4096,
                 minMessage: 'Le mot de passe doit contenir au moins {{ limit }} caractères.',
             ),

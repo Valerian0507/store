@@ -1,39 +1,101 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Confirmation de commande - PhoneStore</title>
-</head>
-<body style="font-family: Arial, sans-serif; color: #333;">
-<h2>Merci pour votre commande 🛒</h2>
+{% extends 'email/_layout.html.twig' %}
 
-<p>Bonjour {{ username }},</p>
+{# Payment confirmation (CheckoutController::confirm) - expects: order (App\Entity\Order) #}
+{% set subtotalCents = order.items|reduce((sum, item) => sum + item.lineTotalCents, 0) %}
+{% set shippingCents = order.totalCents - subtotalCents %}
+{% set itemsCount = order.items|reduce((sum, item) => sum + item.quantity, 0) %}
 
-<p>
-    Nous vous confirmons la bonne prise en compte de votre commande
-    <strong>{{ order.number }}</strong>
-    passée le {{ order.date|date('d/m/Y') }}.
-</p>
+{% block title %}Merci pour votre commande !{% endblock %}
+{% block preheader %}Votre commande {{ order.reference }} est confirmée.{% endblock %}
 
-<h3>Détail de la commande</h3>
+{# Header: icon on the left + "Démonstration" badge #}
+{% block hero %}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom: 18px;">
+        <tr>
+            <td width="72" valign="middle">
+                <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                    <td align="center" valign="middle" width="60" height="60" style="width: 60px; height: 60px; border-radius: 30px; background: #E1E8DD;">
+                        <img src="{{ absolute_url(asset('images/email/check.png')) }}" width="30" height="30" alt="" style="display: block; margin: 0 auto; border: 0;">
+                    </td>
+                </tr></table>
+            </td>
+            <td valign="middle">
+                <h1 style="margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: 28px; font-weight: normal; line-height: 1.2; color: #0E3A3F;">Merci pour votre commande !</h1>
+            </td>
+            <td align="right" valign="top" width="120">
+                <span style="display: inline-block; padding: 6px 12px; border-radius: 999px; background: #F7E3D3; font-size: 12px; color: #8F4C1E;">Démonstration</span>
+            </td>
+        </tr>
+    </table>
+{% endblock %}
 
-<ul>
-    {% for item in order.items %}
-        <li>
-            {{ item.name }} -
-            {{ item.quantity }} × {{ item.price }} €
-        </li>
-    {% endfor %}
-</ul>
+{% block content %}
+    <p style="margin: 0;">
+        Bonjour {{ order.shippingFirstName }},<br>
+        Votre commande <strong style="color: #0E3A3F;">{{ order.reference }}</strong> du {{ order.createdAt|date('d/m/Y') }} a bien été enregistrée et payée.
+    </p>
 
-<p><strong>Total :</strong> {{ order.total }} €</p>
+    {# Adresse de livraison #}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin: 22px 0 6px; background: #EEF2EC; border-radius: 12px;">
+        <tr>
+            <td width="64" align="center" valign="middle" style="padding: 18px 0 18px 10px;">
+                <img src="{{ absolute_url(asset('images/email/location.png')) }}" width="30" height="30" alt="" style="display: block; border: 0;">
+            </td>
+            <td valign="middle" style="padding: 16px 20px 16px 16px; border-left: 1px solid #CFD9CB; font-size: 15px; line-height: 1.5; color: #0E3A3F;">
+                <span style="font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #566461;">Adresse de livraison</span><br>
+                {{ order.shippingFirstName }} {{ order.shippingLastName }}<br>
+                {{ order.shippingStreet }}<br>
+                {{ order.shippingPostalCode }} {{ order.shippingCity }}<br>
+                {{ order.shippingCountry }}
+            </td>
+        </tr>
+    </table>
 
-<p>Vous recevrez un email lorsque votre commande sera expédiée.</p>
+    <h2 style="margin: 26px 0 8px; padding-top: 22px; border-top: 1px solid #ECE6DA; font-family: Georgia, 'Times New Roman', serif; font-size: 22px; font-weight: normal; color: #0E3A3F;">Détail de votre commande</h2>
 
-<p>
-    Merci pour votre confiance,<br>
-    <strong>L’équipe PhoneStore</strong>
-</p>
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse; font-size: 15px;">
+        {% for item in order.items %}
+            {% set image = item.productImage ? 'uploads/products/' ~ item.productImage : 'images/products/no-image.jpg' %}
+            <tr>
+                <td width="96" style="padding: 14px 12px 14px 0; border-bottom: 1px solid #ECE6DA;">
+                    <img src="{{ absolute_url(asset(image)) }}" width="88" alt="" style="display: block; width: 88px; height: auto; border: 0;">
+                </td>
+                <td style="padding: 14px 8px; border-bottom: 1px solid #ECE6DA;">
+                    <span style="font-family: Georgia, 'Times New Roman', serif; font-size: 16px; color: #0E3A3F;">{{ item.productName }}</span><br>
+                    <span style="font-size: 12px; color: #566461;">
+                        {{ item.product ? 'Réf. ' ~ item.product.reference ~ ' · ' }}{{ (item.unitPriceCents / 100)|number_format(2, ',', ' ') }} € l'unité
+                    </span>
+                </td>
+                <td align="center" width="36" style="padding: 14px 4px; border-bottom: 1px solid #ECE6DA; color: #3D4C4A;">{{ item.quantity }}</td>
+                <td align="right" width="90" style="padding: 14px 0 14px 4px; border-bottom: 1px solid #ECE6DA; font-weight: bold; color: #0E3A3F; white-space: nowrap;">{{ (item.lineTotalCents / 100)|number_format(2, ',', ' ') }} €</td>
+            </tr>
+        {% endfor %}
+    </table>
 
-</body>
-</html>
+    {# Totals, right-aligned #}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top: 14px;">
+        <tr>
+            <td width="40%"></td>
+            <td>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size: 15px;">
+                    <tr>
+                        <td style="padding: 4px 0; color: #3D4C4A;">Sous-total ({{ itemsCount }} article{{ itemsCount > 1 ? 's' }})</td>
+                        <td align="right" style="padding: 4px 0; color: #0E3A3F; white-space: nowrap;">{{ (subtotalCents / 100)|number_format(2, ',', ' ') }} €</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 4px 0 12px; color: #3D4C4A;">Livraison</td>
+                        <td align="right" style="padding: 4px 0 12px; color: #1F7A4D; white-space: nowrap;">{{ shippingCents > 0 ? (shippingCents / 100)|number_format(2, ',', ' ') ~ ' €' : 'Offerte' }}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding-top: 12px; border-top: 1px solid #D8D2C6; font-family: Georgia, 'Times New Roman', serif; font-size: 24px; color: #0E3A3F;">Total TTC<br><span style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #566461;">TVA incluse</span></td>
+                        <td align="right" valign="top" style="padding-top: 14px; border-top: 1px solid #D8D2C6; font-size: 22px; font-weight: bold; color: #0E3A3F; white-space: nowrap;">{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    {% include 'email/_button.html.twig' with {url: url('app_profile_orders_show', {id: order.id}), label: 'Voir ma commande', showLink: false} %}
+{% endblock %}
+
+{% block signature %}Merci pour votre confiance,<br>L'équipe AquaSphère{% endblock %}

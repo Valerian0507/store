@@ -1,47 +1,99 @@
-{% extends 'base.html.twig' %}
+{% extends 'home/_legal_layout.html.twig' %}
 
-{% block title %}CGV{% endblock %}
+{% set legalPage = 'cgv' %}
+{% set legalSections = [
+    {id: 'presentation', title: 'Présentation'},
+    {id: 'produits-prix', title: 'Produits et prix'},
+    {id: 'commande-paiement', title: 'Commande et paiement'},
+    {id: 'livraison', title: 'Livraison'},
+    {id: 'retractation', title: 'Retours et rétractation'},
+    {id: 'contact', title: 'Contact'},
+] %}
 
-{% block body %}
-    <div section  class="container py-4">
-        <h1 class="h3 mb-4">CGV</h1>
-        <h2 class="h5 mt-4">Droit de rétractation</h2>
+{% block legal_title %}Conditions générales de vente{% endblock %}
+{% block legal_intro %}Les conditions d'utilisation de la boutique de démonstration.{% endblock %}
 
+{% block legal_notice %}
+    <div class="legal-notice">
+        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
         <p>
-            Conformément aux articles L.221-18 et suivants du Code de la consommation,
-            le client dispose d'un délai de <strong>quatorze (14) jours</strong> à compter de la
-            réception de sa commande pour exercer son droit de rétractation, sans avoir à
-            justifier de motif ni à payer de pénalité.
+            <strong>AquaSphère est un projet pédagogique.</strong><br>
+            Les produits et commandes sont présentés à titre de démonstration : les paiements passent par Stripe en mode test.
         </p>
-
-        <p>
-            Pour exercer ce droit, le client informe AquaSphère de sa décision de se rétracter
-            par une déclaration dénuée d'ambiguïté, adressée par e-mail à
-            [adresse e-mail de contact] avant l'expiration du délai de 14 jours.
-        </p>
-
-        <p>
-            En cas de rétractation, le client renvoie les produits, dans leur état d'origine
-            et complets, dans un délai de <strong>14 jours</strong> suivant la communication de
-            sa décision. Les frais de retour sont à la charge du client.
-        </p>
-
-        <p>
-            AquaSphère procède au remboursement de la totalité des sommes versées, y compris les
-            frais de livraison standard, dans un délai de <strong>14 jours</strong> à compter de
-            la date à laquelle il est informé de la décision de rétractation. Le remboursement
-            est effectué par le même moyen de paiement que celui utilisé lors de la commande,
-            sauf accord exprès du client pour un autre moyen.
-        </p>
-
-        <p>
-            Conformément à l'article L.221-28 du Code de la consommation, le droit de rétractation
-            ne s'applique pas notamment aux produits confectionnés sur mesure, aux produits
-            descellés ne pouvant être renvoyés pour des raisons d'hygiène, ou aux biens
-            susceptibles de se détériorer rapidement.
-        </p>
-
     </div>
+{% endblock %}
 
+{% block section_presentation %}
+    <p>
+        Les présentes conditions générales de vente (CGV) s'appliquent aux commandes passées sur le site
+        AquaSphère. Toute commande implique l'acceptation des présentes CGV, cochée lors de la création du compte.
+    </p>
+{% endblock %}
 
+{% block section_produits_prix %}
+    <p>
+        Les produits sont présentés avec leurs caractéristiques essentielles et leur disponibilité en stock.
+        Les prix sont indiqués en euros, toutes taxes comprises (TTC). Le prix applicable est celui affiché
+        au moment de la validation de la commande.
+    </p>
+{% endblock %}
+
+{% block section_commande_paiement %}
+    <p>
+        La commande est passée depuis le panier, après connexion au compte client et saisie d'une adresse
+        de livraison. Elle est enregistrée « en attente de paiement » jusqu'à la confirmation du paiement ;
+        une commande en attente peut être annulée depuis l'espace « Mon compte ».
+    </p>
+    <p>
+        Le paiement s'effectue par carte bancaire via la plateforme sécurisée Stripe. AquaSphère n'a jamais
+        accès à vos données bancaires. Un e-mail de confirmation est envoyé une fois le paiement accepté.
+    </p>
+{% endblock %}
+
+{% block section_livraison %}
+    <p>
+        La livraison est offerte en France métropolitaine. Le suivi de la commande est disponible dans
+        l'espace « Mes commandes ».
+    </p>
+{% endblock %}
+
+{% block section_retractation %}
+    <p>
+        Conformément aux articles L.221-18 et suivants du Code de la consommation, le client dispose d'un
+        délai de <strong>quatorze (14) jours</strong> à compter de la réception de sa commande pour exercer
+        son droit de rétractation, sans avoir à justifier de motif ni à payer de pénalité.
+    </p>
+    <p>
+        Pour exercer ce droit, le client informe AquaSphère de sa décision de se rétracter par une déclaration
+        dénuée d'ambiguïté, adressée par e-mail à
+        <a href="mailto:alex.shaginyan0507@gmail.com">alex.shaginyan0507@gmail.com</a>
+        avant l'expiration du délai de 14 jours.
+    </p>
+    <p>
+        En cas de rétractation, le client renvoie les produits, dans leur état d'origine et complets, dans un
+        délai de <strong>14 jours</strong> suivant la communication de sa décision. Les frais de retour sont à
+        la charge du client.
+    </p>
+    <p>
+        AquaSphère procède au remboursement de la totalité des sommes versées, y compris les frais de livraison
+        standard, dans un délai de <strong>14 jours</strong> à compter de la date à laquelle il est informé de la
+        décision de rétractation. Le remboursement est effectué par le même moyen de paiement que celui utilisé
+        lors de la commande, sauf accord exprès du client pour un autre moyen.
+    </p>
+    <p>
+        Conformément à l'article L.221-28 du Code de la consommation, le droit de rétractation ne s'applique pas
+        notamment aux produits confectionnés sur mesure, aux produits descellés ne pouvant être renvoyés pour des
+        raisons d'hygiène, ou aux biens susceptibles de se détériorer rapidement.
+    </p>
+    <p>
+        Les produits bénéficient en outre de la garantie légale de conformité (articles L.217-3 et suivants du
+        Code de la consommation) et de la garantie des vices cachés (articles 1641 et suivants du Code civil).
+    </p>
+{% endblock %}
+
+{% block section_contact %}
+    <p>Pour toute question sur une commande, écrivez-nous :</p>
+    <a href="mailto:alex.shaginyan0507@gmail.com" class="legal-mail">
+        <i class="fa-regular fa-envelope" aria-hidden="true"></i> alex.shaginyan0507@gmail.com
+    </a>
 {% endblock %}

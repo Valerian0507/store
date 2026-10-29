@@ -28,7 +28,7 @@ final class CarePlanController extends AbstractController
     {
         $this->checkToken($request, 'care_plan_create_' . $id);
         $product = $products->find($id);
-        if ($product === null || !$product->isReplenishable()) throw $this->createNotFoundException('Ce produit ne propose pas de planning.');
+        if ($product === null || !$product->isReplenishable()) throw $this->createNotFoundException('This product has no replenishment plan.');
         if ($product->getStock() < 1) {
             $this->addFlash('warning', 'Ce produit est actuellement indisponible.');
             return $this->redirectToRoute('app_products_show', ['id' => $id], Response::HTTP_SEE_OTHER);

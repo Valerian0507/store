@@ -7,8 +7,8 @@ use App\Entity\OrderItem;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests unitaires de la commande : état initial, ajout de lignes,
- * lien inverse ligne -> commande, et recalcul du montant total.
+ * Order unit tests: initial state, adding lines,
+ * inverse link line -> order, and total recalculation.
  */
 class OrderTest extends TestCase
 {
@@ -29,7 +29,7 @@ class OrderTest extends TestCase
         $order->addItem($item);
 
         $this->assertCount(1, $order->getItems());
-        // Le lien inverse est positionné : la ligne connaît sa commande.
+        // The inverse link is set: the line knows its order.
         $this->assertSame($order, $item->getOrder());
     }
 
@@ -41,7 +41,7 @@ class OrderTest extends TestCase
         $order->addItem($item);
         $order->addItem($item);
 
-        // La même ligne n'est pas ajoutée deux fois.
+        // The same line is not added twice.
         $this->assertCount(1, $order->getItems());
     }
 
@@ -68,7 +68,7 @@ class OrderTest extends TestCase
         $order->recalcTotal();
         $this->assertSame(3500, $order->getTotalCents());
 
-        // removeItem() recalcule automatiquement le total.
+        // removeItem() recalculates the total automatically.
         $order->removeItem($second);
 
         $this->assertCount(1, $order->getItems());

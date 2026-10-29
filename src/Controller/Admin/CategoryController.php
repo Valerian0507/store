@@ -41,7 +41,7 @@ final class CategoryController extends AbstractController
             return $this->redirectToRoute('admin_categories_index');
         }
 
-        // 422 si le formulaire est invalide : Turbo n'affiche les erreurs qu'avec un code 4xx
+        // 422 when the form is invalid: Turbo only renders the errors with a 4xx status
         return $this->render('admin/categories/new.html.twig', [
             'form' => $form->createView(),
         ], new Response(null, $form->isSubmitted() && !$form->isValid() ? 422 : 200));

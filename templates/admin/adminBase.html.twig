@@ -1,4 +1,4 @@
-{# templates/admin/adminBase.html.twig - en-tête du site + barre latérale d'administration + contenu #}
+{# templates/admin/adminBase.html.twig - site header + admin sidebar + content #}
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -19,7 +19,7 @@
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         {% endblock %}
 
-        {# Après importmap : le CSS d'administration et de page passe après Bootstrap et app.css #}
+        {# After importmap: the admin and page CSS come after Bootstrap and app.css #}
         <link rel="stylesheet" href="{{ asset('styles/pages/admin.css') }}">
         {% block stylesheets %}{% endblock %}
     </head>

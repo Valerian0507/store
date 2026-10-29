@@ -109,7 +109,7 @@
     color: var(--aq-muted);
 }
 
-/* Disponibilité */
+/* Availability */
 .product-stock {
     display: flex;
     align-items: flex-start;
@@ -150,60 +150,19 @@
     color: var(--aq-muted);
 }
 
-/* Quantité + bouton */
+/* Quantity + button */
 .product-buy {
     display: flex;
     gap: 0.75rem;
     margin: 0 0 1.25rem;
 }
 
-.product-qty {
-    display: inline-flex;
-    align-items: center;
-    flex-shrink: 0;
-    height: 52px;
-    padding: 0 0.35rem;
-    border: 1px solid var(--aq-border);
-    border-radius: 999px;
-    background: #fff;
-}
-
-.product-qty__btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    border: 1px solid transparent;
-    border-radius: 50%;
-    background: none;
-    color: var(--aq-ink);
-    font-size: 0.8rem;
-}
-
-.product-qty__btn:hover:not(:disabled) { border-color: var(--aq-border); background: var(--aq-bg); }
-.product-qty__btn:disabled { opacity: 0.35; cursor: default; }
-
-.product-qty__input {
-    width: 3rem;
-    border: 0;
-    background: transparent;
-    color: var(--aq-ink);
-    font-weight: 600;
-    text-align: center;
-    appearance: textfield;
-    -moz-appearance: textfield;
-}
-
-.product-qty__input::-webkit-inner-spin-button,
-.product-qty__input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-.product-qty__input:focus { outline: none; }
-.product-qty:focus-within { border-color: var(--aq-link); box-shadow: 0 0 0 3px rgba(14, 124, 123, 0.15); }
+/* − / + selector: .product-qty in app.css (shared with the cart) */
+.product-qty { height: 52px; }
 
 .product-buy__submit { flex: 1; min-height: 52px; }
 
-/* Réassurance */
+/* Reassurance */
 .product-trust {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -248,7 +207,7 @@
     color: var(--aq-ink);
 }
 
-/* Description / conseils + caractéristiques */
+/* Description / advice + specifications */
 .product-details {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -256,7 +215,7 @@
     margin-top: 1.25rem;
 }
 
-/* Sans description ni conseil : les caractéristiques prennent toute la largeur */
+/* No description nor advice: the specifications take the full width */
 .product-details > :only-child { grid-column: 1 / -1; }
 
 .product-description { line-height: 1.7; color: var(--aq-text); }
@@ -279,7 +238,7 @@
 .product-specs th { width: 45%; font-weight: 400; color: var(--aq-muted); }
 .product-specs td { color: var(--aq-ink); font-weight: 500; }
 
-/* Complétez votre installation */
+/* "Complétez votre installation" (related products) */
 .product-suggestions { margin-top: 3rem; }
 .product-suggestions .aq-section-title { margin-bottom: 1.25rem; }
 
@@ -307,7 +266,7 @@
    Mobile
    ========================================================= */
 @media (max-width: 575.98px) {
-    .product-page__back { display: none; } /* le fil d'Ariane suffit */
+    .product-page__back { display: none; } /* the breadcrumb is enough */
     .product-breadcrumb [aria-current] { max-width: 20ch; }
 
     .product-buy { flex-direction: column; }

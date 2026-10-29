@@ -4,13 +4,13 @@
    Design tokens
    ========================================================= */
 :root {
-    --aq-ink: #0E3A3F;            /* bleu pétrole : titres, boutons, footer */
+    --aq-ink: #0E3A3F;            /* petrol blue: headings, buttons, footer */
     --aq-ink-hover: #165058;
-    --aq-accent: #C08A4E;         /* bronze : décor uniquement (contraste insuffisant pour du texte) */
-    --aq-accent-btn: #9A6A35;     /* bronze foncé : fond de bouton avec texte blanc (AA) */
-    --aq-accent-text: #8A5D2B;    /* bronze texte : petites étiquettes sur fond crème (AA) */
+    --aq-accent: #C08A4E;         /* bronze: decoration only (not enough contrast for text) */
+    --aq-accent-btn: #9A6A35;     /* dark bronze: button background with white text (AA) */
+    --aq-accent-text: #8A5D2B;    /* bronze text: small labels on cream background (AA) */
     --aq-link: #0E7C7B;
-    --aq-bg: #F7F3EC;             /* crème */
+    --aq-bg: #F7F3EC;             /* cream */
     --aq-surface: #FFFFFF;
     --aq-text: #16201F;
     --aq-muted: #566461;
@@ -30,7 +30,7 @@
     --aq-shadow-card: 0 24px 46px -24px rgba(14, 58, 63, 0.45);
     --aq-shadow-media: 0 30px 60px -32px rgba(14, 58, 63, 0.5);
 
-    /* Bootstrap branché sur les tokens */
+    /* Bootstrap wired to the tokens */
     --bs-body-font-family: var(--aq-font-sans);
     --bs-body-bg: var(--aq-bg);
     --bs-body-color: var(--aq-text);
@@ -46,7 +46,7 @@
 /* =========================================================
    Base
    ========================================================= */
-/* Les ancres (#home-universes, #newsletter) ne passent pas sous le header collant */
+/* Anchors (#home-universes, #newsletter) do not end up under the sticky header */
 html { scroll-padding-top: 88px; }
 
 body {
@@ -66,8 +66,8 @@ h1, h2, h3, h4,
     outline-offset: 2px;
 }
 
-/* Desktop : mêmes largeurs que le .container Bootstrap (admin).
-   Mobile et tablette (< 1200 px) : pleine largeur avec une petite marge latérale. */
+/* Desktop: same widths as the Bootstrap .container (admin).
+   Mobile and tablet (< 1200 px): full width with a small side margin. */
 .aq-container {
     width: 100%;
     margin-inline: auto;
@@ -82,10 +82,10 @@ h1, h2, h3, h4,
 .btn-icon { background: none; border: 0; padding: 0; }
 
 /* =========================================================
-   Composants partagés
+   Shared components
    ========================================================= */
 
-/* Petite étiquette au-dessus des titres */
+/* Small label above headings */
 .aq-kicker {
     display: inline-block;
     font-size: 0.75rem;
@@ -135,7 +135,7 @@ h1, h2, h3, h4,
     pointer-events: none;
 }
 
-/* Lien "Voir tout →" souligné bronze */
+/* "See all →" link with a bronze underline */
 .aq-link-arrow {
     display: inline-flex;
     align-items: center;
@@ -153,7 +153,7 @@ h1, h2, h3, h4,
 .aq-link-arrow:hover { color: var(--aq-link); }
 .aq-link-arrow:hover i { transform: translateX(3px); }
 
-/* Titre de section + lien à droite */
+/* Section title + link on the right */
 .aq-section-head {
     display: flex;
     align-items: flex-end;
@@ -175,7 +175,7 @@ h1, h2, h3, h4,
     gap: 1.25rem;
 }
 
-/* Flèches de carrousel (masquées sans JS ou s'il n'y a rien à faire défiler) */
+/* Carousel arrows (hidden without JS or when there is nothing to scroll) */
 .aq-carousel-nav { display: none; gap: 0.5rem; }
 .is-scrollable .aq-carousel-nav { display: flex; }
 
@@ -197,7 +197,7 @@ h1, h2, h3, h4,
 .aq-carousel-btn:hover:not(:disabled) { background: var(--aq-ink); border-color: var(--aq-ink); color: #fff; }
 .aq-carousel-btn:disabled { opacity: 0.35; cursor: default; }
 
-/* Interrupteur (case à cocher role="switch") */
+/* Switch (checkbox with role="switch") */
 .aq-switch {
     display: inline-flex;
     align-items: center;
@@ -242,8 +242,53 @@ h1, h2, h3, h4,
 .aq-switch input:checked + .aq-switch__track::after { transform: translateX(20px); }
 .aq-switch input:focus-visible + .aq-switch__track { outline: 2px solid var(--aq-link); outline-offset: 2px; }
 
-/* Mot de passe : bouton œil (security/_password_toggle.html.twig)
-   et règles cochées en direct (security/_password_rules.html.twig) - connexion, inscription, Mon compte */
+/* Quantity selector − / + (quantity_controller.js) - product page, cart */
+.product-qty {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    height: 44px;
+    padding: 0 0.3rem;
+    border: 1px solid var(--aq-border);
+    border-radius: 999px;
+    background: #fff;
+}
+
+.product-qty__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    background: none;
+    color: var(--aq-ink);
+    font-size: 0.8rem;
+}
+
+.product-qty__btn:hover:not(:disabled) { border-color: var(--aq-border); background: var(--aq-bg); }
+.product-qty__btn:disabled { opacity: 0.35; cursor: default; }
+
+.product-qty__input {
+    width: 3rem;
+    border: 0;
+    background: transparent;
+    color: var(--aq-ink);
+    font-weight: 600;
+    text-align: center;
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+.product-qty__input::-webkit-inner-spin-button,
+.product-qty__input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+.product-qty__input:focus { outline: none; }
+.product-qty:focus-within { border-color: var(--aq-link); box-shadow: 0 0 0 3px rgba(14, 124, 123, 0.15); }
+
+/* Password: eye button (security/_password_toggle.html.twig)
+   and rules ticked live (security/_password_rules.html.twig) - login, registration, account */
 .auth-field__password { position: relative; }
 .auth-field__password input { padding-right: 3rem; }
 
@@ -321,7 +366,7 @@ h1, h2, h3, h4,
 .aq-product-card__media {
     display: block;
     aspect-ratio: 4 / 3;
-    overflow: hidden; /* sinon la taille réelle de l'image écrase l'aspect-ratio */
+    overflow: hidden; /* otherwise the real image size overrides the aspect-ratio */
     padding: 0.75rem;
     background: #fff;
 }
@@ -341,7 +386,7 @@ h1, h2, h3, h4,
     border-top: 1px solid var(--aq-border-soft);
 }
 
-/* Une seule ligne : toutes les cartes ont la même hauteur (titre complet au survol) */
+/* Single line: all cards have the same height (full title on hover) */
 .aq-product-card__title {
     overflow: hidden;
     white-space: nowrap;
@@ -355,7 +400,7 @@ h1, h2, h3, h4,
 .aq-product-card__title a { color: inherit; text-decoration: none; }
 .aq-product-card__title a:hover { color: var(--aq-link); }
 
-/* Variante catalogue : catégorie + référence, titre sur deux lignes de hauteur fixe */
+/* Catalogue variant: category + reference, title on two fixed-height lines */
 .aq-product-card__category {
     margin: 0 0 0.3rem;
     font-size: 0.7rem;
@@ -449,7 +494,7 @@ h1, h2, h3, h4,
     gap: 0.4rem;
 }
 
-/* Séparation entre la recherche et les icônes */
+/* Separator between the search and the icons */
 .site-header__actions .site-header__search { margin-right: 1.4rem; }
 
 .site-header__search::after {
@@ -483,7 +528,7 @@ h1, h2, h3, h4,
 .site-header__icon:hover,
 .site-header__icon.is-active { background: var(--aq-mint); color: var(--aq-ink); }
 
-/* Nombre d'articles sur l'icône panier */
+/* Number of items on the cart icon */
 .site-header__cart { position: relative; }
 
 .site-header__badge {
@@ -546,7 +591,7 @@ h1, h2, h3, h4,
     color: var(--aq-ink);
 }
 
-/* Menu mobile (caché sur grand écran) */
+/* Mobile menu (hidden on large screens) */
 .site-menu { border-top: 1px solid var(--aq-border-soft); }
 
 .site-menu__inner {
@@ -597,7 +642,7 @@ h1, h2, h3, h4,
     .site-menu { display: none !important; }
 }
 
-/* 1200–1399 px : conteneur de 1140 px, on resserre sans tout coller */
+/* 1200–1399 px: 1140 px container, tighter without cramming */
 @media (max-width: 1399.98px) {
     .site-header__bar { gap: 1.5rem; }
     .site-header__nav { gap: 0.15rem; }
@@ -609,7 +654,7 @@ h1, h2, h3, h4,
 }
 
 @media (max-width: 1199.98px) {
-    /* Burger | logo centré | panier */
+    /* Burger | centered logo | cart */
     .site-header__bar {
         display: grid;
         grid-template-columns: 42px minmax(0, 1fr) 42px;
@@ -623,7 +668,7 @@ h1, h2, h3, h4,
     .site-header__search,
     .site-header__account { display: none; }
 
-    /* Le logo rétrécit plutôt que de pousser le panier hors de l'écran */
+    /* The logo shrinks rather than pushing the cart off screen */
     .site-header .brand {
         height: 28px;
         max-width: 100%;
@@ -709,13 +754,13 @@ h1, h2, h3, h4,
     padding-bottom: 0.9rem;
     font-family: "Parisienne", cursive;
     font-size: 1.4rem;
-    white-space: nowrap; /* deux lignes, comme sur la maquette */
+    white-space: nowrap; /* two lines, as in the mockup */
     line-height: 1.25;
     color: var(--aq-bg);
     transform: rotate(-7deg);
 }
 
-/* Petit trait bronze sous la devise */
+/* Small bronze line under the motto */
 .site-footer__motto::after {
     content: "";
     position: absolute;
@@ -741,7 +786,7 @@ h1, h2, h3, h4,
 
 .site-footer__bottom p { margin: 0; }
 
-/* < 1400 px : l'olivier passe sur sa propre ligne, centré sous les colonnes */
+/* < 1400 px: the olive tree moves to its own line, centered under the columns */
 @media (max-width: 1399.98px) {
     .site-footer__grid { grid-template-columns: 1.5fr repeat(3, minmax(0, 1fr)); }
 
@@ -769,7 +814,7 @@ h1, h2, h3, h4,
 }
 
 /* =========================================================
-   Page de désinscription newsletter
+   Newsletter unsubscribe page
    ========================================================= */
 .newsletter-page { padding-block: 4rem 2rem; }
 
@@ -826,7 +871,7 @@ h1, h2, h3, h4,
     box-shadow: 0 12px 28px -12px rgba(14, 58, 63, 0.35);
 }
 
-/* Compte à rebours avant disparition (assets/lib/toast.js) */
+/* Countdown before the toast disappears (assets/lib/toast.js) */
 .flash-progress {
     position: absolute;
     left: 0;

@@ -30,7 +30,7 @@ class ProfileChangePasswordType extends AbstractType
                 'first_options' => [
                     'label' => 'Nouveau mot de passe',
                     'attr' => ['autocomplete' => 'new-password'],
-                    // Même règle qu'à l'inscription (App\Validator\StrongPassword)
+                    // Same rule as registration (App\Validator\StrongPassword)
                     'constraints' => [
                         new StrongPassword(),
                     ],

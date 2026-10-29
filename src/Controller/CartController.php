@@ -103,9 +103,9 @@ class CartController extends AbstractController
     }
 
     /**
-     * Ajout depuis le JS (assets/controllers/cart_add_controller.js) : réponse JSON affichée en notification,
-     * avec le nouveau nombre d'articles pour le badge de l'en-tête.
-     * Sans JS : message flash et retour sur la page d'origine.
+     * Add from JS (assets/controllers/cart_add_controller.js): JSON response shown as a notification,
+     * with the new item count for the header badge.
+     * Without JS: flash message and redirect back to the original page.
      */
     private function addResponse(Request $request, string $type, string $message, ?int $cartCount = null): Response
     {
@@ -118,7 +118,7 @@ class CartController extends AbstractController
 
         $this->addFlash($type, $message);
 
-        // Referer accepté uniquement s'il pointe vers ce site (pas de redirection ouverte)
+        // Referer accepted only when it points to this site (no open redirect)
         $referer = (string) $request->headers->get('referer', '');
         if (str_starts_with($referer, $request->getSchemeAndHttpHost() . '/')) {
             return $this->redirect($referer);
@@ -128,20 +128,29 @@ class CartController extends AbstractController
     }
 
     #[Route('/update/{id}', name: 'update', methods: ['POST'], requirements: ['id' => '\d+'])]
-    public function update(int $id, Request $request, CartManager $cartManager): Response
+    public function update(int $id, Request $request, CartManager $cartManager, ProductRepository $productRepository): Response
     {
         $qty = (int) $request->getPayload()->get('qty', 1);
         $token = (string) $request->getPayload()->get('_token', '');
 
         if (!$this->isCsrfTokenValid('cart_update_' . $id, $token)) {
-            $this->addFlash('error', 'Invalid CSRF token.');
+            $this->addFlash('danger', 'Jeton de sécurité invalide, veuillez recharger la page.');
 
             return $this->redirectToRoute('app_cart_index');
         }
 
-        $cartManager->setQuantity($id, $qty);
+        // Same rule as when adding: never more than the available stock
+        $stock = $productRepository->find($id)?->getStock() ?? 0;
+        if ($qty > $stock) {
+            $qty = $stock; // 0: setQuantity removes the product from the cart
+            $this->addFlash('warning', $stock > 0
+                ? sprintf('Stock insuffisant : quantité ramenée à %d.', $stock)
+                : 'Ce produit est en rupture de stock, il a été retiré du panier.');
+        } else {
+            $this->addFlash('success', 'Quantité mise à jour.');
+        }
 
-        $this->addFlash('success', 'Quantité mise à jour.');
+        $cartManager->setQuantity($id, $qty);
 
         return $this->redirectToRoute('app_cart_index');
     }
@@ -154,7 +163,7 @@ class CartController extends AbstractController
         $token = (string) $request->getPayload()->get('_token', '');
 
         if (!$this->isCsrfTokenValid('cart_remove_' . $id, $token)) {
-            $this->addFlash('error', 'Invalid CSRF token.');
+            $this->addFlash('danger', 'Jeton de sécurité invalide, veuillez recharger la page.');
 
             return $this->redirectToRoute('app_cart_index');
         }

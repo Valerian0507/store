@@ -146,7 +146,7 @@ class Product
         return $this->volumeM3;
     }
 
-    // Nullable : un champ vide du formulaire admin arrive à null, la validation l'arrête ensuite
+    // Nullable: an empty admin form field arrives as null, then validation rejects it
     public function setVolumeM3(?float $volumeM3): static
     {
         $this->volumeM3 = $volumeM3;

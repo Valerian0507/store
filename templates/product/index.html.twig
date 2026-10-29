@@ -18,7 +18,7 @@
 				{% if q %}pour « <strong>{{ q }}</strong> »{% endif %}
 			</p>
 
-			{# Outil utile selon la catégorie (PoolToolsController) #}
+			{# Useful tool depending on the category (PoolToolsController) #}
 			{% if selectedCategory %}
 				{% if selectedCategory.label|lower == 'piscines' %}
 					<a class="aq-link-arrow catalog__tool" href="{{ path('app_tools_volume') }}">

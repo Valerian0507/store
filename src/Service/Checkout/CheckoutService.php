@@ -19,7 +19,7 @@ final class CheckoutService
         private EntityManagerInterface $em
         ){}
 
-    // Génère une référence unique : ORD-20260419-9F2DF1F5
+    // Generates a unique reference: ORD-20260419-9F2DF1F5
     private function generateOrderReference(): string
     {
         return 'ORD-' . (new \DateTimeImmutable())->format('Ymd') . '-' . strtoupper(bin2hex(random_bytes(4)));
@@ -37,7 +37,7 @@ final class CheckoutService
     {
         $rawCart = $this->cartManager->getRaw();
         if($rawCart === []) {
-            throw new LogicException("Impossible de créer une commande à partir d'un panier vide.");
+            throw new LogicException('Cannot create an order from an empty cart.');
             }
 
         $productIds = array_keys($rawCart);
@@ -53,7 +53,7 @@ final class CheckoutService
         $order->setStatus('pending');
         $order->setReference($this->generateOrderReference());
 
-        // Données d'expédition copiées dans la commande
+        // Shipping data copied into the order
         $order->setShippingFirstName($shippingData['firstName']);
         $order->setShippingLastName($shippingData['lastName']);
         $order->setShippingStreet($shippingData['street']);
@@ -64,34 +64,34 @@ final class CheckoutService
         foreach ($rawCart as $productId => $qty) {
             $product = $productsById[$productId] ?? null;
 
-            // 3 vérifications
-            // Vérification 1 : le produit existe-t-il ?
+            // 3 checks
+            // Check 1: does the product exist?
             if(!$product) {
-                throw new LogicException(sprintf("Produit introuvable pour l'id %d.", $productId));
+                throw new LogicException(sprintf('Product not found for id %d.', $productId));
             }
 
-            // Vérification 2 : le prix est-il défini ?
+            // Check 2: is the price set?
             if($product->getPriceCents() === null || $product->getPriceCents() <= 0) {
-                throw new LogicException(sprintf("Prix introuvable pour le produit #%d.", $productId));
+                throw new LogicException(sprintf('No price for product #%d.', $productId));
             }
 
-            // Vérification 3 : le stock est-il suffisant ?
+            // Check 3: is the stock sufficient? (the message is shown to the customer)
             if($product->getStock() < $qty){
                 throw new InsufficientStockException(sprintf('Stock insuffisant pour "%s".', $product->getTitle()));
             }
 
-            // Snapshot : copie des données produit au moment de la commande
+            // Snapshot: product data copied at order time
             $orderItem = OrderItem::fromProduct($product, $qty);
             $order->addItem($orderItem);
 
-            $product->setStock($product->getStock() - $qty); // Décrémente le stock du produit
+            $product->setStock($product->getStock() - $qty); // Decrement the product stock
         }
 
         $order->recalcTotal();
 
         $this->em->persist($order);
-        $this->em->flush(); // Tout en une seule transaction
-        $this->cartManager->clear(); // Vide le panier après commande
+        $this->em->flush(); // Everything in a single transaction
+        $this->cartManager->clear(); // Empty the cart after the order
 
         return $order;
     }

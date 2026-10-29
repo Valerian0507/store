@@ -17,7 +17,7 @@ class NewsletterSubscriber
     #[ORM\Column(length: 180, unique: true)]
     private string $email;
 
-    // Jeton aléatoire du lien de désinscription (pas d'identifiant devinable dans l'URL)
+    // Random token for the unsubscribe link (no guessable identifier in the URL)
     #[ORM\Column(length: 64, unique: true)]
     private string $unsubscribeToken;
 

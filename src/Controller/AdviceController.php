@@ -18,7 +18,7 @@ class AdviceController extends AbstractController
     public function show(string $slug): Response
     {
         if (!isset(self::TEMPLATES[$slug])) {
-            throw $this->createNotFoundException('Ce conseil est introuvable.');
+            throw $this->createNotFoundException('Advice article not found.');
         }
 
         return $this->render(self::TEMPLATES[$slug]);

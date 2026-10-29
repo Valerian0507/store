@@ -1,18 +1,18 @@
-# Outils piscine et plannings de démonstration
+# Pool tools and demo replenishment plans
 
-- `/outils/calculateur-volume` : rectangle, cercle (diamètre) et ellipse. Dimensions intérieures en mètres et profondeur moyenne réelle d’eau. Résultat en m³ et litres. Le budget utilise exclusivement le tarif d’eau, le montant mensuel et le nombre de mois saisis.
-- `/outils/analyse-eau` : saisie locale du pH, du chlore libre et du TAC. Les valeurs ne sont pas envoyées au serveur. Pas de dosage automatique, de confirmation de baignade ni de diagnostic à partir d’une photo. Le TAC est comparé uniquement à une plage saisie depuis la notice.
-- `/profile/abonnements` : accès authentifié aux plannings de démonstration. Création depuis un consommable, quantité 1–20, intervalle 4/6/8/12 semaines, modification, pause, reprise et annulation. La prochaine échéance est indicative : aucun paiement, commande, envoi ou rappel automatique n’est déclenché.
+- `/outils/calculateur-volume`: rectangle, circle (diameter) and ellipse. Inner dimensions in metres and real average water depth. Result in m³ and litres. The budget only uses the water price, the monthly amount and the number of months entered.
+- `/outils/analyse-eau`: local input of pH, free chlorine and total alkalinity (TAC). The values are not sent to the server. No automatic dosing, no "safe to swim" confirmation and no diagnosis from a photo. TAC is only compared to a range typed from the product manual.
+- `/profile/abonnements`: logged-in access to the demo replenishment plans. Created from a consumable, quantity 1–20, interval 4/6/8/12 weeks, edit, pause, resume and cancel. The next date is only indicative: no payment, order, shipment or reminder is ever triggered.
 
-Les cartes des outils figurent entre « Bien choisir » et « Conseils & inspirations ». Les liens sont également présents dans les guides et les catégories/produits concernés. Dans l’administration produit, la case « Consommable » contrôle l’affichage du formulaire de planning. La migration active cette case pour les six consommables de référence 10, 16, 22, 28, 34 et 39 du catalogue pédagogique.
+The tool cards sit between "Bien choisir" and "Conseils & inspirations" on the home page. Links are also shown in the advice guides and on the related categories and products. In the product admin, the "Consommable" checkbox controls whether the plan form is displayed. The migration ticks it for the six consumables of the educational catalogue (references 10, 16, 22, 28, 34 and 39).
 
 ## Installation
 
-La migration `DoctrineMigrations\Version20261028120000` ajoute `products.replenishable` et la table `care_plans`. Elle a été appliquée à la base locale de ce projet. Pour une autre installation, utiliser la procédure habituelle de migrations Doctrine après examen des migrations en attente.
+Migration `DoctrineMigrations\Version20261028120000` adds `products.replenishable` and the `care_plans` table. For another installation, run the usual Doctrine migrations after reviewing the pending ones.
 
-Les contrôleurs Stimulus sont découverts par l’AssetMapper existant. Aucun nouveau paquet JavaScript n’est nécessaire.
+The Stimulus controllers are discovered by the existing AssetMapper setup. No new JavaScript package is needed.
 
-## Validation
+## Checks
 
 ```powershell
 node --test tests/JavaScript/pool_tools.test.mjs
@@ -22,9 +22,9 @@ php bin/console lint:container
 php tests/Smoke/pool_tools_smoke.php
 ```
 
-Le dernier script est destiné exclusivement à l’environnement local `dev`. Il utilise de vrais appels HTTP au noyau et des utilisateurs temporaires à l’intérieur d’une transaction, avec rollback dans `finally`. Il vérifie accès anonyme, création, validation, doublons, CSRF, propriété, pause/reprise/annulation et absence de commande. Il ne requiert pas de modifier les droits de la base de test. Les tests unitaires PHP restent utilisables indépendamment de la base de données.
+The last script is for the local `dev` environment only. It sends real HTTP requests to the kernel and uses temporary users inside a transaction, rolled back in `finally`. It checks anonymous access, creation, validation, duplicates, CSRF, ownership, pause/resume/cancel and that no order is created. It does not need any rights on the test database. The PHP unit tests can be run without a database.
 
-## Sources des repères de l’eau
+## Sources for the water reference values
 
-- [CDC — Home Pool and Hot Tub Water Treatment and Testing](https://www.cdc.gov/healthy-swimming/about/home-pool-and-hot-tub-water-treatment-and-testing.html) : pH et minima de chlore selon bassin et stabilisant ; particularité des mesures supérieures à 10 ppm.
-- [CDC — Guidelines for Keeping Your Pool Safe and Healthy](https://www.cdc.gov/healthy-swimming/safety/what-you-can-do-to-stay-healthy-in-swimming-pools.html) : plage usuelle de chlore en piscine. Les instructions propres au bassin et au produit restent nécessaires.
+- [CDC — Home Pool and Hot Tub Water Treatment and Testing](https://www.cdc.gov/healthy-swimming/about/home-pool-and-hot-tub-water-treatment-and-testing.html): pH and minimum chlorine depending on the pool type and the stabilizer; special case of readings above 10 ppm.
+- [CDC — Guidelines for Keeping Your Pool Safe and Healthy](https://www.cdc.gov/healthy-swimming/safety/what-you-can-do-to-stay-healthy-in-swimming-pools.html): usual chlorine range in pools. The pool's and the product's own instructions are still required.

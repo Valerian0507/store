@@ -5,21 +5,21 @@ namespace App\Tests\Controller;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
- * Tests fonctionnels du contrôle d'accès.
+ * Functional access control tests.
  *
- * Ils démarrent réellement l'application (HttpKernel) et vérifient :
- *  - que les pages publiques répondent bien (200) ;
- *  - que les zones protégées (/admin, /profile, /checkout) renvoient
- *    un visiteur anonyme vers la page de connexion.
+ * They really boot the application (HttpKernel) and check:
+ *  - that the public pages respond (200);
+ *  - that the protected areas (/admin, /profile, /checkout) redirect
+ *    an anonymous visitor to the login page.
  *
- * Les redirections de sécurité sont décidées par le pare-feu AVANT
- * l'exécution du contrôleur : ces tests ne dépendent donc pas du contenu
- * de la base de données.
+ * Security redirects are decided by the firewall BEFORE
+ * the controller runs: these tests therefore do not depend on the content
+ * of the database.
  *
- * Pré-requis pour lancer ce fichier en local :
- *   1. créer la base de test     : php bin/console --env=test doctrine:database:create
- *   2. créer le schéma            : php bin/console --env=test doctrine:migrations:migrate -n
- *   3. lancer la suite            : php bin/phpunit tests/Controller
+ * Requirements to run this file locally:
+ *   1. create the test database: php bin/console --env=test doctrine:database:create
+ *   2. create the schema: php bin/console --env=test doctrine:migrations:migrate -n
+ *   3. run the suite: php bin/phpunit tests/Controller
  */
 class SecurityAccessTest extends WebTestCase
 {
@@ -75,22 +75,5 @@ class SecurityAccessTest extends WebTestCase
         );
     }
 
-    /*
-     * Exemple à activer une fois une fixture utilisateur disponible en test :
-     * vérifie qu'un utilisateur authentifié SANS le rôle ROLE_ADMIN reçoit
-     * bien un 403 sur la zone d'administration.
-     *
-     * public function testAdminAreaIsForbiddenForRegularUser(): void
-     * {
-     *     $client = static::createClient();
-     *     $user = static::getContainer()
-     *         ->get(\App\Repository\UserRepository::class)
-     *         ->findOneBy(['email' => 'user@example.com']);
-     *
-     *     $client->loginUser($user);
-     *     $client->request('GET', '/admin');
-     *
-     *     $this->assertResponseStatusCodeSame(403);
-     * }
-     */
+    // 403 for a logged-in customer on /admin: tests/Controller/Admin/AdminListsTest.php
 }

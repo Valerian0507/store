@@ -6,12 +6,8 @@ use App\Repository\CartItemRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CartItemRepository::class)]
-#[ORM\Table(
-    name: 'cart_items',
-    uniqueConstraints: [
-        new ORM\UniqueConstraint(name: 'uniq_cart_product', columns: ['cart_id', 'product_id'])
-    ]
-)]
+#[ORM\Table(name: 'cart_items')]
+#[ORM\UniqueConstraint(name: 'uniq_cart_product', columns: ['cart_id', 'product_id'])]
 class CartItem
 {
     #[ORM\Id]
@@ -55,7 +51,7 @@ class CartItem
     public function setQuantity(int $quantity): static
     {
         if ($quantity < 1) {
-            throw new \InvalidArgumentException('Le quantité doit avoir une valeur supérieure ou égale à 1.');
+            throw new \InvalidArgumentException('Quantity must be greater than or equal to 1.');
         }
 
         $this->quantity = $quantity;

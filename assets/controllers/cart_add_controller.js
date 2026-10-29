@@ -2,9 +2,9 @@ import { Controller } from '@hotwired/stimulus';
 import { showToast } from '../lib/toast.js';
 
 /*
- * Formulaire "Ajouter au panier" : envoi en arrière-plan (fetch),
- * l'utilisateur reste sur la page et une notification s'affiche en haut à droite.
- * Sans JS, le formulaire est envoyé normalement (CartController renvoie sur la page d'origine).
+ * "Ajouter au panier" form: sent in the background (fetch),
+ * the user stays on the page and a notification shows up at the top right.
+ * Without JS, the form is submitted normally (CartController redirects back to the page).
  */
 export default class extends Controller {
     async submit(event) {
@@ -30,7 +30,7 @@ export default class extends Controller {
         }
     }
 
-    // Badge sur l'icône panier (_partials/_navbar.html.twig)
+    // Badge on the cart icon (_partials/_navbar.html.twig)
     updateBadge(count) {
         document.querySelectorAll('[data-cart-count]').forEach((badge) => {
             badge.textContent = count > 99 ? '99+' : String(count);

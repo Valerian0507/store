@@ -23,7 +23,7 @@ class ChangePasswordFormType extends AbstractType
                     ],
                 ],
                 'first_options' => [
-                    // Même règle qu'à l'inscription (App\Validator\StrongPassword)
+                    // Same rule as registration (App\Validator\StrongPassword)
                     'constraints' => [
                         new StrongPassword(),
                         new NotCompromisedPassword(

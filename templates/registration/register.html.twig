@@ -33,8 +33,8 @@
             {{ form_errors(registrationForm.email) }}
         </div>
 
-        {# Mot de passe saisi deux fois (RepeatedType) : erreurs (longueur, "ne correspondent pas") portées par le champ parent,
-           affichées sous le 1er champ ; les deux champs passent en rouge #}
+        {# Password typed twice (RepeatedType): errors (length, "do not match") belong to the parent field,
+           shown under the 1st field; both fields turn red #}
         {% set passwordClass = 'auth-field__input' ~ (registrationForm.plainPassword.vars.valid ? '' : ' is-invalid') %}
         <div class="auth-field" data-controller="password-rules">
             {{ form_label(registrationForm.plainPassword.first, 'Mot de passe', {label_attr: {class: 'auth-field__label'}}) }}
@@ -62,7 +62,7 @@
         </div>
 
         <div class="auth-field">
-            {# Case écrite à la main (le thème Bootstrap ajoute son propre libellé) : nom, id et valeur viennent du formulaire #}
+            {# Hand-written checkbox (the Bootstrap theme adds its own label): name, id and value come from the form #}
             {% set terms = registrationForm.agreeTerms.vars %}
             <label class="auth-check">
                 <input type="checkbox" class="auth-check__input" id="{{ terms.id }}" name="{{ terms.full_name }}"

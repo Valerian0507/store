@@ -1,4 +1,4 @@
-{# Pagination de l'administration - attend : route, params (filtres à conserver), page, pages #}
+{# Admin pagination - expects: route, params (filters to keep), page, pages #}
 {% if pages > 1 %}
     {% set start = max(1, page - 2) %}
     {% set end = min(pages, page + 2) %}

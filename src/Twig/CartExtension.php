@@ -7,7 +7,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
 /**
- * Nombre d'articles du panier, affiché sur l'icône panier de l'en-tête.
+ * Number of items in the cart, shown on the cart icon of the header.
  */
 class CartExtension extends AbstractExtension
 {

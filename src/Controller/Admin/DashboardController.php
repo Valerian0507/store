@@ -22,7 +22,7 @@ class DashboardController extends AbstractController
         OrderRepository $orders,
         UserRepository $users,
     ): Response {
-        // Chiffres affichés sur les cartes du tableau de bord
+        // Figures shown on the dashboard cards
         return $this->render('admin/dashboard.html.twig', [
             'stats' => [
                 'products' => $products->count([]),

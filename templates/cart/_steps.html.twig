@@ -1,0 +1,13 @@
+{# Checkout steps - expects: step (1 cart, 2 delivery, 3 payment, 4 = order completed) #}
+{% set complete = step > 3 %}
+<ol class="checkout-steps {{ complete ? 'checkout-steps--complete' }}" aria-label="Étapes de la commande">
+    {% for label in ['Panier', 'Livraison', 'Paiement'] %}
+        {% set n = loop.index %}
+        <li class="checkout-steps__item {{ n < step ? 'is-done' }} {{ n == step ? 'is-current' }}" {% if n == step %}aria-current="step"{% endif %}>
+            <span class="checkout-steps__dot">
+                {% if complete %}<i class="fa-solid fa-check" aria-hidden="true"></i><span class="visually-hidden">Étape {{ n }} terminée</span>{% else %}{{ n }}{% endif %}
+            </span>
+            <span class="checkout-steps__label">{{ label }}</span>
+        </li>
+    {% endfor %}
+</ol>

@@ -19,7 +19,7 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-    // Méthodes privées - chaque responsabilité est isolée
+    // Private methods - each one has a single responsibility
     private function createCatalogQueryBuilder(): QueryBuilder
     {
         return $this->createQueryBuilder('products');
@@ -35,7 +35,7 @@ class ProductRepository extends ServiceEntityRepository
 
     private function applySearch(QueryBuilder $qb, ?string $q): void
     {
-        // Recherche dans le nom et la référence
+        // Search in the title and the reference
         if ($q !== null && $q !== '') {
             $qb
                 ->andWhere('(LOWER(products.title) LIKE LOWER(:q) OR LOWER(products.reference) LIKE LOWER(:q))')
@@ -75,7 +75,7 @@ class ProductRepository extends ServiceEntityRepository
         $perPage = max(1, min(100, $perPage));
         $offset = ($page - 1) * $perPage;
 
-        // Catégorie chargée avec le produit : affichée sur chaque carte sans requête supplémentaire
+        // Category loaded with the product: shown on each card without an extra query
         $qb = $this->createCatalogQueryBuilder()
             ->leftJoin('products.category', 'category')
             ->addSelect('category')
@@ -93,7 +93,7 @@ class ProductRepository extends ServiceEntityRepository
 
     /**
      * @return Product[]
-     * Sélection de l'accueil : le dernier produit de chaque catégorie (avec image, prix et stock).
+     * Home page selection: the latest product of each category (with image, price and stock).
      */
     public function findHomeSelection(int $limit = 4): array
     {
@@ -113,7 +113,7 @@ class ProductRepository extends ServiceEntityRepository
     }
 
     /**
-     * Liste de l'administration : tous les produits (même sans prix), recherche nom/référence, filtre catégorie, pagination.
+     * Admin list: all products (even without a price), title/reference search, category filter, pagination.
      *
      * @return array{items: Product[], total: int}
      */
@@ -136,7 +136,7 @@ class ProductRepository extends ServiceEntityRepository
         return ['items' => $items, 'total' => $total];
     }
 
-    // Fiche produit "Complétez votre installation" : catégories complémentaires, sinon la même catégorie
+    // Product page "Complétez votre installation": complementary categories, otherwise the same category
     private const COMPLEMENTS = [
         'piscines' => ['entretien', 'accessoires'],
         'spa' => ['entretien', 'accessoires'],
@@ -144,8 +144,8 @@ class ProductRepository extends ServiceEntityRepository
 
     /**
      * @return Product[]
-     * Produits disponibles (prix, stock, image), répartis à parts égales entre les catégories complémentaires
-     * (ex. piscine : 2 entretien + 2 accessoires), consommables d'abord (chlore, algicide…).
+     * Available products (price, stock, image), split evenly between the complementary categories
+     * (e.g. pool: 2 care + 2 accessories), consumables first (chlorine, algicide…).
      */
     public function findComplements(Product $product, int $limit = 4): array
     {

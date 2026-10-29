@@ -16,7 +16,7 @@
     </div>
 
     <div class="account-addresses">
-        {# Adresse par défaut en premier #}
+        {# Default address first #}
         {% for address in addresses|sort((a, b) => b.isDefault <=> a.isDefault) %}
             <article class="account-card account-address">
                 <div class="account-address__main">
@@ -54,7 +54,7 @@
             </article>
         {% endfor %}
 
-        {# Carte d'ajout, toujours en dernier #}
+        {# "Add" card, always last #}
         <a href="{{ path('app_profile_addresses_new') }}" class="account-address-add">
             <span class="account-card__icon" aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
             <strong>Ajouter une adresse</strong>

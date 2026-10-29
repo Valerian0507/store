@@ -1,4 +1,4 @@
-{# templates/_partials/_logo.html.twig - variant: 'dark' (fond clair) | 'light' (fond foncé) #}
+{# templates/_partials/_logo.html.twig - variant: 'dark' (light background) | 'light' (dark background) #}
 {% set variant = variant|default('dark') %}
 <img class="brand brand--{{ variant }}"
      src="{{ asset(variant == 'light' ? 'images/icons/aquasphere-logo-light.png' : 'images/icons/aquasphere-logo.png') }}"

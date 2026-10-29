@@ -8,7 +8,7 @@
         <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="48x48">
         <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
 
-        {# Polices : Cormorant Garamond (titres) + Hanken Grotesk (texte) #}
+        {# Fonts: Cormorant Garamond (headings) + Hanken Grotesk (text) #}
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=Parisienne&display=swap">
@@ -18,7 +18,7 @@
             <script src="https://kit.fontawesome.com/bc43524f66.js" crossorigin="anonymous"></script>
         {% endblock %}
 
-        {# Après importmap : le CSS de page passe après Bootstrap et app.css #}
+        {# After importmap: the page CSS comes after Bootstrap and app.css #}
         {% block stylesheets %} {% endblock %}
     </head>
     <body>

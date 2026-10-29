@@ -45,7 +45,7 @@ final class CartManager
         $user = $this->security->getUser();
 
         if(!$user instanceof User) {
-            // Visiteur - stockage en session via CartStorage
+            // Visitor - stored in the session via CartStorage
             $cart = $this->cartStorage->get();
             $cart[$productId] = ($cart[$productId] ?? 0) + $qty;
 
@@ -57,11 +57,11 @@ final class CartManager
         $product = $this->productRepository->find($productId);
 
         if(!$product) {
-            throw new \LogicException("Produit n'est pas trouvé");
+            throw new \LogicException('Product not found.');
         }
 
         if ($product->getPriceCents() === null || $product->getPriceCents() <= 0) {
-            throw new \LogicException('Produit sans prix, ne peut pas être ajouté au panier.');
+            throw new \LogicException('Product without a price cannot be added to the cart.');
         }
 
         $cart = $this->getOrCreateCart($user);
@@ -127,7 +127,7 @@ final class CartManager
         return $raw;
     }
 
-    // Nombre d'articles (somme des quantités) pour le badge du panier dans l'en-tête
+    // Number of items (sum of quantities) for the cart badge in the header
     public function countItems(): int
     {
         $user = $this->security->getUser();
@@ -139,7 +139,7 @@ final class CartManager
         return array_sum($this->getRaw());
     }
 
-    /** @return array<int, int> productId => quantité */
+    /** @return array<int, int> productId => quantity */
     private function getCleanSessionCart(): array
     {
         $cart = $this->cartStorage->get();

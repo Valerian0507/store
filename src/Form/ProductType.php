@@ -24,7 +24,7 @@ class ProductType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            // Champ vide : chaîne vide (et non null) pour que le NotBlank de l'entité Product s'applique
+            // Empty field: empty string (not null) so that the Product entity NotBlank applies
             ->add('reference', TextType::class, [
                 'label' => 'Référence',
                 'empty_data' => '',
@@ -32,7 +32,7 @@ class ProductType extends AbstractType
                     new Length(max: 64, maxMessage: 'Maximum {{ limit }} caractères.'),
                 ],
             ])
-            // Obligatoire : Assert\NotNull de l'entité Product
+            // Required: Assert\NotNull on the Product entity
             ->add('category', EntityType::class, [
                 'label' => 'Catégorie',
                 'class' => Category::class,
@@ -78,7 +78,7 @@ class ProductType extends AbstractType
             ])
             ->add('priceCents', IntegerType::class, [
                 'label' => 'Prix (centimes)',
-                // Obligatoire et positif : contraintes de l'entité Product
+                // Required and positive: Product entity constraints
                 'invalid_message' => 'Renseignez un nombre entier de centimes (ex. 49900).',
             ])
             ->add('stock', IntegerType::class, [

@@ -3,9 +3,9 @@
 {% block title %}Catégories{% endblock %}
 
 {% block admin_content %}
-    {# Icône SVG par univers (assets/images/admin_categories/<libellé>.svg) ; une nouvelle catégorie garde l'icône par défaut #}
+    {# SVG icon per universe (assets/images/admin_categories/<label>.svg); a new category keeps the default icon #}
     {% set categoryIcons = ['piscines', 'spa', 'accessoires', 'entretien', 'matelas'] %}
-    {# Même ordre que le menu du site (NavigationExtension) : piscines, spa, accessoires… #}
+    {# Same order as the site menu (NavigationExtension): piscines, spa, accessoires… #}
     {% set categories = nav_categories() %}
     {% set totalProducts = categories|reduce((sum, c) => sum + c.products|length, 0) %}
 
@@ -57,7 +57,7 @@
                                 <a class="admin-action" href="{{ path('admin_categories_edit', {id: category.id}) }}">
                                     <i class="fa-solid fa-pen" aria-hidden="true"></i> Modifier
                                 </a>
-                                {# Une catégorie qui contient des produits ne peut pas être supprimée (CategoryController::delete) #}
+                                {# A category that contains products cannot be deleted (CategoryController::delete) #}
                                 <form method="post" action="{{ path('admin_categories_delete', {id: category.id}) }}"
                                       onsubmit="return confirm('Supprimer la catégorie « {{ category.label|e('js') }} » ?');">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete_category_' ~ category.id) }}">

@@ -11,9 +11,9 @@ class UserChecker implements UserCheckerInterface
 {
     public function checkPreAuth(UserInterface $user): void
     {
-        // Pas de vérifications pre-auth pour ce projet.
-        // La vérification de l'e-mail est effectuée dans checkPostAuth()
-        // afin de ne pas divulguer l'existence d'un compte non vérifié.
+        // No pre-auth checks in this project.
+        // The email verification is done in checkPostAuth()
+        // so as not to disclose that an unverified account exists.
     }
 
     public function checkPostAuth(UserInterface $user): void

@@ -58,7 +58,7 @@ class OrderController extends AbstractController
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'totalOrders' => $totalOrders,
-            // En-tête : toutes commandes confondues (indépendant des filtres)
+            // Header: all orders (independent from the filters)
             'allOrders' => $orderRepository->count([]),
             'pendingOrders' => $orderRepository->count(['status' => 'pending']),
         ]);

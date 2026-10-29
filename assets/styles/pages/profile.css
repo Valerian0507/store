@@ -4,7 +4,7 @@
 
 .account { padding-top: 1.5rem; padding-bottom: 1rem; }
 
-/* Bandeau d'accueil : photo sauge avec branche d'olivier à droite, texte sur la partie claire */
+/* Welcome banner: sage photo with an olive branch on the right, text on the light part */
 .account-hero {
     position: relative;
     display: flex;
@@ -173,7 +173,7 @@
     gap: 0.5rem;
     padding: 0.45rem 0.95rem;
     border-radius: 999px;
-    background: rgba(247, 243, 236, 0.9); /* lisible au-dessus de la branche d'olivier */
+    background: rgba(247, 243, 236, 0.9); /* readable over the olive branch */
     color: var(--aq-ink);
     font-size: 0.9rem;
     font-weight: 500;
@@ -224,7 +224,7 @@
     text-transform: uppercase;
 }
 
-/* Aide en bas de page */
+/* Help at the bottom of the page */
 .account-help {
     display: flex;
     flex-wrap: wrap;
@@ -250,7 +250,7 @@
     text-underline-offset: 4px;
 }
 
-/* Cartes avec en-tête (icône + titre + chapô) */
+/* Cards with a header (icon + title + lead) */
 .account-grid--even { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
 .account-card__head { display: flex; align-items: flex-start; gap: 1.25rem; margin-bottom: 1.25rem; }
@@ -286,7 +286,7 @@
 
 .account-form__submit { margin-top: auto; min-height: 50px; }
 
-/* Commandes : lignes en cartes */
+/* Orders: rows as cards */
 .account-orders__head,
 .account-order {
     display: grid;
@@ -430,7 +430,31 @@
 
 .account-note i { padding-right: 1.25rem; border-right: 1px solid rgba(14, 58, 63, 0.3); font-size: 1.4rem; }
 
-/* Détail d'une commande */
+/* Formulaire d'adresse */
+.account-address-form {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: 1.25rem;
+    align-items: stretch;
+}
+
+.account-form__row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 0 1.25rem; }
+
+.account-form__actions { display: grid; grid-template-columns: 1.6fr 1fr; gap: 1rem; margin-top: 0.5rem; }
+.account-form__actions .aq-btn { min-height: 50px; }
+
+.account-select {
+    padding-right: 2.5rem;
+    appearance: none;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M5 7.5L10 12.5L15 7.5' stroke='%230E3A3F' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 0.95rem center / 14px;
+}
+
+.account-card--sage { background: var(--aq-sage); border-color: #d5dfd2; }
+.account-card__icon--light { background: rgba(255, 255, 255, 0.55); }
+.account-card--sage .account-card__text { flex: 0; margin: 0 0 1rem; padding-left: calc(56px + 1.25rem); }
+.account-card__text--ruled { margin-top: 0.5rem !important; padding-top: 1.25rem; border-top: 1px solid rgba(14, 58, 63, 0.15); }
+
+/* Order detail */
 .account-hero__meta { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; font-family: var(--aq-font-serif); font-size: 1.35rem; color: var(--aq-text); }
 
 .account-order-detail {
@@ -506,6 +530,12 @@
 .account-card__head--flush { margin-bottom: 0; }
 .account-hero__meta .order-status { font-family: var(--aq-font-sans); font-size: 0.85rem; }
 .account-summary dt { font-weight: 400; }
+.account-summary dd.account-summary__free { color: #1f7a4d; font-weight: 600; }
+
+/* Help card (right column of the order detail) */
+.account-help--card { display: flex; flex-wrap: nowrap; align-items: flex-start; margin-top: 0; padding: 1.25rem 1.5rem; }
+.account-help--card .account-help__icon { padding-right: 0; border-right: 0; }
+.account-help--card p { margin-bottom: 0.35rem; font-family: var(--aq-font-sans); font-size: 1rem; }
 
 /* =========================================================
    Tablette
@@ -517,9 +547,10 @@
 
     .account-addresses { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .account-tabs { justify-content: flex-start; }
-    .account-order-detail { grid-template-columns: 1fr; }
+    .account-order-detail,
+    .account-address-form { grid-template-columns: 1fr; }
 
-    /* Commandes : une carte par commande, libellé devant chaque valeur */
+    /* Orders: one card per order, label before each value */
     .account-orders__head { display: none; }
 
     .account-order {
@@ -549,7 +580,7 @@
 @media (max-width: 575.98px) {
     .account-hero { min-height: 0; }
 
-    /* Voile sauge à gauche : la branche reste visible à droite sans passer sous le texte */
+    /* Sage overlay on the left: the branch stays visible on the right without going under the text */
     .account-hero::after {
         content: "";
         position: absolute;
@@ -574,7 +605,7 @@
 
     .account-order { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
-    /* Articles : produit sur toute la largeur, chiffres dessous avec libellés */
+    /* Items: product over the full width, figures below with labels */
     .account-items__head { display: none; }
     .account-item { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; padding-inline: 0; }
     .account-item__product { grid-column: 1 / -1; }
@@ -582,12 +613,16 @@
     .account-item > span:not(:first-child) { text-align: left; }
     .account-item [data-label]::before { content: attr(data-label); display: block; color: var(--aq-muted); font-size: 0.72rem; }
     .account-hero__meta { font-size: 1.1rem; }
+
+    .account-form__row,
+    .account-form__actions { grid-template-columns: 1fr; }
+    .account-card--sage .account-card__text { padding-left: 0; }
     .account-order__actions > * { flex: 1 1 auto; }
 
     .account-help__icon,
     .account-note i { padding-right: 1rem; }
 
-    /* Aide : icône + texte, lien en dessous */
+    /* Help: icon + text, link below */
     .account-help { display: grid; grid-template-columns: auto minmax(0, 1fr); }
     .account-help__link { grid-column: 1 / -1; justify-self: start; }
     .account-note { font-size: 1.1rem; }

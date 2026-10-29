@@ -52,7 +52,7 @@
     display: block;
 }
 
-/* Bandeau de réassurance */
+/* Reassurance strip */
 .home-trust {
     display: flex;
     justify-content: center;
@@ -75,7 +75,7 @@
 .home-trust li + li { border-left: 1px solid var(--aq-border); }
 .home-trust i { font-size: 1.15rem; color: var(--aq-accent); }
 
-/* Univers (catégories) : carrousel, 4 visibles sur desktop */
+/* Universes (categories): carousel, 4 visible on desktop */
 .home-universes {
     --visible: 4;
     --gap: 1rem;
@@ -122,10 +122,10 @@
 }
 
 .home-universe:hover { color: #fff; }
-.home-universe:focus-visible { outline-offset: -3px; } /* sinon coupé par le défilement */
+.home-universe:focus-visible { outline-offset: -3px; } /* otherwise clipped by the scroll container */
 .home-universe:hover img { transform: scale(1.05); }
 
-/* right : place réservée à la flèche, la longue étiquette ne passe jamais dessous */
+/* right: room kept for the arrow, a long label never goes under it */
 .home-universe__label {
     position: absolute;
     left: 1rem;
@@ -154,14 +154,14 @@
 
 .home-universe:hover .home-universe__arrow { background: #fff; color: var(--aq-ink); }
 
-/* Sélection produits */
+/* Product selection */
 .home-products {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 1rem;
 }
 
-/* Bannière spa */
+/* Spa banner */
 .home-banner {
     position: relative;
     display: flex;
@@ -343,7 +343,7 @@
 
 .home-newsletter__form { margin: 0; }
 
-/* Champ + bouton dans une même "pilule" */
+/* Input + button in the same "pill" */
 .home-newsletter__field {
     display: flex;
     align-items: center;
@@ -389,7 +389,7 @@
     .home-hero__grid,
     .home-choose { gap: 2rem; }
 
-    /* Colonnes égales : les deux boutons du hero restent sur une ligne */
+    /* Equal columns: both hero buttons stay on one line */
     .home-hero__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
     .home-hero__actions { gap: 0.6rem; }
     .home-hero__actions .aq-btn { padding-inline: 1.3rem; }
@@ -469,7 +469,7 @@
     .home-newsletter__leaves { display: none; }
 }
 
-/* Très petits écrans : toute la tuile est cliquable, la flèche laisse la place au libellé */
+/* Very small screens: the whole tile is clickable, the arrow leaves room for the label */
 @media (max-width: 359.98px) {
     .home-universe__arrow { display: none; }
     .home-universe__label { right: 0.75rem; }

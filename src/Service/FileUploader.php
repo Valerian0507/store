@@ -25,11 +25,20 @@ class FileUploader
 
         try {
             $file->move($this->targetDirectory, $filename);
-        } catch (FileException) {
-            throw new \RuntimeException('Erreur lors du téléchargement du fichier.');
+        } catch (FileException $e) {
+            throw new \RuntimeException('Unable to move the uploaded file.', previous: $e);
         }
 
         return $filename;
+    }
+
+    public function remove(string $filename): void
+    {
+        $path = $this->targetDirectory . DIRECTORY_SEPARATOR . basename($filename);
+
+        if (is_file($path)) {
+            unlink($path);
+        }
     }
 
     public function getTargetDirectory(): string

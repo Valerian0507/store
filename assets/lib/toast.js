@@ -1,11 +1,11 @@
 /*
- * Notifications en haut à droite (.flash-container, cf. _partials/_flash.html.twig).
- * Les messages flash du serveur et ceux ajoutés en JS disparaissent après 5 secondes.
+ * Notifications at the top right (.flash-container, see _partials/_flash.html.twig).
+ * Server flash messages and the ones added from JS disappear after 5 seconds.
  */
 const DELAY = 5000;
 
 export function autoHide(alert) {
-    // Barre sous le message : se vide pendant le délai avant disparition
+    // Bar under the message: empties during the delay before it disappears
     const progress = document.createElement('span');
     progress.className = 'flash-progress';
     progress.style.animationDuration = `${DELAY}ms`;

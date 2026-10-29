@@ -40,7 +40,7 @@ class NewsletterController extends AbstractController
         }
 
         if (!$form->isValid()) {
-            // Premier message d'erreur du formulaire (e-mail vide, invalide, jeton CSRF…)
+            // First form error message (empty or invalid email, CSRF token…)
             $message = 'Inscription impossible.';
             foreach ($form->getErrors(true) as $error) {
                 $message = $error->getMessage();
@@ -53,7 +53,7 @@ class NewsletterController extends AbstractController
 
         $email = (string) $form->get('email')->getData();
 
-        // Adresse déjà inscrite : même message, pour ne pas révéler qui est abonné
+        // Address already subscribed: same message, so as not to reveal who is subscribed
         if ($subscribers->findOneByEmail($email) === null) {
             $this->createSubscriber($email, $em, $mailer, $logger);
         }
@@ -63,7 +63,7 @@ class NewsletterController extends AbstractController
         return $this->redirect($backToForm);
     }
 
-    // Depuis "Mon compte" : inscription / désinscription de l'adresse du compte connecté
+    // From the account page: subscribe / unsubscribe the logged-in user's address
     #[Route('/compte', name: 'account', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
     public function account(
@@ -83,7 +83,7 @@ class NewsletterController extends AbstractController
         $user = $this->getUser();
         $subscriber = $subscribers->findOneByEmail($user->getEmail());
 
-        // Interrupteur "Je souhaite recevoir la newsletter" : coché = inscrit, décoché = désinscrit
+        // "Je souhaite recevoir la newsletter" switch: checked = subscribed, unchecked = unsubscribed
         $wantsNewsletter = $request->request->getBoolean('newsletter');
 
         if ($wantsNewsletter && $subscriber === null) {
@@ -109,7 +109,7 @@ class NewsletterController extends AbstractController
     ): Response {
         $subscriber = $subscribers->findOneBy(['unsubscribeToken' => $token]);
 
-        // GET : page de confirmation (un simple clic ou un aperçu de lien ne désinscrit pas)
+        // GET: confirmation page (a single click or a link preview does not unsubscribe)
         if ($subscriber !== null && $request->isMethod('POST')) {
             if (!$this->isCsrfTokenValid('newsletter_unsubscribe', (string) $request->request->get('_token'))) {
                 $this->addFlash('danger', 'Jeton de sécurité invalide, veuillez réessayer.');
@@ -150,11 +150,11 @@ class NewsletterController extends AbstractController
             ->context(['unsubscribeUrl' => $unsubscribeUrl]);
         $message->getHeaders()->addTextHeader('List-Unsubscribe', '<' . $unsubscribeUrl . '>');
 
-        // L'inscription reste valable même si l'e-mail de bienvenue ne part pas
+        // The subscription stays valid even if the welcome email is not sent
         try {
             $mailer->send($message);
         } catch (TransportExceptionInterface $e) {
-            $logger->error('Newsletter : envoi de l\'e-mail de bienvenue impossible.', ['exception' => $e]);
+            $logger->error('Newsletter: the welcome email could not be sent.', ['exception' => $e]);
         }
     }
 }

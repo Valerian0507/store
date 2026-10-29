@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Exception\InsufficientStockException;
+use App\Form\AddressType;
 use App\Repository\AddressRepository;
 use App\Repository\OrderRepository;
 use App\Service\Checkout\CheckoutService;
@@ -11,6 +12,11 @@ use App\Service\Checkout\CheckoutSummaryBuilder;
 use App\Service\Checkout\OrderSuccessBuilder;
 use App\Service\Payment\StripeCheckoutService;
 use LogicException;
+use Psr\Log\LoggerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,7 +53,7 @@ final class CheckoutController extends AbstractController
         'street' => '',
         'city' => '',
         'postalCode' => '',
-        'country' => '',
+        'country' => 'France',
         ];
 
         if($user instanceof User) {
@@ -76,6 +82,7 @@ final class CheckoutController extends AbstractController
             'summary' => $summary,
             'errors' => [],
             'shippingData' => $shippingData,
+            'countries' => AddressType::COUNTRIES,
         ]);
     }
 
@@ -138,6 +145,7 @@ final class CheckoutController extends AbstractController
                 'summary' => $checkoutSummaryBuilder->build(),
                 'errors' => $errors,
                 'shippingData' => $shippingData,
+                'countries' => AddressType::COUNTRIES,
             ], new Response(status: 422));
         }
 
@@ -219,8 +227,8 @@ final class CheckoutController extends AbstractController
             $errors['postalCode'] = 'Le code postal est trop long.';
         }
 
-        if ($shippingData['country'] !== '' && mb_strlen($shippingData['country']) > 120) {
-            $errors['country'] = 'Le nom du pays est trop long.';
+        if ($shippingData['country'] !== '' && !in_array($shippingData['country'], AddressType::COUNTRIES, true)) {
+            $errors['country'] = 'Choisissez un pays dans la liste.';
         }
 
         return $errors;
@@ -254,7 +262,15 @@ final class CheckoutController extends AbstractController
     }
 
     #[Route('/confirm/{id}', name: 'confirm', methods: ['GET'], requirements: ['id' => '\d+'])]
-    public function confirm(int $id, Request $request, OrderRepository $orderRepository, StripeCheckoutService $stripe, EntityManagerInterface $em): Response
+    public function confirm(
+        int $id,
+        Request $request,
+        OrderRepository $orderRepository,
+        StripeCheckoutService $stripe,
+        EntityManagerInterface $em,
+        MailerInterface $mailer,
+        LoggerInterface $logger,
+    ): Response
     {
         $user = $this->getUser();
         if (!$user instanceof User) {
@@ -275,6 +291,19 @@ final class CheckoutController extends AbstractController
                 $order->setStatus('paid');
                 $em->flush();
                 $this->addFlash('success', 'Paiement effectué avec succès.');
+
+                // Confirmation email (only once: the order is no longer "pending" afterwards).
+                // The payment stays valid even if sending fails.
+                try {
+                    $mailer->send((new TemplatedEmail())
+                        ->from(new Address('no-reply@store.com', 'AquaSphère'))
+                        ->to($user->getEmail())
+                        ->subject(sprintf('Votre commande %s est confirmée - AquaSphère', $order->getReference()))
+                        ->htmlTemplate('email/order_confirmation.html.twig')
+                        ->context(['order' => $order]));
+                } catch (TransportExceptionInterface $e) {
+                    $logger->error('Order: the confirmation email could not be sent.', ['exception' => $e, 'order' => $order->getId()]);
+                }
             }
         }
 

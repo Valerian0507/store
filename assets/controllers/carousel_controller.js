@@ -1,9 +1,9 @@
 import { Controller } from '@hotwired/stimulus';
 
 /*
- * Carrousel horizontal : défilement natif (scroll-snap, swipe sur mobile)
- * + boutons précédent / suivant qui avancent d'un élément.
- * Les boutons sont désactivés aux extrémités et masqués s'il n'y a rien à faire défiler.
+ * Horizontal carousel: native scrolling (scroll-snap, swipe on mobile)
+ * + previous / next buttons that move by one item.
+ * The buttons are disabled at both ends and hidden when there is nothing to scroll.
  */
 export default class extends Controller {
     static targets = ['track', 'prev', 'next'];

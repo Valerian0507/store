@@ -1,10 +1,13 @@
 {# templates/_partials/_navbar.html.twig #}
 {% set route = app.request.attributes.get('_route') %}
 {% set currentCategory = app.request.query.get('category') %}
+{# 5xx error page (errorSafeMode): no database query -> "Catalogue" link instead of the categories, cart not counted #}
+{% set safeMode = errorSafeMode ?? false %}
+{% set navCategories = safeMode ? [] : nav_categories() %}
 
 <header class="site-header">
     <div class="aq-container site-header__bar">
-        {# Burger : mobile et tablette uniquement #}
+        {# Burger: mobile and tablet only #}
         <button class="site-header__icon site-header__toggle" type="button"
                 data-bs-toggle="collapse" data-bs-target="#siteMenu"
                 aria-controls="siteMenu" aria-expanded="false" aria-label="Ouvrir le menu">
@@ -15,13 +18,15 @@
             {% include '_partials/_logo.html.twig' %}
         </a>
 
-        {# Lien actif selon la route et la catégorie courantes #}
+        {# Active link from the current route and category #}
         <nav class="site-header__nav" aria-label="Navigation principale">
-            {% for category in nav_categories() %}
+            {% for category in navCategories %}
                 <a class="site-header__link {{ route == 'app_products_index' and currentCategory == category.id ? 'is-active' : '' }}"
                    href="{{ path('app_products_index', {category: category.id}) }}">
                     {{ category.label|capitalize }}
                 </a>
+            {% else %}
+                <a class="site-header__link" href="{{ path('app_products_index') }}">Catalogue</a>
             {% endfor %}
         </nav>
 
@@ -48,15 +53,15 @@
                 </a>
             {% endif %}
 
-            {# Badge mis à jour sans rechargement par cart_add_controller.js #}
-            {% set cartCount = cart_count() %}
+            {# Badge updated without reload by cart_add_controller.js #}
+            {% set cartCount = safeMode ? 0 : cart_count() %}
             <a class="site-header__icon site-header__cart {{ route starts with 'app_cart_' ? 'is-active' : '' }}" href="{{ path('app_cart_index') }}" title="Panier"
                aria-label="{{ cartCount > 0 ? 'Panier (' ~ cartCount ~ ' article' ~ (cartCount > 1 ? 's' : '') ~ ')' : 'Panier' }}" data-cart-link>
                 <i class="fa-solid fa-bag-shopping"></i>
                 <span class="site-header__badge" data-cart-count aria-hidden="true" {{ cartCount == 0 ? 'hidden' }}>{{ cartCount > 99 ? '99+' : cartCount }}</span>
             </a>
 
-            {# Connexion / déconnexion toujours en dernier : l'icône indique l'action, pas l'état #}
+            {# Login / logout always last: the icon shows the action, not the state #}
             {% if app.user %}
                 <form class="site-header__account" method="POST" action="{{ path('app_logout') }}">
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
@@ -72,7 +77,7 @@
         </div>
     </div>
 
-    {# Menu déroulant mobile #}
+    {# Mobile dropdown menu #}
     <div class="collapse site-menu" id="siteMenu">
         <div class="aq-container site-menu__inner">
             <form class="site-search" method="get" action="{{ path('app_products_index') }}" role="search">
@@ -85,7 +90,7 @@
 
             <nav class="site-menu__links" aria-label="Navigation mobile">
                 <a href="{{ path('app_products_index') }}">Tous les produits</a>
-                {% for category in nav_categories() %}
+                {% for category in navCategories %}
                     <a href="{{ path('app_products_index', {category: category.id}) }}">{{ category.label|capitalize }}</a>
                 {% endfor %}
                 {% if is_granted('ROLE_ADMIN') %}
